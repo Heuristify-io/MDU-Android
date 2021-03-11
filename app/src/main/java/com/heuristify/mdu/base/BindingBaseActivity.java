@@ -18,7 +18,6 @@ public abstract class BindingBaseActivity<DB extends ViewDataBinding> extends Ap
 
     public DB dataBinding;
     protected Context mContext;
-    private CustomDialog progressDialog;
     private CustomProgressDialog customProgressDialog;
 
     @Override
@@ -26,9 +25,7 @@ public abstract class BindingBaseActivity<DB extends ViewDataBinding> extends Ap
         super.onCreate(savedInstanceState);
         mContext = this;
         dataBinding = DataBindingUtil.setContentView(this,getLayoutRes());
-        progressDialog = new CustomDialog(mContext);
         customProgressDialog = new CustomProgressDialog(mContext);
-        progressDialog.setCancelable(false);
     }
 
     @LayoutRes

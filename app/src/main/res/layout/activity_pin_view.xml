@@ -145,7 +145,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:background="@android:color/transparent"
+                                android:background="@drawable/selector_edittext"
                                 android:gravity="center"
                                 android:hint="5"
                                 android:imeOptions="actionNext"
@@ -184,7 +184,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:background="@android:color/transparent"
+                                android:background="@drawable/selector_edittext"
                                 android:gravity="center"
                                 android:hint="8"
                                 android:imeOptions="actionNext"
@@ -223,7 +223,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:background="@android:color/transparent"
+                                android:background="@drawable/selector_edittext"
                                 android:gravity="center"
                                 android:hint="2"
                                 android:imeOptions="actionNext"
@@ -262,7 +262,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:background="@android:color/transparent"
+                                android:background="@drawable/selector_edittext"
                                 android:gravity="center"
                                 android:hint="9"
                                 android:imeOptions="actionDone"
@@ -290,7 +290,9 @@
                     android:text="Didn't receive a code?"
                     android:textColor="@color/light1"
                     android:textSize="@dimen/_12sdp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+
+                    />
 
                 <TextView
                     android:id="@+id/textViewRequestCode"
