@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/light"
+        tools:context=".view.activities.AttendingActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_weight="1.3">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/checklist_pana" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="2">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_below="@id/imageView"
+                android:fontFamily="@font/archivo_regular"
+                android:gravity="center"
+                android:text="Starting your"
+                android:textColor="@color/dark"
+                android:textSize="@dimen/_20sdp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView"
+                android:fontFamily="@font/archivo_regular"
+                android:gravity="center"
+                android:text="day, doctor?"
+                android:textColor="@color/dark"
+                android:textSize="@dimen/_20sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/archivo_regular"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:gravity="center"
+                android:text="Let us known if you are"
+                android:textColor="@color/light1"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/archivo_regular"
+                android:gravity="center"
+                android:text="starting your day."
+                android:textColor="@color/light1"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_weight="2.2">
+
+            <Button
+                android:id="@+id/buttonSkip"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="@dimen/_40sdp"
+                android:background="@drawable/rounded_shape_white_color"
+                android:layout_margin="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="Skip"
+                android:textAllCaps="false"
+                android:textColor="@color/dark2"
+                android:textSize="@dimen/_16sdp" />
+
+            <Button
+                android:id="@+id/buttonAttending"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/_40sdp"
+                android:background="@drawable/rounded_shape"
+                android:layout_margin="@dimen/_5sdp"
+               android:textAllCaps="false"
+                android:gravity="center"
+                android:text="I'm Attending"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_16sdp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".view.activities.PinViewActivity">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearBack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_weight="0.1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="left"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageViewBack"
+                    android:layout_width="@dimen/_14sdp"
+                    android:layout_height="@dimen/_14sdp"
+                    android:layout_gravity="center"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:paddingBottom="@dimen/_2sdp"
+                    android:src="@drawable/chevron_left_24px" />
+
+                <TextView
+                    android:id="@+id/textViewBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:fontFamily="@font/archivo_regular"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="left"
+                    android:text="Back"
+                    android:textColor="@color/light1"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="normal" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/archivo_regular"
+                    android:gravity="left"
+                    android:text="Enter"
+                    android:textColor="@color/dark2"
+                    android:textSize="@dimen/_20sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/archivo_regular"
+                    android:gravity="left"
+                    android:text="Security Code"
+                    android:textColor="@color/dark2"
+                    android:textSize="@dimen/_20sdp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/archivo_regular"
+                    android:gravity="left"
+                    android:text="Please enter the code your receive from PTC. If you did not receive a code, please request a code to continye"
+                    android:textColor="@color/light1"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_weight="2.5"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/cardView1"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardBackgroundColor="@color/white"
+                        card_view:cardCornerRadius="@dimen/_30sdp"
+                        card_view:cardElevation="@dimen/_1sdp"
+                        card_view:cardMaxElevation="@dimen/_2sdp">
+
+                        <LinearLayout
+                            android:id="@+id/linear1"
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
+                            android:background="@drawable/circle"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/editTextText1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="@android:color/transparent"
+                                android:gravity="center"
+                                android:hint="5"
+                                android:imeOptions="actionNext"
+                                android:inputType="number"
+                                android:padding="@dimen/_5sdp"
+                                android:textColor="@color/dark"
+                                android:textColorHint="@color/dark"
+                                android:textSize="@dimen/_15sdp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/cardView2"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardBackgroundColor="@color/white"
+                        card_view:cardCornerRadius="@dimen/_30sdp"
+                        card_view:cardElevation="@dimen/_1sdp"
+                        card_view:cardMaxElevation="@dimen/_2sdp">
+
+                        <LinearLayout
+                            android:id="@+id/linear2"
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
+                            android:background="@drawable/circle"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/editTextText2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="@android:color/transparent"
+                                android:gravity="center"
+                                android:hint="8"
+                                android:imeOptions="actionNext"
+                                android:inputType="number"
+                                android:padding="@dimen/_5sdp"
+                                android:textColor="@color/dark"
+                                android:textColorHint="@color/dark"
+                                android:textSize="@dimen/_15sdp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/cardView3"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardBackgroundColor="@color/white"
+                        card_view:cardCornerRadius="@dimen/_30sdp"
+                        card_view:cardElevation="@dimen/_1sdp"
+                        card_view:cardMaxElevation="@dimen/_2sdp">
+
+                        <LinearLayout
+                            android:id="@+id/linear3"
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
+                            android:background="@drawable/circle"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/editTextText3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="@android:color/transparent"
+                                android:gravity="center"
+                                android:hint="2"
+                                android:imeOptions="actionNext"
+                                android:inputType="number"
+                                android:padding="@dimen/_5sdp"
+                                android:textColor="@color/dark"
+                                android:textColorHint="@color/dark"
+                                android:textSize="@dimen/_15sdp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/cardView4"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        card_view:cardBackgroundColor="@color/white"
+                        card_view:cardCornerRadius="@dimen/_30sdp"
+                        card_view:cardElevation="@dimen/_1sdp"
+                        card_view:cardMaxElevation="@dimen/_2sdp">
+
+                        <LinearLayout
+                            android:id="@+id/linear4"
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
+                            android:background="@drawable/circle"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/editTextText4"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="@android:color/transparent"
+                                android:gravity="center"
+                                android:hint="9"
+                                android:imeOptions="actionDone"
+                                android:inputType="number"
+                                android:padding="@dimen/_5sdp"
+                                android:textColor="@color/dark"
+                                android:textColorHint="@color/dark"
+                                android:textSize="@dimen/_15sdp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/archivo_regular"
+                    android:gravity="center"
+                    android:text="Didn't receive a code?"
+                    android:textColor="@color/light1"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/textViewRequestCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="?attr/selectableItemBackground"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="Request Code"
+                    android:textColor="@color/dark2"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.2"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/buttonSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginLeft="@dimen/_30sdp"
+                android:layout_marginRight="@dimen/_30sdp"
+                android:background="@drawable/rounded_shape"
+                android:gravity="center"
+                android:text="Sign In"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_16sdp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
