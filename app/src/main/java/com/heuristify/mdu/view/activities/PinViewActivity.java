@@ -14,16 +14,22 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
+import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.ActivityPinViewBinding;
+import com.heuristify.mdu.helper.Helper;
 import com.heuristify.mdu.mvvm.viewmodel.LoginViewModel;
+import com.heuristify.mdu.sharedPreferences.SharedHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -32,7 +38,7 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
     LoginViewModel loginViewModel;
     private String TAG = "PinViewActivity";
     private Context context;
-    private Observer observer, progressObserver, errorObserver;
+    private Observer observer;
     private String pin_code = "";
     private LifecycleOwner lifecycleOwner;
 
@@ -54,30 +60,38 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
             @Override
             public void onChanged(Response<ResponseBody> responseBodyResponse) {
                 if (responseBodyResponse.isSuccessful()) {
-                    Toast.makeText(mContext, "Login Successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(PinViewActivity.this, AttendingActivity.class));
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseBodyResponse.body().string());
+                        if(jsonObject != null){
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.NAME,jsonObject.optString("fullName"));
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.PMDC,jsonObject.optString("pmdcNumber"));
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.PHONE,jsonObject.optString("phoneNumber"));
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.EMAIL,jsonObject.optString("email"));
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.JWT,jsonObject.optString("JWTToken"));
+                        }
+                        startActivity(new Intent(PinViewActivity.this, AttendingActivity.class));
+                        finish();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(context, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
                 }
-                Log.e(TAG, "response" + responseBodyResponse.code());
+                Log.e(TAG, "response" + responseBodyResponse.body().toString());
 //                loginViewModel.getLoginRepository(Integer.parseInt(pin_code)).removeObserver(this);
             }
         };
 
-
-//        errorObserver = new Observer<String>() {
-//            @Override
-//            public void onChanged(String s) {
-//                Log.e(TAG, "getError_msg " + s);
-//                loginViewModel.getError_msg().removeObserver(this);
-//                hideProgressDialog();
-//
-//            }
-//        };
 
         loginViewModel.getError_msg().observe(lifecycleOwner, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 Log.e(TAG, "getError_msg " + s);
 //                loginViewModel.getError_msg().removeObserver(this);
+                Toast.makeText(context, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -174,6 +188,10 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                     dataBinding.editTextText3.requestFocus();
                     dataBinding.editTextText4.clearFocus();
                 }
+                if (s.length() > 0 && dataBinding.editTextText1.getText().length() > 0 && dataBinding.editTextText2.getText().length() > 0 && dataBinding.editTextText3.getText().length() > 0) {
+                    sendLoginPinCode(dataBinding.editTextText1.getText().toString(), dataBinding.editTextText2.getText().toString(),
+                            dataBinding.editTextText3.getText().toString(), dataBinding.editTextText4.getText().toString());
+                }
 
             }
         });
@@ -185,7 +203,8 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                     dataBinding.editTextText4.clearFocus();
                     if (dataBinding.editTextText1.getText().toString().length() > 0 && dataBinding.editTextText2.getText().toString().length() > 0 && dataBinding.editTextText3.getText().toString().length() > 0
                             && dataBinding.editTextText4.getText().toString().length() > 0) {
-                        sendLoginPinCode(dataBinding.editTextText1.getText().toString(), dataBinding.editTextText2.getText().toString(), dataBinding.editTextText3.getText().toString(), dataBinding.editTextText4.getText().toString());
+                        sendLoginPinCode(dataBinding.editTextText1.getText().toString(), dataBinding.editTextText2.getText().toString(),
+                                dataBinding.editTextText3.getText().toString(), dataBinding.editTextText4.getText().toString());
                     } else {
                         Toast.makeText(mContext, "PinView Not Valid", Toast.LENGTH_SHORT).show();
                     }

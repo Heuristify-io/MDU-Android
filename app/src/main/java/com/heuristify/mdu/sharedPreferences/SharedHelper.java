@@ -9,7 +9,7 @@ public class SharedHelper {
     public static SharedPreferences.Editor editor;
 
     public static String putKey(Context context, String Key, String Value) {
-        sharedPreferences = context.getSharedPreferences("mduCache", Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences("mdu", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString(Key, Value);
         editor.commit();
@@ -17,14 +17,14 @@ public class SharedHelper {
     }
 
     public static String getKey(Context contextGetKey, String Key) {
-        sharedPreferences = contextGetKey.getSharedPreferences("mduCache", Context.MODE_PRIVATE);
+        sharedPreferences = contextGetKey.getSharedPreferences("mdu", Context.MODE_PRIVATE);
         String Value = sharedPreferences.getString(Key, "");
         return Value;
 
     }
 
     public static void deleteAllSharedPrefs(Context context){
-        sharedPreferences = context.getSharedPreferences("mduCache", Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences("mdu", Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().commit();
     }
 }

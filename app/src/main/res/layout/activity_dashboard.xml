@@ -3,369 +3,416 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/light"
         android:orientation="vertical"
         tools:context=".view.activities.DashboardActivity">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_20sdp"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/cardView1"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                card_view:cardBackgroundColor="@color/dark2"
-                card_view:cardCornerRadius="@dimen/_10sdp"
-                card_view:cardElevation="@dimen/_1sdp"
-                card_view:cardMaxElevation="@dimen/_2sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:gravity="left"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/imageView"
-                        android:fontFamily="@font/archivo_regular"
-                        android:gravity="center"
-                        android:text="Welcome,"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_15sdp"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/textView"
-                        android:fontFamily="@font/archivo_regular"
-                        android:gravity="center"
-                        android:text="Dr. Israr Ahmed"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_15sdp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
+                android:layout_height="wrap_content">
 
 
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/textViewDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/archivo_regular"
-                android:gravity="left"
-                android:text="10/02/2021"
-                android:textColor="@color/light1"
-                android:textSize="@dimen/_13sdp"
-                android:textStyle="normal" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/archivo_regular"
-                android:gravity="left"
-                android:text="Patient Summary"
-                android:textColor="@color/dark"
-                android:textSize="@dimen/_15sdp"
-                android:textStyle="normal" />
-
-            <TextView
-                android:id="@+id/textViewDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/archivo_regular"
-                android:gravity="left"
-                android:text="The following table shows the total number of patients, updated records and pending records. Please press update records when you have internet connectivity."
-                android:textColor="@color/light1"
-                android:textSize="@dimen/_13sdp"
-                android:textStyle="normal" />
-
-            <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/cardView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                card_view:cardBackgroundColor="@color/white"
-                card_view:cardCornerRadius="@dimen/_10sdp"
-                card_view:cardElevation="@dimen/_1sdp"
-                card_view:cardMaxElevation="@dimen/_1sdp">
-
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_60sdp"
-                    android:orientation="vertical">
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    app:cardBackgroundColor="@color/dark2"
+                    app:cardCornerRadius="@dimen/_12sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
+                        android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/textViewTotal"
-                            android:layout_width="0dp"
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="15dp"
                             android:fontFamily="@font/archivo_regular"
                             android:gravity="center"
-                            android:text="22"
-                            android:textColor="@color/dark2"
-                            android:textSize="@dimen/_13sdp"
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="@dimen/_2sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_gravity="center"
-                            android:background="@color/light1" />
-
-                        <TextView
-                            android:id="@+id/textViewUpdated"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/archivo_regular"
-                            android:gravity="center"
-                            android:text="18"
-                            android:textColor="@color/dark2"
-                            android:textSize="@dimen/_13sdp"
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="@dimen/_2sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_gravity="center"
-                            android:background="@color/light1" />
-
-                        <TextView
-                            android:id="@+id/textViewPending"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/archivo_regular"
-                            android:gravity="center"
-                            android:text="4"
-                            android:textColor="@color/dark2"
-                            android:textSize="@dimen/_13sdp"
-                            android:textStyle="bold" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:background="@color/dark2"
-                        >
-
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/archivo_regular"
-                            android:gravity="center"
-                            android:text="Total"
+                            android:text="Welcome,"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_12sdp"
-                            android:textStyle="normal" />
-
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/archivo_regular"
-                            android:gravity="center"
-                            android:text="Updated"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_12sdp"
-                            android:textStyle="normal" />
-
+                            android:textSize="@dimen/_15sdp"
+                            android:textStyle="normal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:id="@+id/textViewName"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
+                            android:layout_below="@id/textView"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginLeft="20dp"
                             android:fontFamily="@font/archivo_regular"
                             android:gravity="center"
-                            android:text="Pending"
+                            android:text="Dr. Israr Ahmed"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_12sdp"
-                            android:textStyle="normal" />
+                            android:textSize="@dimen/_15sdp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
-                    </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-            <Button
-                android:id="@+id/buttonAttending22"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/rounded_shape"
-                android:textAllCaps="false"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/_50sdp"
-                android:text="Upload Records"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_15sdp" />
-
-            <Button
-                android:id="@+id/buttonAttending2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/rounded_shape_white_color"
-                android:textAllCaps="false"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:gravity="center"
-                android:text="View Consultation History"
-                android:textColor="@color/dark"
-                android:textSize="@dimen/_15sdp" />
-
-
-        </LinearLayout>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="horizontal">
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_13sdp"
-                android:background="@drawable/top_corner_round"
-                android:orientation="vertical">
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/linear"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/rounded_shape"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/imageViewAdd"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_gravity="center"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/add" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginRight="@dimen/_40sdp"
-                android:layout_toLeftOf="@id/linear"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imageViewDashboard"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/dashboard_24px" />
+                </androidx.cardview.widget.CardView>
 
 
                 <TextView
-                    android:id="@+id/textViewDashboard"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/textViewDate"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
                     android:fontFamily="@font/archivo_regular"
-                    android:gravity="center"
-                    android:text="Dashboard"
-                    android:textColor="@color/dark2"
-                    android:textSize="@dimen/_10sdp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginLeft="@dimen/_40sdp"
-                android:layout_toRightOf="@id/linear"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imageViewPath"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/assignment_24px" />
-
-
-                <TextView
-                    android:id="@+id/textViewPath"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:fontFamily="@font/archivo_regular"
-                    android:gravity="center"
-                    android:text="Path"
+                    android:gravity="left"
+                    android:text="10/02/2021"
                     android:textColor="@color/light1"
-                    android:textSize="@dimen/_10sdp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_13sdp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:fontFamily="@font/archivo_regular"
+                    android:gravity="left"
+                    android:text="Patient Summary"
+                    android:textColor="@color/dark"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
+
+                <TextView
+                    android:id="@+id/textViewDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:fontFamily="@font/archivo_regular"
+                    android:gravity="left"
+                    android:text="The following table shows the total number of patients, updated records and pending records. Please press update records when you have internet connectivity."
+                    android:textColor="@color/light1"
+                    android:textSize="@dimen/_13sdp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@drawable/top_corner_round"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@drawable/bottom_corner_round"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="20"
+                    android:textColor="@color/dark2"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toStartOf="@+id/divider"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.645" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="18"
+                    android:textColor="@color/dark2"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toStartOf="@+id/divider2"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/divider"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.661" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="4"
+                    android:textColor="@color/dark2"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toEndOf="@+id/view"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/divider2"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.661" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="1dp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toStartOf="@+id/textView10"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView9"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.615" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="1dp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toStartOf="@+id/textView11"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView10"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.615" />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Total"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@+id/view2"
+                    app:layout_constraintEnd_toStartOf="@+id/divider"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Updated"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@+id/view2"
+                    app:layout_constraintEnd_toStartOf="@+id/divider2"
+                    app:layout_constraintStart_toEndOf="@+id/divider"
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Pending"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@+id/view2"
+                    app:layout_constraintEnd_toEndOf="@+id/view"
+                    app:layout_constraintStart_toEndOf="@+id/textView10"
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
 
 
-        </RelativeLayout>
+                <Button
+                    android:id="@+id/buttonAttending22"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="64dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@drawable/rounded_shape"
+                    android:gravity="center"
+                    android:text="Upload Records"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_15sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/buttonAttending2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="32dp"
+                    android:background="@drawable/rounded_shape_white_color"
+                    android:gravity="center"
+                    android:text="View Consultation History"
+                    android:textAllCaps="false"
+                    android:textColor="@color/dark"
+                    android:textSize="@dimen/_15sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonAttending22"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+
+
+
+
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_50sdp"
+            android:background="@drawable/tab_corner_round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewDashboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/archivo_regular"
+            android:gravity="center"
+            android:text="Path"
+            android:textColor="@color/light1"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewPath"
+            app:layout_constraintHorizontal_bias="0.598"
+            app:layout_constraintStart_toStartOf="@+id/imageViewPath"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewPath" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:backgroundTint="@color/dark2"
+            android:clickable="true"
+            app:fabCustomSize="@dimen/_40sdp"
+            app:layout_constraintBottom_toTopOf="@+id/view3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view3"
+            app:srcCompat="@drawable/add" />
+
+
+        <ImageView
+            android:id="@+id/imageViewDashboard"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/dashboard_24px"
+            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
+            app:layout_constraintStart_toStartOf="@+id/view3"
+            app:layout_constraintTop_toTopOf="@+id/view3" />
+
+        <ImageView
+            android:id="@+id/imageViewPath"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/assignment_24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/floatingActionButton"
+            app:layout_constraintTop_toTopOf="@+id/view3" />
+
+        <TextView
+            android:id="@+id/textViewPath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/archivo_regular"
+            android:gravity="center"
+            android:text="Dashboard"
+            android:textColor="@color/dark2"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewDashboard"
+            app:layout_constraintStart_toStartOf="@+id/imageViewDashboard"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewDashboard" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>

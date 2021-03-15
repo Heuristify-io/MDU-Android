@@ -2,6 +2,7 @@ package com.heuristify.mdu.mvvm.repository;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -37,12 +38,14 @@ public class LoginRepository {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         progress.setValue(false);
                         responseBodyMutableLiveData.postValue(response);
+                        Log.e("respoinse",""+response.code());
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         progress.setValue(false);
                         error_msg.postValue(t.getMessage());
+                        Log.e("respoinse2",""+t.getMessage());
                     }
                 });
 

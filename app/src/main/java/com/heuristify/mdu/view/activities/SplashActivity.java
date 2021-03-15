@@ -1,7 +1,6 @@
 package com.heuristify.mdu.view.activities;
 
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,7 +8,10 @@ import android.os.Looper;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
+import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.ActivitySplashBinding;
+import com.heuristify.mdu.helper.Helper;
+import com.heuristify.mdu.sharedPreferences.SharedHelper;
 
 public class SplashActivity extends BindingBaseActivity<ActivitySplashBinding> {
 
@@ -19,8 +21,13 @@ public class SplashActivity extends BindingBaseActivity<ActivitySplashBinding> {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, GetStartActivity.class));
-//                finish();
+                if (SharedHelper.getKey(MyApplication.getInstance(), Helper.JWT).length() > 0) {
+                    startActivity(new Intent(SplashActivity.this, PinViewActivity.class));
+                    finish();
+                } else {
+                    startActivity(new Intent(SplashActivity.this, GetStartActivity.class));
+                    finish();
+                }
             }
         }, 500);
 

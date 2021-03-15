@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <import type="android.view.View" />
+        <variable
+            name="clickHandler"
+            type="com.heuristify.mdu.interfaces.OnClickHandlerInterface" />
+    </data>
+
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/light"
+        android:orientation="vertical"
         tools:context=".view.activities.AttendingActivity">
 
         <LinearLayout
@@ -27,15 +36,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="2">
+            android:layout_weight="2"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_below="@id/imageView"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/archivo_regular"
                 android:gravity="center"
                 android:text="Starting your"
@@ -59,8 +68,8 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/archivo_regular"
                 android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/archivo_regular"
                 android:gravity="center"
                 android:text="Let us known if you are"
                 android:textColor="@color/light1"
@@ -83,21 +92,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
-            android:layout_weight="2.2">
+            android:layout_weight="2.2"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/buttonSkip"
                 android:layout_width="0dp"
-                android:layout_weight="0.5"
                 android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/rounded_shape_white_color"
                 android:layout_margin="@dimen/_5sdp"
+                android:layout_weight="0.5"
+                android:background="@drawable/rounded_shape_white_color"
                 android:gravity="center"
                 android:text="Skip"
+                android:onClick="@{clickHandler::onClick}"
                 android:textAllCaps="false"
                 android:textColor="@color/dark2"
                 android:textSize="@dimen/_16sdp" />
@@ -105,13 +115,14 @@
             <Button
                 android:id="@+id/buttonAttending"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/rounded_shape"
                 android:layout_margin="@dimen/_5sdp"
-               android:textAllCaps="false"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_shape"
                 android:gravity="center"
                 android:text="I'm Attending"
+                android:onClick="@{clickHandler::onClick}"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16sdp" />
 

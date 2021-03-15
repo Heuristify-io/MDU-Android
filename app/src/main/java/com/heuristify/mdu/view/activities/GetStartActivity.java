@@ -1,7 +1,6 @@
 package com.heuristify.mdu.view.activities;
 
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +17,8 @@ public class GetStartActivity extends BindingBaseActivity<ActivityGetStartBindin
         dataBinding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(GetStartActivity.this,PinViewActivity.class));
+                startActivity(new Intent(GetStartActivity.this, PinViewActivity.class));
+                finish();
             }
         });
 
