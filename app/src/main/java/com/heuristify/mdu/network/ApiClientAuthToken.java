@@ -40,7 +40,7 @@ public class ApiClientAuthToken {
 
                     Request request = original.newBuilder()
                             .addHeader("content-type", "application/json")
-                            .addHeader("User-Type", "android")
+                            .addHeader("Device-Type", "android")
                             .addHeader("Authorization",SharedHelper.getKey(MyApplication.getInstance(), Helper.JWT))
                             .addHeader("Connection", "close")
 

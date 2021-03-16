@@ -79,10 +79,12 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                         e.printStackTrace();
                     }
                 } else {
+
                     Toast.makeText(context, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
                 }
                 Log.e(TAG, "response" + responseBodyResponse.code());
 //                loginViewModel.getLoginRepository(Integer.parseInt(pin_code)).removeObserver(this);
+
             }
         };
 

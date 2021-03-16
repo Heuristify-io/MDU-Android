@@ -2,6 +2,7 @@ package com.heuristify.mdu.database.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.Query;
 
 import com.heuristify.mdu.database.entity.MedicineEntity;
 
@@ -12,5 +13,8 @@ public interface TaskDao {
 
     @Insert(onConflict = REPLACE)
     void insertMedicineList(MedicineEntity medicine);
+
+    @Query("SELECT * FROM medicine_list_entity")
+    MedicineEntity getMedicine();
 
 }
