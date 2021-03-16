@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.lifecycle.ViewModelProviders;
+
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.ActivitySplashBinding;
 import com.heuristify.mdu.helper.Helper;
+import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
 import com.heuristify.mdu.sharedPreferences.SharedHelper;
 
 public class SplashActivity extends BindingBaseActivity<ActivitySplashBinding> {
@@ -18,6 +21,12 @@ public class SplashActivity extends BindingBaseActivity<ActivitySplashBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MedicineViewModel medicineViewModel = ViewModelProviders.of(this).get(MedicineViewModel.class);
+        medicineViewModel.getMedicineList();
+
+
+
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {

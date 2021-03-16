@@ -1,0 +1,40 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "d5fcd1e47742f27d59ea8ec967862343",
+    "entities": [
+      {
+        "tableName": "medicine_list_entity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicine_list_id` INTEGER NOT NULL, `medicine_list_column` TEXT, PRIMARY KEY(`medicine_list_id`))",
+        "fields": [
+          {
+            "fieldPath": "medicine_list_id",
+            "columnName": "medicine_list_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medicineList",
+            "columnName": "medicine_list_column",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "medicine_list_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd5fcd1e47742f27d59ea8ec967862343')"
+    ]
+  }
+}
