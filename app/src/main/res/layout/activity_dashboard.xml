@@ -364,7 +364,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="12dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/dashboard_24px"
+            android:src="@drawable/dashboard_dark_24px"
             app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
             app:layout_constraintStart_toStartOf="@+id/view3"
             app:layout_constraintTop_toTopOf="@+id/view3" />
@@ -376,7 +376,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="12dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/assignment_24px"
+            android:src="@drawable/assignment_hover_24px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/floatingActionButton"
             app:layout_constraintTop_toTopOf="@+id/view3" />
