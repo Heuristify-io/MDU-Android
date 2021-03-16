@@ -41,6 +41,7 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
     private Observer observer;
     private String pin_code = "";
     private LifecycleOwner lifecycleOwner;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +63,12 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                 if (responseBodyResponse.isSuccessful()) {
                     try {
                         JSONObject jsonObject = new JSONObject(responseBodyResponse.body().string());
-                        if(jsonObject != null){
-                            SharedHelper.putKey(MyApplication.getInstance(), Helper.NAME,jsonObject.optString("fullName"));
-                            SharedHelper.putKey(MyApplication.getInstance(), Helper.PMDC,jsonObject.optString("pmdcNumber"));
-                            SharedHelper.putKey(MyApplication.getInstance(), Helper.PHONE,jsonObject.optString("phoneNumber"));
-                            SharedHelper.putKey(MyApplication.getInstance(), Helper.EMAIL,jsonObject.optString("email"));
-                            SharedHelper.putKey(MyApplication.getInstance(), Helper.JWT,jsonObject.optString("JWTToken"));
+                        if (jsonObject != null) {
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.NAME, jsonObject.optString("fullName"));
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.PMDC, jsonObject.optString("pmdcNumber"));
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.PHONE, jsonObject.optString("phoneNumber"));
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.EMAIL, jsonObject.optString("email"));
+                            SharedHelper.putKey(MyApplication.getInstance(), Helper.JWT, jsonObject.optString("JWTToken"));
                         }
                         startActivity(new Intent(PinViewActivity.this, AttendingActivity.class));
                         finish();
@@ -80,7 +81,7 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                 } else {
                     Toast.makeText(context, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
                 }
-                Log.e(TAG, "response" + responseBodyResponse.body().toString());
+                Log.e(TAG, "response" + responseBodyResponse.code());
 //                loginViewModel.getLoginRepository(Integer.parseInt(pin_code)).removeObserver(this);
             }
         };
@@ -206,7 +207,6 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                         sendLoginPinCode(dataBinding.editTextText1.getText().toString(), dataBinding.editTextText2.getText().toString(),
                                 dataBinding.editTextText3.getText().toString(), dataBinding.editTextText4.getText().toString());
                     } else {
-                        Toast.makeText(mContext, "PinView Not Valid", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return false;
@@ -230,19 +230,29 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.imageViewBack) {
-            finish();
+            count++;
+            finishActivity();
         } else if (v.getId() == R.id.textViewBack) {
-            finish();
+            count++;
+            finishActivity();
         } else if (v.getId() == R.id.linearBack) {
-            finish();
+            count++;
+            finishActivity();
         } else if (v.getId() == R.id.textViewRequestCode) {
         } else if (v.getId() == R.id.buttonSignIn) {
             if (dataBinding.editTextText1.getText().toString().length() > 0 && dataBinding.editTextText2.getText().toString().length() > 0 && dataBinding.editTextText3.getText().toString().length() > 0
                     && dataBinding.editTextText4.getText().toString().length() > 0) {
                 sendLoginPinCode(dataBinding.editTextText1.getText().toString(), dataBinding.editTextText2.getText().toString(), dataBinding.editTextText3.getText().toString(), dataBinding.editTextText4.getText().toString());
             } else {
-                Toast.makeText(mContext, "PinView Not Valid", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void finishActivity() {
+        if (count >= 2) {
+            finish();
+        } else {
+            Toast.makeText(context, "Press Again To Exist", Toast.LENGTH_SHORT).show();
         }
     }
 
