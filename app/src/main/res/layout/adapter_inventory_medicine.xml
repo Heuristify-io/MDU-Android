@@ -13,23 +13,20 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
 
         <TextView
             android:id="@+id/textViewMedicineNameAdapter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:fontFamily="@font/archive"
             android:gravity="center"
             android:text="@{medicine.medicine_units}"
             android:textColor="@color/dark2"
             android:textSize="@dimen/_10sdp"
             android:textStyle="normal"
-            android:fontFamily="@font/archive"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textViewTotalAdapter"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1.5"
@@ -40,15 +37,14 @@
             android:id="@+id/textViewRemainAdapter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:paddingLeft="@dimen/_10sdp"
+            android:fontFamily="@font/archive"
+            android:gravity="left"
             android:text="@{medicine.medicine_name}"
             android:textColor="@color/dark"
             android:textSize="@dimen/_10sdp"
             android:textStyle="italic"
-            android:fontFamily="@font/archive"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textViewMedicineNameAdapter"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="2"
@@ -59,33 +55,18 @@
             android:id="@+id/textViewTotalAdapter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:fontFamily="@font/archive"
             android:gravity="center"
             android:text="@{medicine.medicine_strength}"
             android:textColor="@color/light1"
             android:textSize="@dimen/_10sdp"
             android:textStyle="normal"
-            android:fontFamily="@font/archive"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/textViewMedicineNameAdapter"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginLeft="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
-            android:layout_marginRight="@dimen/_20sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"
-            android:src="@drawable/divider" />
 
 
         <androidx.constraintlayout.widget.Barrier
@@ -93,9 +74,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="textViewRemainAdapter,textViewMedicineNameAdapter,textViewTotalAdapter,imageView2"
-            tools:layout_editor_absoluteX="234dp"
+            app:constraint_referenced_ids="textViewRemainAdapter,textViewMedicineNameAdapter,textViewTotalAdapter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="35dp" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/light2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier"
+            tools:layout_editor_absoluteX="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

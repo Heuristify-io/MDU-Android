@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="medicine"
+            type="com.heuristify.mdu.pojo.Medicine" />
+    </data>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        >
+
+        <TextView
+            android:id="@+id/textViewMedicineNameAdapter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/textViewRemainAdapter"
+            android:text="@{medicine.medicine_name}"
+            android:textColor="@color/dark2"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="normal"
+            android:fontFamily="@font/archive"
+            android:layout_margin="@dimen/_10sdp"
+            />
+
+        <TextView
+            android:id="@+id/textViewRemainAdapter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@{'('+medicine.medicine_strength+')'}"
+            android:layout_margin="@dimen/_10sdp"
+            android:textColor="@color/dark"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="italic"
+            android:fontFamily="@font/archive"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/textViewMedicineNameAdapter"
+            android:background="@color/light2"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            />
+
+
+    </RelativeLayout>
+
+</layout>

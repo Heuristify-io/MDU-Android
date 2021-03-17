@@ -8,6 +8,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface RetrofitServices {
 
@@ -17,4 +18,7 @@ public interface RetrofitServices {
 
     @GET("/medicines/")
     Call<MedicineList>  getMedicine();
+
+    @GET("/medicines/search/{name}")
+    Call<MedicineList>  getSearchMedicine(@Path("name") String name);
 }

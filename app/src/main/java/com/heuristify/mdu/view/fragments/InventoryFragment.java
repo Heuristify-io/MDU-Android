@@ -1,5 +1,6 @@
 package com.heuristify.mdu.view.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.heuristify.mdu.database.entity.MedicineEntity;
 import com.heuristify.mdu.databinding.FragmentDashboardBinding;
 import com.heuristify.mdu.databinding.FragmentInventoryBinding;
 import com.heuristify.mdu.pojo.Medicine;
+import com.heuristify.mdu.view.activities.AddNewInventoryActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +93,13 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
 
             }
         }).start();
+
+        getDataBinding().buttonAddInventory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), AddNewInventoryActivity.class));
+            }
+        });
 
     }
 

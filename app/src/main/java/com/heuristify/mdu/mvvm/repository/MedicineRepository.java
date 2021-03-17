@@ -2,6 +2,8 @@ package com.heuristify.mdu.mvvm.repository;
 
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.MedicineEntity;
 import com.heuristify.mdu.pojo.MedicineList;
@@ -11,6 +13,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MedicineRepository {
+
+    MutableLiveData<Response<MedicineList>> searchMedicineResponse = new MutableLiveData<>();
+    MutableLiveData<String> error_msg = new MutableLiveData<>();
+    MutableLiveData<Boolean> isSuggestion = new MutableLiveData<>();
+    
 
     public void getMedicine() {
 
@@ -50,5 +57,36 @@ public class MedicineRepository {
             }
         }).start();
 
+    }
+
+    public MutableLiveData<Response<MedicineList>> getSearchMedicine(String stock) {
+        isSuggestion.setValue(false);
+        getSearchMedicineList(stock);
+        return searchMedicineResponse;
+    }
+
+    private void getSearchMedicineList(String medicine) {
+        Call<MedicineList> call = MyApplication.getInstance().getRetrofitServicesWithToken().getSearchMedicine(medicine);
+        call.enqueue(new Callback<MedicineList>() {
+            @Override
+            public void onResponse(Call<MedicineList> call, Response<MedicineList> response) {
+                isSuggestion.setValue(true);
+                searchMedicineResponse.setValue(response);
+            }
+
+            @Override
+            public void onFailure(Call<MedicineList> call, Throwable t) {
+                isSuggestion.setValue(false);
+                error_msg.setValue(t.getMessage());
+            }
+        });
+    }
+
+    public MutableLiveData<String> getError_msg() {
+        return error_msg;
+    }
+
+    public MutableLiveData<Boolean> getBooleanMutableLiveData() {
+        return isSuggestion;
     }
 }

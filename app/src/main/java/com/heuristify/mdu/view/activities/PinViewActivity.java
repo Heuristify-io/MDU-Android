@@ -85,6 +85,7 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                 Log.e(TAG, "response" + responseBodyResponse.code());
 //                loginViewModel.getLoginRepository(Integer.parseInt(pin_code)).removeObserver(this);
 
+
             }
         };
 
@@ -95,6 +96,8 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                 Log.e(TAG, "getError_msg " + s);
 //                loginViewModel.getError_msg().removeObserver(this);
                 Toast.makeText(context, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(PinViewActivity.this, AttendingActivity.class));
+                finish();
             }
         });
 
