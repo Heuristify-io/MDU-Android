@@ -1,6 +1,7 @@
 package com.heuristify.mdu.view.activities;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -176,15 +177,18 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
                 finish();
                 break;
             case R.id.imageViewAdd:
-
+                gotoNextActivity();
                 break;
             case R.id.textViewAddAnotherMedicine:
-
+                gotoNextActivity();
                 break;
             case R.id.buttonNext:
-//                startActivity(new Intent(AddNewInventoryActivity.this,));
-//                finish();
+                gotoNextActivity();
                 break;
         }
+    }
+
+    private void gotoNextActivity(){
+        startActivity(new Intent(AddNewInventoryActivity.this,AddNewInventoryDetailsActivity.class));
     }
 }

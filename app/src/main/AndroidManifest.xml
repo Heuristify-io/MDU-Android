@@ -15,8 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MDU"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".view.activities.AddNewInventoryDetailsActivity"></activity>
+        android:usesCleartextTraffic="true"
+
+        >
+        <activity android:name=".view.activities.AddNewInventoryDetailsActivity"/>
         <activity
             android:name=".view.activities.AddNewInventoryActivity"
             android:screenOrientation="portrait"
