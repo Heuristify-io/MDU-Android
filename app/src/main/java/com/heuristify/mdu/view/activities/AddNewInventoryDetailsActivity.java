@@ -36,9 +36,9 @@ import retrofit2.Response;
 
 public class AddNewInventoryDetailsActivity extends BindingBaseActivity<ActivityAddNewInventoryDetailsBinding> implements OnClickHandlerInterface {
     private String medicine_name = "";
-    String[] From = {"Tablet", "Syrup", "Item 3", "Item 4", "Item 5", "Item 6"};
+    String[] From = {"Tablet", "Syrup"};
     String[] Strength = {"500", "600", "700", "800", "800", "900"};
-    String[] Unit = {"mg", "mfg", "gfg"};
+    String[] Unit = {"mg"};
     ArrayAdapter<String> from_adapter, strength_adapter, unit_adapter;
     MedicineViewModel medicineViewModel;
     private Observer observer;
