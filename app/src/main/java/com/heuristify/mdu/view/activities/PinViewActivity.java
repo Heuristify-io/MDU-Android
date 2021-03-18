@@ -108,7 +108,7 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                 if (aBoolean) {
                     showProgressDialog();
                 } else {
-                    hideProgressDialog();
+                    dismissProgressDialog();
                 }
 //                loginViewModel.getProgress().removeObserver(this);
             }

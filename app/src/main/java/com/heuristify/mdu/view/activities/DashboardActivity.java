@@ -62,7 +62,11 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
     private void inventoryFragment() {
         darkInventory();
         fragment = new InventoryFragment();
-        fragmentManager.beginTransaction().replace(R.id.frameLayout, fragment,"Inventory").addToBackStack("Inventory").commit();
+
+        InventoryFragment myFragment = (InventoryFragment)getSupportFragmentManager().findFragmentByTag("Inventory");
+        if (!(myFragment != null && myFragment.isVisible())) {
+            fragmentManager.beginTransaction().replace(R.id.frameLayout, fragment,"Inventory").addToBackStack("Inventory").commit();
+        }
     }
 
     private void dashboardFragment() {

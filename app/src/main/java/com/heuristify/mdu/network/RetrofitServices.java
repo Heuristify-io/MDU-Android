@@ -1,6 +1,7 @@
 package com.heuristify.mdu.network;
 
 import com.heuristify.mdu.pojo.MedicineList;
+import com.heuristify.mdu.pojo.StockMedicineList;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -19,6 +20,13 @@ public interface RetrofitServices {
     @GET("/medicines/")
     Call<MedicineList>  getMedicine();
 
+    @GET("/medicines/stocks")
+    Call<StockMedicineList>  getMedicineStock();
+
     @GET("/medicines/search/{name}")
     Call<MedicineList>  getSearchMedicine(@Path("name") String name);
+
+    @FormUrlEncoded
+    @POST("/medicines/create")
+    Call<StockMedicineList> createMedicine(@Field("medicineName") String medicineName,@Field("form") String form,@Field("strength") String strength,@Field("units") String units,@Field("quantity") int quantity);
 }

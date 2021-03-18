@@ -5,6 +5,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.heuristify.mdu.database.entity.MedicineEntity;
+import com.heuristify.mdu.pojo.StockMedicine;
+
+import java.util.List;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -16,5 +19,14 @@ public interface TaskDao {
 
     @Query("SELECT * FROM medicine_list_entity")
     MedicineEntity getMedicine();
+
+    @Insert()
+    void insertStockMedicine(StockMedicine stockMedicine);
+
+    @Query("SELECT * FROM stock_medicine")
+    List<StockMedicine> getStockMedicines();
+
+    @Query("DELETE FROM stock_medicine")
+    void deleteStockMedicines();
 
 }

@@ -257,12 +257,13 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/buttonNext"
+                android:id="@+id/buttonNextInventoryDetais"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginLeft="@dimen/_30sdp"
                 android:layout_marginRight="@dimen/_30sdp"
-                android:background="@drawable/rounded_shape"
+                android:background="@drawable/rounded_shape_light_dark_mix_color"
+                android:enabled="false"
                 android:gravity="center"
                 android:onClick="@{clickHandler::onClick}"
                 android:text="Next"

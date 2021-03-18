@@ -8,7 +8,7 @@
 
         <variable
             name="medicine"
-            type="com.heuristify.mdu.pojo.Medicine" />
+            type="com.heuristify.mdu.pojo.StockMedicine" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/archive"
             android:gravity="center"
-            android:text="@{medicine.medicine_units}"
+            android:text="@{medicine.stock_medicine_quantity}"
             android:textColor="@color/dark2"
             android:textSize="@dimen/_10sdp"
             android:textStyle="normal"
@@ -41,7 +41,7 @@
             android:paddingLeft="@dimen/_10sdp"
             android:fontFamily="@font/archive"
             android:gravity="left"
-            android:text="@{medicine.medicine_name}"
+            android:text="@{medicine.stock_medicine_name}"
             android:textColor="@color/dark"
             android:textSize="@dimen/_10sdp"
             android:textStyle="italic"
@@ -58,7 +58,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/archive"
             android:gravity="center"
-            android:text="@{medicine.medicine_strength}"
+            android:text="@{medicine.stock_medicine_total}"
             android:textColor="@color/light1"
             android:textSize="@dimen/_10sdp"
             android:textStyle="normal"

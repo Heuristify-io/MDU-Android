@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
-import com.heuristify.mdu.helper.CustomDialog;
 import com.heuristify.mdu.helper.CustomProgressDialog;
 import com.heuristify.mdu.sharedPreferences.SharedHelper;
 
@@ -26,6 +25,7 @@ public abstract class BindingBaseActivity<DB extends ViewDataBinding> extends Ap
         mContext = this;
         dataBinding = DataBindingUtil.setContentView(this,getLayoutRes());
         customProgressDialog = new CustomProgressDialog(mContext);
+        MyApplication.getInstance().setCurrentActivity(this);
     }
 
     @LayoutRes
@@ -41,7 +41,7 @@ public abstract class BindingBaseActivity<DB extends ViewDataBinding> extends Ap
 
     }
 
-    public void hideProgressDialog() {
+    public void dismissProgressDialog() {
         customProgressDialog.dismiss();
     }
 

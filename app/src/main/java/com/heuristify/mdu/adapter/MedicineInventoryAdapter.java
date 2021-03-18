@@ -11,14 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.databinding.AdapterInventoryMedicineBinding;
 import com.heuristify.mdu.pojo.Medicine;
+import com.heuristify.mdu.pojo.StockMedicine;
 
 import java.util.List;
 
 public class MedicineInventoryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    List<Medicine> medicineList;
+    List<StockMedicine> medicineList;
     Context context;
 
-    public MedicineInventoryAdapter(List<Medicine> medicineList, Context context) {
+    public MedicineInventoryAdapter(List<StockMedicine> medicineList, Context context) {
         this.medicineList = medicineList;
         this.context = context;
     }

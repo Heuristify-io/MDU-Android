@@ -22,6 +22,7 @@ import com.heuristify.mdu.database.entity.MedicineEntity;
 import com.heuristify.mdu.databinding.FragmentDashboardBinding;
 import com.heuristify.mdu.databinding.FragmentInventoryBinding;
 import com.heuristify.mdu.pojo.Medicine;
+import com.heuristify.mdu.pojo.StockMedicine;
 import com.heuristify.mdu.view.activities.AddNewInventoryActivity;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private List<Medicine> medicineList;
+    private List<StockMedicine> medicineList;
     private MedicineInventoryAdapter medicineInventoryAdapter;
 
     public InventoryFragment() {
@@ -74,14 +75,16 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialRecycleView();
+        MyApplication.getInstance().setCurrentActivity(getActivity());
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 MedicineEntity medicineEntity = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getMedicine();
-                if (medicineEntity != null) {
-                    medicineList.addAll(medicineEntity.getMedicineList());
+                List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicines();
+                if (stockMedicines != null) {
+                    medicineList.addAll(stockMedicines);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

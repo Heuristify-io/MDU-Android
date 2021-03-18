@@ -35,6 +35,10 @@ public class MyApplication extends Application {
         this.activity = activity;
     }
 
+    public Activity getActivity(){
+        return activity;
+    }
+
     public RetrofitServices getRetrofitServices() {
         Retrofit retrofit = ApiClientAuth.getRetrofitFactoryToken();
         retrofitServices = retrofit.create(RetrofitServices.class);

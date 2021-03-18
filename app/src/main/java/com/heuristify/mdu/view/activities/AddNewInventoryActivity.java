@@ -182,11 +182,10 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
             case R.id.textViewAddAnotherMedicine:
                 gotoNextActivity();
                 break;
-            case R.id.buttonNext:
-                gotoNextActivity();
-                break;
         }
     }
+
+
 
     private void gotoNextActivity(){
         startActivity(new Intent(AddNewInventoryActivity.this,AddNewInventoryDetailsActivity.class));

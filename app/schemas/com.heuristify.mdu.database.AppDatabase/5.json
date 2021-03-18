@@ -1,0 +1,84 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 5,
+    "identityHash": "d0541d5df1448ef3fe04d8682baea1cf",
+    "entities": [
+      {
+        "tableName": "medicine_list_entity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medicine_list_id` INTEGER NOT NULL, `medicine_list_column` TEXT, PRIMARY KEY(`medicine_list_id`))",
+        "fields": [
+          {
+            "fieldPath": "medicine_list_id",
+            "columnName": "medicine_list_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medicineList",
+            "columnName": "medicine_list_column",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "medicine_list_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "stock_medicine",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`stock_medicine_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stock_medicine_medicineId` INTEGER NOT NULL, `stock_medicine_name` TEXT, `stock_medicine_quantity` TEXT, `stock_medicine_total` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "stock_medicine_id",
+            "columnName": "stock_medicine_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stock_medicine_medicineId",
+            "columnName": "stock_medicine_medicineId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stock_medicine_name",
+            "columnName": "stock_medicine_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stock_medicine_quantity",
+            "columnName": "stock_medicine_quantity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stock_medicine_total",
+            "columnName": "stock_medicine_total",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "stock_medicine_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd0541d5df1448ef3fe04d8682baea1cf')"
+    ]
+  }
+}

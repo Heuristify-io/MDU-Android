@@ -6,8 +6,14 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.MedicineEntity;
+import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.pojo.MedicineList;
+import com.heuristify.mdu.pojo.StockMedicine;
+import com.heuristify.mdu.pojo.StockMedicineList;
 
+import java.util.List;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -15,9 +21,10 @@ import retrofit2.Response;
 public class MedicineRepository {
 
     MutableLiveData<Response<MedicineList>> searchMedicineResponse = new MutableLiveData<>();
+    MutableLiveData<Response<StockMedicineList>> createMedicineResponse = new MutableLiveData<>();
     MutableLiveData<String> error_msg = new MutableLiveData<>();
     MutableLiveData<Boolean> isSuggestion = new MutableLiveData<>();
-    
+
 
     public void getMedicine() {
 
@@ -26,18 +33,18 @@ public class MedicineRepository {
             @Override
             public void onResponse(Call<MedicineList> call, Response<MedicineList> response) {
                 if (response.isSuccessful()) {
-                    Log.e("medicine_response",""+response.body().getMedicineList().size());
+                    Log.e("medicine_response", "" + response.body().getMedicineList().size());
                     if (response.body().getMedicineList().size() > 0) {
                         storeMedicineIntoDb(response);
                     }
                 }
-                Log.e("medicine_response2",""+response.code());
+                Log.e("medicine_response2", "" + response.code());
             }
 
             @Override
             public void onFailure(Call<MedicineList> call, Throwable t) {
 
-                Log.e("medicine_responseFail",""+t.getMessage());
+                Log.e("medicine_responseFail", "" + t.getMessage());
 
             }
         });
@@ -82,11 +89,105 @@ public class MedicineRepository {
         });
     }
 
+    public MutableLiveData<Response<StockMedicineList>> createMedicineInventory(String medicineName, String from, String strength, String units, int quantity) {
+        createMedicine(medicineName, from, strength, units, quantity);
+        return createMedicineResponse;
+    }
+
+    private void createMedicine(String medicineName, String from, String strength, String units, int quantity) {
+        Call<StockMedicineList> responseBodyCall = MyApplication.getInstance().getRetrofitServicesWithToken().createMedicine(medicineName, from, strength, units, quantity);
+        responseBodyCall.enqueue(new Callback<StockMedicineList>() {
+            @Override
+            public void onResponse(Call<StockMedicineList> call, Response<StockMedicineList> response) {
+                try {
+
+                    if (response.code() == 201) {
+                        if (response.body().getStockMedicineListList().size() > 0) {
+                            //response to activity
+                            deleteOldListAndStoreNewListFromDb(response, response.body().getStockMedicineListList(),"createMedicine");
+                        } else {
+                            createMedicineResponse.setValue(response);
+                        }
+                    } else {
+                        createMedicineResponse.setValue(response);
+                    }
+
+                } catch (Exception e) {
+                    createMedicineResponse.setValue(response);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<StockMedicineList> call, Throwable t) {
+                error_msg.setValue(t.getMessage());
+            }
+        });
+
+
+    }
+
     public MutableLiveData<String> getError_msg() {
         return error_msg;
     }
 
     public MutableLiveData<Boolean> getBooleanMutableLiveData() {
         return isSuggestion;
+    }
+
+    public void getStockMedicineList() {
+        Call<StockMedicineList> stockMedicineListCall = MyApplication.getInstance().getRetrofitServicesWithToken().getMedicineStock();
+        stockMedicineListCall.enqueue(new Callback<StockMedicineList>() {
+            @Override
+            public void onResponse(Call<StockMedicineList> call, Response<StockMedicineList> response) {
+                if (response.isSuccessful()) {
+                    if (response.code() == 200) {
+
+                        //do not response to activity
+                        if(response.body().getStockMedicineListList() != null){
+                            deleteOldListAndStoreNewListFromDb(response, response.body().getStockMedicineListList(),"getStockMedicineList");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StockMedicineList> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void storeInToDb(StockMedicine stockMedicine) {
+        MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertStockMedicine(stockMedicine);
+    }
+
+    private void deleteOldListAndStoreNewListFromDb(Response<StockMedicineList> response, List<StockMedicine> stockMedicineListList,String msg) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicines();
+                if (stockMedicines != null) {
+                    MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().deleteStockMedicines();
+                }
+                for (int i = 0; i < stockMedicineListList.size(); i++) {
+                    StockMedicine stockMedicine = new StockMedicine();
+                    stockMedicine.setStock_medicine_id(stockMedicineListList.get(i).getStock_medicine_id());
+                    stockMedicine.setStock_medicine_medicineId(stockMedicineListList.get(i).getStock_medicine_medicineId());
+                    stockMedicine.setStock_medicine_name(stockMedicineListList.get(i).getStock_medicine_name());
+                    stockMedicine.setStock_medicine_quantity(stockMedicineListList.get(i).getStock_medicine_quantity());
+                    stockMedicine.setStock_medicine_total(stockMedicineListList.get(i).getStock_medicine_total());
+                    storeInToDb(stockMedicine);
+                }
+                if(msg.equals("createMedicine")){
+                    MyApplication.getInstance().getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            createMedicineResponse.setValue(response);
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 }

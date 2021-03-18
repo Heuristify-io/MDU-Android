@@ -24,7 +24,7 @@ public class SplashActivity extends BindingBaseActivity<ActivitySplashBinding> {
 
         MedicineViewModel medicineViewModel = ViewModelProviders.of(this).get(MedicineViewModel.class);
         medicineViewModel.getMedicineList();
-
+        medicineViewModel.getStockMedicineList();
 
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {

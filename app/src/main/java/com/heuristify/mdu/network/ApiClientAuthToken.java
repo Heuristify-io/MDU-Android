@@ -36,7 +36,6 @@ public class ApiClientAuthToken {
                 @Override
                 public okhttp3.Response intercept(Chain chain) throws IOException {
                     Request original = chain.request();
-                    Log.e("token", "" + SharedHelper.getKey(MyApplication.getInstance(), Helper.JWT));
 
                     Request request = original.newBuilder()
                             .addHeader("content-type", "application/json")
