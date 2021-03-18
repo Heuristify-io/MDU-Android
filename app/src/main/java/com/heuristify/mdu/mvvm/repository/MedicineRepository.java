@@ -1,5 +1,6 @@
 package com.heuristify.mdu.mvvm.repository;
 
+import android.database.Cursor;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -102,12 +103,22 @@ public class MedicineRepository {
                 try {
 
                     if (response.code() == 201) {
-                        if (response.body().getStockMedicineListList().size() > 0) {
-                            //response to activity
-                            deleteOldListAndStoreNewListFromDb(response, response.body().getStockMedicineListList(),"createMedicine");
+
+                        if (response.body().getMsg().equals("Successfully created medicine.")) {
+                            //add new medicine
+                            DisplayLog.showLog("add_new_med", "" + response.code());
+                            addNewMedicine(response, response.body().getMedicine().getMedicine_id(), medicineName, quantity);
+
+                        } else if (response.body().getMsg().equals("Successfully bought medicine.")) {
+
+                            //update medicine fields
+                            createMedicineResponse.setValue(response);
+//                            updateMedicine(response, medicineName, quantity);
+
                         } else {
                             createMedicineResponse.setValue(response);
                         }
+
                     } else {
                         createMedicineResponse.setValue(response);
                     }
@@ -127,6 +138,54 @@ public class MedicineRepository {
 
     }
 
+    private void updateMedicine(Response<StockMedicineList> response, String medicineName, int quantity) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                StockMedicine stockMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getMedicineQuantityAndTotal(medicineName);
+
+
+                String q1 = stockMedicine.getStock_medicine_quantity();
+                String t1 = stockMedicine.getStock_medicine_total();
+                int add_quantity = Integer.parseInt(q1) + quantity;
+                int add_total = Integer.parseInt(t1) + quantity;
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().update(add_quantity, add_total, medicineName);
+
+                MyApplication.getInstance().getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createMedicineResponse.setValue(response);
+                    }
+                });
+
+            }
+        }).start();
+    }
+
+    private void addNewMedicine(Response<StockMedicineList> response, int medicine_id, String medicineName, int quantity) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                StockMedicine stockMedicine = new StockMedicine();
+                stockMedicine.setStock_medicine_medicineId(medicine_id);
+                stockMedicine.setStock_medicine_name(medicineName);
+                stockMedicine.setStock_medicine_quantity(String.valueOf(quantity));
+                stockMedicine.setStock_medicine_total(String.valueOf(quantity));
+                storeInToDb(stockMedicine);
+
+                MyApplication.getInstance().getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createMedicineResponse.setValue(response);
+                    }
+                });
+
+            }
+        }).start();
+    }
+
     public MutableLiveData<String> getError_msg() {
         return error_msg;
     }
@@ -144,8 +203,8 @@ public class MedicineRepository {
                     if (response.code() == 200) {
 
                         //do not response to activity
-                        if(response.body().getStockMedicineListList() != null){
-                            deleteOldListAndStoreNewListFromDb(response, response.body().getStockMedicineListList(),"getStockMedicineList");
+                        if (response.body().getStockMedicineListList() != null) {
+                            deleteOldListAndStoreNewListFromDb(response, response.body().getStockMedicineListList(), "getStockMedicineList");
                         }
                     }
                 }
@@ -162,7 +221,7 @@ public class MedicineRepository {
         MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertStockMedicine(stockMedicine);
     }
 
-    private void deleteOldListAndStoreNewListFromDb(Response<StockMedicineList> response, List<StockMedicine> stockMedicineListList,String msg) {
+    private void deleteOldListAndStoreNewListFromDb(Response<StockMedicineList> response, List<StockMedicine> stockMedicineListList, String msg) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -172,14 +231,13 @@ public class MedicineRepository {
                 }
                 for (int i = 0; i < stockMedicineListList.size(); i++) {
                     StockMedicine stockMedicine = new StockMedicine();
-                    stockMedicine.setStock_medicine_id(stockMedicineListList.get(i).getStock_medicine_id());
                     stockMedicine.setStock_medicine_medicineId(stockMedicineListList.get(i).getStock_medicine_medicineId());
                     stockMedicine.setStock_medicine_name(stockMedicineListList.get(i).getStock_medicine_name());
                     stockMedicine.setStock_medicine_quantity(stockMedicineListList.get(i).getStock_medicine_quantity());
                     stockMedicine.setStock_medicine_total(stockMedicineListList.get(i).getStock_medicine_total());
                     storeInToDb(stockMedicine);
                 }
-                if(msg.equals("createMedicine")){
+                if (msg.equals("createMedicine")) {
                     MyApplication.getInstance().getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

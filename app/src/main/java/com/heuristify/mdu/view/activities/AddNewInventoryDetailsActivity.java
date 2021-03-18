@@ -105,6 +105,10 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
                 dismissProgressDialog();
                 if (responseBodyResponse.isSuccessful()) {
                     Toast.makeText(context, "Medicine Buy Successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(AddNewInventoryDetailsActivity.this, DashboardActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                     finish();
                 } else {
                 }
@@ -149,7 +153,7 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
                 finish();
                 break;
             case R.id.textViewSub:
-                if (Integer.parseInt(getDataBinding().textViewNumber.getText().toString()) > 0) {
+                if (Integer.parseInt(getDataBinding().textViewNumber.getText().toString()) > 1) {
                     int number = Integer.parseInt(getDataBinding().textViewNumber.getText().toString());
                     number = number - 1;
                     getDataBinding().textViewNumber.setText(String.valueOf(number));

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "391ac30e5dacd945f7496d5f1d207ca6",
+    "identityHash": "fb74fa0fb3ee5c736c67c52ccf57d0aa",
     "entities": [
       {
         "tableName": "medicine_list_entity",
@@ -32,14 +32,8 @@
       },
       {
         "tableName": "stock_medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`stock_medicine_id` INTEGER NOT NULL, `stock_medicine_medicineId` INTEGER NOT NULL, `stock_medicine_name` TEXT, `stock_medicine_quantity` TEXT, `stock_medicine_total` TEXT, PRIMARY KEY(`stock_medicine_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`stock_medicine_medicineId` INTEGER NOT NULL, `stock_medicine_name` TEXT, `stock_medicine_quantity` TEXT, `stock_medicine_total` TEXT, PRIMARY KEY(`stock_medicine_medicineId`))",
         "fields": [
-          {
-            "fieldPath": "stock_medicine_id",
-            "columnName": "stock_medicine_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "stock_medicine_medicineId",
             "columnName": "stock_medicine_medicineId",
@@ -67,7 +61,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "stock_medicine_id"
+            "stock_medicine_medicineId"
           ],
           "autoGenerate": false
         },
@@ -78,7 +72,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '391ac30e5dacd945f7496d5f1d207ca6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fb74fa0fb3ee5c736c67c52ccf57d0aa')"
     ]
   }
 }
