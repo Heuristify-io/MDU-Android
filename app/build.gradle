@@ -72,4 +72,7 @@ dependencies {
     //spinner
     implementation 'com.github.tiper:MaterialSpinner:1.4.2'
     implementation 'com.github.ganfra:material-spinner:2.0.0'
+
+    // Image Compressor library
+    implementation 'id.zelory:compressor:2.1.0'
 }

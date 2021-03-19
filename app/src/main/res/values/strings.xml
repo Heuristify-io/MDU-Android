@@ -4,4 +4,8 @@
     <string name="copy_right">Copyright&#174; 2020. PTC and/or its affiliates. All rights  reserved.</string>
     <string name="inventory_desc">The following table shows the total and remaining inventory of medicines.</string>
     <string name="inventory_desc2">Please enter the details for the new inventory being added.</string>
+    <string name="inventory_desc3">Please enter the patients details</string>
+    <string name="name">Enter Name</string>
+    <string name="back">Back</string>
+    <string name="string_back">Back</string>
 </resources>
