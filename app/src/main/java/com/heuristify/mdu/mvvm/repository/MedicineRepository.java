@@ -112,8 +112,7 @@ public class MedicineRepository {
                         } else if (response.body().getMsg().equals("Successfully bought medicine.")) {
 
                             //update medicine fields
-                            createMedicineResponse.setValue(response);
-//                            updateMedicine(response, medicineName, quantity);
+                            updateMedicine(response, medicineName, quantity);
 
                         } else {
                             createMedicineResponse.setValue(response);
@@ -144,13 +143,14 @@ public class MedicineRepository {
             public void run() {
 
                 StockMedicine stockMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getMedicineQuantityAndTotal(medicineName);
+                if (stockMedicine != null) {
 
-
-                String q1 = stockMedicine.getStock_medicine_quantity();
-                String t1 = stockMedicine.getStock_medicine_total();
-                int add_quantity = Integer.parseInt(q1) + quantity;
-                int add_total = Integer.parseInt(t1) + quantity;
-                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().update(add_quantity, add_total, medicineName);
+                    String q1 = stockMedicine.getStock_medicine_quantity();
+                    String t1 = stockMedicine.getStock_medicine_total();
+                    int add_quantity = Integer.parseInt(q1) + quantity;
+                    int add_total = Integer.parseInt(t1) + quantity;
+                    MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().update(add_quantity, add_total, medicineName);
+                }
 
                 MyApplication.getInstance().getActivity().runOnUiThread(new Runnable() {
                     @Override
