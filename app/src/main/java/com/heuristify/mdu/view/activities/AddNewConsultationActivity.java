@@ -2,8 +2,8 @@ package com.heuristify.mdu.view.activities;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -13,10 +13,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.media.ExifInterface;
+
+import androidx.annotation.NonNull;
+import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -30,20 +31,15 @@ import androidx.core.content.ContextCompat;
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.base.MyApplication;
-import com.heuristify.mdu.database.entity.MedicineEntity;
 import com.heuristify.mdu.databinding.ActivityAddNewConsultationBinding;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.pojo.Patient;
-import com.heuristify.mdu.pojo.StockMedicine;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.List;
-import java.util.regex.Pattern;
 
 import id.zelory.compressor.Compressor;
 
@@ -63,7 +59,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
         getDataBinding().setClickHandler(this);
 
 
-        gender_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Gender);
+        gender_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Gender);
         gender_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         getDataBinding().materialSpinnerGender.setAdapter(gender_adapter);
 
@@ -76,23 +72,20 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
         } else {
-            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE);
-            } else {
+            else {
                 openCamera();
             }
         }
     }
 
     private void openCamera() {
-        String myDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-        String dateArray[] = myDate.split(Pattern.quote(" "));
-        String photo = "Photo_" + dateArray[0] + ".jpeg";
-        ContentValues values = new ContentValues();
+        ContentValues values;
+        values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Image File name");
         imageToUploadUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent chooserIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File f = new File(mContext.getExternalCacheDir(), photo);
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageToUploadUri);
         chooserIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         startActivityForResult(chooserIntent, 0);
@@ -103,6 +96,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
         return R.layout.activity_add_new_consultation;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -137,41 +131,29 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
     private void saveData(String name, String cNicFirstTwoDigit, String cNicLastFourDigit, String age, String gender) {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
 
-                Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
-                if (patient != null) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(mContext, "Patient Already Exist", Toast.LENGTH_SHORT).show();
-                        }
+            Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
+            if (patient != null) {
+                runOnUiThread(() -> Toast.makeText(mContext, "Patient Already Exist", Toast.LENGTH_SHORT).show());
+            } else {
+                Patient patient1 = new Patient();
+                patient1.setFullName(name);
+                patient1.setCnicFirst2Digits(Integer.parseInt(cNicFirstTwoDigit));
+                patient1.setCnicLast4Digits(Integer.parseInt(cNicLastFourDigit));
+                patient1.setAge(Integer.parseInt(age));
+                patient1.setGender(gender);
+                patient1.setImage_path(compressedImageFile.getPath());
+                int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertPatient(patient1);
+
+                if (insert > 0) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(mContext, "Patient Created Successfully", Toast.LENGTH_SHORT).show();
+                        finish();
                     });
-                } else {
-                    Patient patient1 = new Patient();
-                    patient1.setFullName(name);
-                    patient1.setCnicFirst2Digits(Integer.parseInt(cNicFirstTwoDigit));
-                    patient1.setCnicLast4Digits(Integer.parseInt(cNicLastFourDigit));
-                    patient1.setAge(Integer.parseInt(age));
-                    patient1.setGender(gender);
-                    patient1.setImage_path(compressedImageFile.getPath());
-                    int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertPatient(patient1);
-
-                    if (insert > 0) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(mContext, "Patient Created Successfully", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        });
-
-                    }
                 }
-
             }
+
         }).start();
     }
 
@@ -188,9 +170,6 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
     }
 
     public String compressImage(String filePath) {
-
-        File file = new File(filePath);
-        int file_size = Integer.parseInt(String.valueOf(file.length() / 1024));
 
 
         Bitmap scaledBitmap = null;
@@ -344,7 +323,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
             e.printStackTrace();
         }
 
-        FileOutputStream out = null;
+        FileOutputStream out;
 
         String filename = getFilename();
 
@@ -368,8 +347,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
     public String getFilename() {
         File file = new File(path);
-        String uriSting = file.getAbsolutePath();
-        return uriSting;
+        return file.getAbsolutePath();
 
     }
 
@@ -387,7 +365,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
             final int widthRatio = Math.round((float) width / (float) reqWidth);
 
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+            inSampleSize = Math.min(heightRatio, widthRatio);
 
         }
         final float totalPixels = width * height;
@@ -406,51 +384,45 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_CANCELED) {
-            switch (requestCode) {
-                case 0:
-                    if (resultCode == RESULT_OK) {
-                        if (imageToUploadUri != null) {
-                            path = getRealPathFromURI(imageToUploadUri);
-                            try {
-                                compressedImageFile = new Compressor(getApplicationContext()).compressToFile(new File(compressImage(path)));
-                                int file_size = Integer.parseInt(String.valueOf(compressedImageFile.length() / 1024));
-//                       profileImage.setImageBitmap(Bitmap.createScaledBitmap(compressedImageBitmap, (int) (compressedImageBitmap.getWidth() * 0.5), (int) (compressedImageBitmap.getHeight() * 0.5), true));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            DisplayLog.showLog("imagePath2", "" + compressedImageFile.getPath());
-
-
+            if (requestCode == 0) {
+                if (resultCode == RESULT_OK) {
+                    if (imageToUploadUri != null) {
+                        path = getRealPathFromURI(imageToUploadUri);
+                        try {
+                            compressedImageFile = new Compressor(getApplicationContext()).compressToFile(new File(compressImage(path)));
+                            //                       profileImage.setImageBitmap(Bitmap.createScaledBitmap(compressedImageBitmap, (int) (compressedImageBitmap.getWidth() * 0.5), (int) (compressedImageBitmap.getHeight() * 0.5), true));
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    }
-                    break;
 
+                        DisplayLog.showLog("imagePath2", "" + compressedImageFile.getPath());
+
+
+                    }
+                }
+            } else {
+                throw new IllegalStateException("Unexpected value: " + requestCode);
             }
         }
     }
 
+
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_CAMERA: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_STORAGE);
-                    } else {
                     }
-                } else {
                 }
-                return;
+                break;
             }
             case MY_PERMISSIONS_REQUEST_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openCamera();
-                } else {
-                    // permission not granted
-                }
-                return;
+                }  // permission not granted
+
             }
         }
     }

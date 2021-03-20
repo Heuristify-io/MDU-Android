@@ -1,6 +1,5 @@
 package com.heuristify.mdu.database.dao;
 
-import android.database.Cursor;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

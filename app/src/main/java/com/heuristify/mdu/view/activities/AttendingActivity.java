@@ -1,10 +1,10 @@
 package com.heuristify.mdu.view.activities;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
@@ -29,6 +29,7 @@ public class AttendingActivity extends BindingBaseActivity<ActivityAttendingBind
         return R.layout.activity_attending;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

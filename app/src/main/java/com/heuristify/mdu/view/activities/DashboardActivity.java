@@ -1,12 +1,11 @@
 package com.heuristify.mdu.view.activities;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
@@ -19,42 +18,22 @@ import com.heuristify.mdu.view.fragments.InventoryFragment;
 public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBinding> {
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction fragTransacion = fragmentManager.beginTransaction();
     Fragment fragment = null;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getDataBinding().textViewName.setText("Dr. " + SharedHelper.getKey(this, Helper.NAME));
 
         dashboardFragment();
-        getDataBinding().textViewDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dashboardFragment();
-            }
-        });
+        getDataBinding().textViewDashboard.setOnClickListener(v -> dashboardFragment());
 
-        getDataBinding().textViewInventory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inventoryFragment();
-            }
-        });
+        getDataBinding().textViewInventory.setOnClickListener(v -> inventoryFragment());
 
-        getDataBinding().imageViewDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dashboardFragment();
-            }
-        });
+        getDataBinding().imageViewDashboard.setOnClickListener(v -> dashboardFragment());
 
-        getDataBinding().imageViewInventory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inventoryFragment();
-            }
-        });
+        getDataBinding().imageViewInventory.setOnClickListener(v -> inventoryFragment());
 
 
     }

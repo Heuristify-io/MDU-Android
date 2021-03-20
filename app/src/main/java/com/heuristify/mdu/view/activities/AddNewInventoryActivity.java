@@ -1,6 +1,7 @@
 package com.heuristify.mdu.view.activities;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -52,6 +53,7 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 0) {
@@ -74,19 +76,11 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
 
         });
 
-        medicineViewModel.getError_msg().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
+        medicineViewModel.getError_msg().observe(this, s -> {
 
-            }
         });
 
-        medicineViewModel.getBooleanMutableLiveData().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                isShowSuggestion = aBoolean;
-            }
-        });
+        medicineViewModel.getBooleanMutableLiveData().observe(this, aBoolean -> isShowSuggestion = aBoolean);
 
     }
 
@@ -108,30 +102,27 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
 
     private void getSuggestion(String toUpperCase) {
 
-        medicineViewModel.getSearchStockMutableLiveData(toUpperCase).observe(this, new Observer<Response<MedicineList>>() {
-            @Override
-            public void onChanged(Response<MedicineList> medicineListResponse) {
+        medicineViewModel.getSearchStockMutableLiveData(toUpperCase).observe(this, medicineListResponse -> {
 
-                if(medicineListResponse.code() == 200){
-                    Log.e("search List",""+medicineListResponse.body().getMedicineList().size());
-                    if(isShowSuggestion){
-                        if(!medicineListResponse.body().getMedicineList().isEmpty() && medicineListResponse.body().getMedicineList().size() > 0)
-                        {
-                            if(!medicineList.isEmpty()){
-                                medicineList.clear();
-                                medicineSearchAdapter.notifyDataSetChanged();
-                            }
-                            if(getDataBinding().editTextSearch.length()> 0){
-                                visibleRecycleViewAndOtherViews();
-                                medicineList.addAll(medicineListResponse.body().getMedicineList());
-                                medicineSearchAdapter.notifyDataSetChanged();
-                            }
-                        }
-                        else{
+            if(medicineListResponse.code() == 200){
+                Log.e("search List",""+medicineListResponse.body().getMedicineList().size());
+                if(isShowSuggestion){
+                    if(!medicineListResponse.body().getMedicineList().isEmpty() && medicineListResponse.body().getMedicineList().size() > 0)
+                    {
+                        if(!medicineList.isEmpty()){
                             medicineList.clear();
                             medicineSearchAdapter.notifyDataSetChanged();
-                            goneRecycleViewAndOtherViews();
                         }
+                        if(getDataBinding().editTextSearch.length()> 0){
+                            visibleRecycleViewAndOtherViews();
+                            medicineList.addAll(medicineListResponse.body().getMedicineList());
+                            medicineSearchAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    else{
+                        medicineList.clear();
+                        medicineSearchAdapter.notifyDataSetChanged();
+                        goneRecycleViewAndOtherViews();
                     }
                 }
             }
@@ -167,6 +158,7 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
         getDataBinding().recyclerViewMedicine.setItemAnimator(null);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

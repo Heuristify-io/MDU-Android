@@ -27,16 +27,13 @@ public class SplashActivity extends BindingBaseActivity<ActivitySplashBinding> {
         medicineViewModel.getStockMedicineList();
 
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (SharedHelper.getKey(MyApplication.getInstance(), Helper.JWT).length() > 0) {
-                    startActivity(new Intent(SplashActivity.this, DashboardActivity.class));
-                    finish();
-                } else {
-                    startActivity(new Intent(SplashActivity.this, GetStartActivity.class));
-                    finish();
-                }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (SharedHelper.getKey(MyApplication.getInstance(), Helper.JWT).length() > 0) {
+                startActivity(new Intent(SplashActivity.this, DashboardActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(SplashActivity.this, GetStartActivity.class));
+                finish();
             }
         }, 500);
 
