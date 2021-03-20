@@ -8,23 +8,21 @@ public class SharedHelper {
     public static SharedPreferences sharedPreferences;
     public static SharedPreferences.Editor editor;
 
-    public static String putKey(Context context, String Key, String Value) {
+    public static void putKey(Context context, String Key, String Value) {
         sharedPreferences = context.getSharedPreferences("mdu", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString(Key, Value);
-        editor.commit();
-        return Key;
+        editor.apply();
     }
 
     public static String getKey(Context contextGetKey, String Key) {
         sharedPreferences = contextGetKey.getSharedPreferences("mdu", Context.MODE_PRIVATE);
-        String Value = sharedPreferences.getString(Key, "");
-        return Value;
+        return sharedPreferences.getString(Key, "");
 
     }
 
     public static void deleteAllSharedPrefs(Context context){
         sharedPreferences = context.getSharedPreferences("mdu", Context.MODE_PRIVATE);
-        sharedPreferences.edit().clear().commit();
+        sharedPreferences.edit().clear().apply();
     }
 }

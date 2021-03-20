@@ -6,7 +6,7 @@ import androidx.room.Room;
 public class DatabaseClient {
 
     private static DatabaseClient databaseClient;
-    private AppDatabase appDatabase;
+    private final AppDatabase appDatabase;
 
     private DatabaseClient(Context context) {
         appDatabase = Room.databaseBuilder(context, AppDatabase.class, "MduDatabase")

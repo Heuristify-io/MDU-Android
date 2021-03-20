@@ -3,7 +3,6 @@ package com.heuristify.mdu.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -38,13 +37,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         MedicineSearchViewHolder viewHolder = (MedicineSearchViewHolder) holder;
         viewHolder.adapterMedicineSearchBinding.setMedicine(medicineList.get(position));
-        viewHolder.adapterMedicineSearchBinding.relative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, AddNewInventoryDetailsActivity.class).putExtra("medicine_name",medicineList.get(position).getMedicine_name()));
-
-            }
-        });
+        viewHolder.adapterMedicineSearchBinding.relative.setOnClickListener(v -> context.startActivity(new Intent(context, AddNewInventoryDetailsActivity.class).putExtra("medicine_name",medicineList.get(position).getMedicine_name())));
 
     }
 
@@ -53,7 +46,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return medicineList.size();
     }
 
-    private class MedicineSearchViewHolder extends RecyclerView.ViewHolder {
+    private static class MedicineSearchViewHolder extends RecyclerView.ViewHolder {
 
         AdapterMedicineSearchBinding adapterMedicineSearchBinding;
 

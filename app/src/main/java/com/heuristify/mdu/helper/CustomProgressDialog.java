@@ -14,7 +14,7 @@ public class CustomProgressDialog {
 
     private Dialog mDialog;
     private ProgressBar mProgressBar;
-    private Context context;
+    private final Context context;
 
     public CustomProgressDialog(Context context) {
         this.context = context;

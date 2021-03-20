@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.databinding.AdapterInventoryMedicineBinding;
-import com.heuristify.mdu.pojo.Medicine;
 import com.heuristify.mdu.pojo.StockMedicine;
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class MedicineInventoryAdapter  extends RecyclerView.Adapter<RecyclerView
         return medicineList.size();
     }
 
-    private class InventoryViewHolder extends RecyclerView.ViewHolder {
+    private static class InventoryViewHolder extends RecyclerView.ViewHolder {
         AdapterInventoryMedicineBinding adapterInventoryMedicineBinding;
         public InventoryViewHolder(AdapterInventoryMedicineBinding adapterInventoryMedicineBinding) {
             super(adapterInventoryMedicineBinding.getRoot());
