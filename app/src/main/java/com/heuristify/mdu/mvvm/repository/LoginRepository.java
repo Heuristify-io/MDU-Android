@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
@@ -33,14 +34,14 @@ public class LoginRepository {
             Call<ResponseBody> call = MyApplication.getInstance().getRetrofitServices().loginPin(pin_code);
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                public void onResponse(@NonNull Call<ResponseBody> call,@NonNull Response<ResponseBody> response) {
                     progress.setValue(false);
                     responseBodyMutableLiveData.postValue(response);
                     Log.e("respoinse",""+response.code());
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(@NonNull Call<ResponseBody> call,@NonNull Throwable t) {
                     progress.setValue(false);
                     error_msg.postValue(t.getMessage());
                     Log.e("respoinse2",""+t.getMessage());
