@@ -16,6 +16,7 @@ import android.graphics.Paint;
 
 import androidx.annotation.NonNull;
 import androidx.exifinterface.media.ExifInterface;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;

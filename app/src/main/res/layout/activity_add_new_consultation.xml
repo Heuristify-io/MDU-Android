@@ -174,7 +174,7 @@
 
             <TextView
                 android:id="@+id/textViewConsultationCnicLastFourDigit"
-                android:layout_below="@id/editTextPatientDiagnosis"
+                android:layout_below="@id/editTextConsultationName"
                 android:layout_alignParentRight="true"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
