@@ -109,22 +109,14 @@ public class MedicineRepository {
             public void onResponse(@NonNull Call<StockMedicineList> call, @NonNull Response<StockMedicineList> response) {
                 try {
 
-                    if (response.code() == 201) {
+                    if (response.code() == 200) {
 
-                        if (response.body().getMsg().equals("Successfully created medicine.")) {
-                            //add new medicine
-                            DisplayLog.showLog("add_new_med", "" + response.code());
-                            addNewMedicine(response, response.body().getMedicine().getMedicine_id(), medicineName, quantity);
+                        //update medicine fields
+                        updateMedicine(response, medicineName, quantity);
 
-                        } else if (response.body().getMsg().equals("Successfully bought medicine.")) {
-
-                            //update medicine fields
-                            updateMedicine(response, medicineName, quantity);
-
-                        } else {
-                            createMedicineResponse.setValue(response);
-                        }
-
+                    } else if (response.code() == 201) {
+                        //add new medicine
+                        addNewMedicine(response, response.body().getMedicine().getMedicine_id(), medicineName, quantity);
                     } else {
                         createMedicineResponse.setValue(response);
                     }
@@ -154,7 +146,7 @@ public class MedicineRepository {
                 String t1 = stockMedicine.getStock_medicine_total();
                 int add_quantity = Integer.parseInt(q1) + quantity;
                 int add_total = Integer.parseInt(t1) + quantity;
-                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().update(add_quantity, add_total, medicineName);
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().update(add_quantity, add_total,stockMedicine.getStock_medicine_medicineId());
             }
 
             MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
