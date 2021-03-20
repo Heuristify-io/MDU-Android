@@ -10,15 +10,16 @@ import com.heuristify.mdu.mvvm.repository.MedicineRepository;
 import com.heuristify.mdu.pojo.MedicineList;
 import com.heuristify.mdu.pojo.StockMedicineList;
 
-import okhttp3.ResponseBody;
+
 import retrofit2.Response;
 
 public class MedicineViewModel extends AndroidViewModel {
     MedicineRepository medicineRepository;
     MutableLiveData<Response<MedicineList>> responseBodyMutableLiveData = new MutableLiveData<>();
     MutableLiveData<Response<StockMedicineList>> createMedicineResponse = new MutableLiveData<>();
-    MutableLiveData<Response<StockMedicineList>> stockMedicineListResponse = new MutableLiveData<>();
+    MutableLiveData<Response<StockMedicineList>> getMedicineList = new MutableLiveData<>();
     MutableLiveData<String> error_msg = new MutableLiveData<>();
+    MutableLiveData<String> get_medicine_error_msg = new MutableLiveData<>();
     MutableLiveData<Boolean> isSuggestion = new MutableLiveData<>();
 
 
@@ -31,8 +32,9 @@ public class MedicineViewModel extends AndroidViewModel {
         medicineRepository.getMedicine();
     }
 
-    public void getStockMedicineList(){
-        medicineRepository.getStockMedicineList();
+    public MutableLiveData<Response<StockMedicineList>> getStockMedicineList(){
+        this.getMedicineList = medicineRepository.getStockMedicineList();
+        return getMedicineList;
     }
 
     public MutableLiveData<Response<MedicineList>> getSearchStockMutableLiveData(String medicine) {
@@ -45,9 +47,16 @@ public class MedicineViewModel extends AndroidViewModel {
         return createMedicineResponse;
     }
 
+
+
     public MutableLiveData<String> getError_msg() {
         this.error_msg = medicineRepository.getError_msg();
         return error_msg;
+    }
+
+    public MutableLiveData<String> get_medicine_error_msg() {
+        this.get_medicine_error_msg = medicineRepository.getGet_medicine_error_msg();
+        return get_medicine_error_msg;
     }
 
     public MutableLiveData<Boolean> getBooleanMutableLiveData() {

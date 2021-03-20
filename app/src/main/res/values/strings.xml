@@ -8,4 +8,5 @@
     <string name="name">Enter Name</string>
     <string name="back">Back</string>
     <string name="string_back">Back</string>
+    <string name="not_get_medicine_list">Unable To Get Medicine List</string>
 </resources>

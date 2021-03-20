@@ -1,8 +1,11 @@
 package com.heuristify.mdu.mvvm.repository;
 
-import android.database.Cursor;
+
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
@@ -23,7 +26,9 @@ public class MedicineRepository {
 
     MutableLiveData<Response<MedicineList>> searchMedicineResponse = new MutableLiveData<>();
     MutableLiveData<Response<StockMedicineList>> createMedicineResponse = new MutableLiveData<>();
+    MutableLiveData<Response<StockMedicineList>> getMedicineList = new MutableLiveData<>();
     MutableLiveData<String> error_msg = new MutableLiveData<>();
+    MutableLiveData<String> get_medicine_error_msg = new MutableLiveData<>();
     MutableLiveData<Boolean> isSuggestion = new MutableLiveData<>();
 
 
@@ -31,8 +36,9 @@ public class MedicineRepository {
 
         Call<MedicineList> call = MyApplication.getInstance().getRetrofitServicesWithToken().getMedicine();
         call.enqueue(new Callback<MedicineList>() {
+
             @Override
-            public void onResponse(Call<MedicineList> call, Response<MedicineList> response) {
+            public void onResponse(@NonNull Call<MedicineList> call, Response<MedicineList> response) {
                 if (response.isSuccessful()) {
                     Log.e("medicine_response", "" + response.body().getMedicineList().size());
                     if (response.body().getMedicineList().size() > 0) {
@@ -43,7 +49,7 @@ public class MedicineRepository {
             }
 
             @Override
-            public void onFailure(Call<MedicineList> call, Throwable t) {
+            public void onFailure(@NonNull Call<MedicineList> call, Throwable t) {
 
                 Log.e("medicine_responseFail", "" + t.getMessage());
 
@@ -56,13 +62,10 @@ public class MedicineRepository {
     private void storeMedicineIntoDb(Response<MedicineList> response) {
         MedicineEntity medicineEntity = new MedicineEntity();
         medicineEntity.setMedicineList(response.body().getMedicineList());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MedicineEntity medicineEntity = new MedicineEntity();
-                medicineEntity.setMedicineList(response.body().getMedicineList());
-                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertMedicineList(medicineEntity);
-            }
+        new Thread(() -> {
+            MedicineEntity medicineEntity1 = new MedicineEntity();
+            medicineEntity1.setMedicineList(response.body().getMedicineList());
+            MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertMedicineList(medicineEntity1);
         }).start();
 
     }
@@ -76,14 +79,19 @@ public class MedicineRepository {
     private void getSearchMedicineList(String medicine) {
         Call<MedicineList> call = MyApplication.getInstance().getRetrofitServicesWithToken().getSearchMedicine(medicine);
         call.enqueue(new Callback<MedicineList>() {
+            public Call<MedicineList> call;
+            public Response<MedicineList> response;
+
             @Override
-            public void onResponse(Call<MedicineList> call, Response<MedicineList> response) {
+            public void onResponse(@NonNull Call<MedicineList> call, Response<MedicineList> response) {
+                this.call = call;
+                this.response = response;
                 isSuggestion.setValue(true);
                 searchMedicineResponse.setValue(response);
             }
 
             @Override
-            public void onFailure(Call<MedicineList> call, Throwable t) {
+            public void onFailure(@NonNull Call<MedicineList> call, Throwable t) {
                 isSuggestion.setValue(false);
                 error_msg.setValue(t.getMessage());
             }
@@ -99,7 +107,7 @@ public class MedicineRepository {
         Call<StockMedicineList> responseBodyCall = MyApplication.getInstance().getRetrofitServicesWithToken().createMedicine(medicineName, from, strength, units, quantity);
         responseBodyCall.enqueue(new Callback<StockMedicineList>() {
             @Override
-            public void onResponse(Call<StockMedicineList> call, Response<StockMedicineList> response) {
+            public void onResponse(@NonNull Call<StockMedicineList> call, Response<StockMedicineList> response) {
                 try {
 
                     if (response.code() == 201) {
@@ -129,7 +137,7 @@ public class MedicineRepository {
             }
 
             @Override
-            public void onFailure(Call<StockMedicineList> call, Throwable t) {
+            public void onFailure(@NonNull Call<StockMedicineList> call, Throwable t) {
                 error_msg.setValue(t.getMessage());
             }
         });
@@ -138,52 +146,44 @@ public class MedicineRepository {
     }
 
     private void updateMedicine(Response<StockMedicineList> response, String medicineName, int quantity) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
 
-                StockMedicine stockMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getMedicineQuantityAndTotal(medicineName);
-                if (stockMedicine != null) {
+            StockMedicine stockMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getMedicineQuantityAndTotal(medicineName);
+            if (stockMedicine != null) {
 
-                    String q1 = stockMedicine.getStock_medicine_quantity();
-                    String t1 = stockMedicine.getStock_medicine_total();
-                    int add_quantity = Integer.parseInt(q1) + quantity;
-                    int add_total = Integer.parseInt(t1) + quantity;
-                    MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().update(add_quantity, add_total, medicineName);
-                }
-
-                MyApplication.getInstance().getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        createMedicineResponse.setValue(response);
-                    }
-                });
-
+                String q1 = stockMedicine.getStock_medicine_quantity();
+                String t1 = stockMedicine.getStock_medicine_total();
+                int add_quantity = Integer.parseInt(q1) + quantity;
+                int add_total = Integer.parseInt(t1) + quantity;
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().update(add_quantity, add_total, medicineName);
             }
+
+            MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
+
         }).start();
     }
 
     private void addNewMedicine(Response<StockMedicineList> response, int medicine_id, String medicineName, int quantity) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
 
-                StockMedicine stockMedicine = new StockMedicine();
-                stockMedicine.setStock_medicine_medicineId(medicine_id);
-                stockMedicine.setStock_medicine_name(medicineName);
-                stockMedicine.setStock_medicine_quantity(String.valueOf(quantity));
-                stockMedicine.setStock_medicine_total(String.valueOf(quantity));
-                storeInToDb(stockMedicine);
+            StockMedicine stockMedicine = new StockMedicine();
+            stockMedicine.setStock_medicine_medicineId(medicine_id);
+            stockMedicine.setStock_medicine_name(medicineName);
+            stockMedicine.setStock_medicine_quantity(String.valueOf(quantity));
+            stockMedicine.setStock_medicine_total(String.valueOf(quantity));
+            storeInToDb(stockMedicine);
 
-                MyApplication.getInstance().getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        createMedicineResponse.setValue(response);
-                    }
-                });
+            MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
 
-            }
         }).start();
+    }
+
+    public MutableLiveData<Response<StockMedicineList>> getGetMedicineList() {
+        return getMedicineList;
+    }
+
+    public MutableLiveData<String> getGet_medicine_error_msg() {
+        return get_medicine_error_msg;
     }
 
     public MutableLiveData<String> getError_msg() {
@@ -194,25 +194,39 @@ public class MedicineRepository {
         return isSuggestion;
     }
 
-    public void getStockMedicineList() {
+    public MutableLiveData<Response<StockMedicineList>> getStockMedicineList() {
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            callGetMedicineList();
+        }, 200);
+
+        return getMedicineList;
+    }
+
+    private void callGetMedicineList() {
+
         Call<StockMedicineList> stockMedicineListCall = MyApplication.getInstance().getRetrofitServicesWithToken().getMedicineStock();
         stockMedicineListCall.enqueue(new Callback<StockMedicineList>() {
-            @Override
-            public void onResponse(Call<StockMedicineList> call, Response<StockMedicineList> response) {
+            public Call<StockMedicineList> call;
+            public Response<StockMedicineList> response;
+
+            public void onResponse(@NonNull Call<StockMedicineList> call, Response<StockMedicineList> response) {
+                this.call = call;
+                this.response = response;
                 if (response.isSuccessful()) {
                     if (response.code() == 200) {
-
-                        //do not response to activity
                         if (response.body().getStockMedicineListList() != null) {
-                            deleteOldListAndStoreNewListFromDb(response, response.body().getStockMedicineListList(), "getStockMedicineList");
+                            deleteOldListAndStoreNewListFromDb(response, response.body().getStockMedicineListList());
                         }
                     }
                 }
+
+                getMedicineList.setValue(response);
             }
 
             @Override
-            public void onFailure(Call<StockMedicineList> call, Throwable t) {
-
+            public void onFailure(@NonNull Call<StockMedicineList> call, Throwable t) {
+                get_medicine_error_msg.setValue(t.getMessage());
             }
         });
     }
@@ -221,30 +235,22 @@ public class MedicineRepository {
         MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertStockMedicine(stockMedicine);
     }
 
-    private void deleteOldListAndStoreNewListFromDb(Response<StockMedicineList> response, List<StockMedicine> stockMedicineListList, String msg) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicines();
-                if (stockMedicines != null) {
-                    MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().deleteStockMedicines();
-                }
-                for (int i = 0; i < stockMedicineListList.size(); i++) {
-                    StockMedicine stockMedicine = new StockMedicine();
-                    stockMedicine.setStock_medicine_medicineId(stockMedicineListList.get(i).getStock_medicine_medicineId());
-                    stockMedicine.setStock_medicine_name(stockMedicineListList.get(i).getStock_medicine_name());
-                    stockMedicine.setStock_medicine_quantity(stockMedicineListList.get(i).getStock_medicine_quantity());
-                    stockMedicine.setStock_medicine_total(stockMedicineListList.get(i).getStock_medicine_total());
-                    storeInToDb(stockMedicine);
-                }
-                if (msg.equals("createMedicine")) {
-                    MyApplication.getInstance().getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            createMedicineResponse.setValue(response);
-                        }
-                    });
-                }
+    private void deleteOldListAndStoreNewListFromDb(Response<StockMedicineList> response, List<StockMedicine> stockMedicineListList) {
+        new Thread(() -> {
+            List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicines();
+            if (stockMedicines != null) {
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().deleteStockMedicines();
+            }
+            for (int i = 0; i < stockMedicineListList.size(); i++) {
+                StockMedicine stockMedicine = new StockMedicine();
+                stockMedicine.setStock_medicine_medicineId(stockMedicineListList.get(i).getStock_medicine_medicineId());
+                stockMedicine.setStock_medicine_name(stockMedicineListList.get(i).getStock_medicine_name());
+                stockMedicine.setStock_medicine_quantity(stockMedicineListList.get(i).getStock_medicine_quantity());
+                stockMedicine.setStock_medicine_total(stockMedicineListList.get(i).getStock_medicine_total());
+                storeInToDb(stockMedicine);
+            }
+            if ("getStockMedicineList".equals("createMedicine")) {
+                MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
             }
         }).start();
     }
