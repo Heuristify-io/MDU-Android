@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout>
 
     <data>
 
@@ -12,12 +10,14 @@
             type="com.heuristify.mdu.interfaces.OnClickHandlerInterface" />
     </data>
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/light"
         android:orientation="vertical"
-        tools:context=".view.activities.AddNewConsultationActivity">
+        tools:context=".view.activities.AddDiagnosisAndMedicineActivity">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -25,7 +25,6 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_30sdp"
-            android:layout_above="@id/buttonNextConsultation"
             android:orientation="vertical">
 
 
@@ -71,7 +70,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/archivo_regular"
                 android:gravity="start"
-                android:text="Add New"
+                android:text="Add Diagnosis"
                 android:textColor="@color/dark2"
                 android:textSize="@dimen/_20sdp"
                 android:textStyle="normal" />
@@ -85,7 +84,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/archivo_regular"
                 android:gravity="left"
-                android:text="Consultation"
+                android:text="and Medicine"
                 android:textColor="@color/dark2"
                 android:textSize="@dimen/_20sdp"
                 android:textStyle="bold" />
@@ -100,14 +99,28 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/archivo_regular"
                 android:gravity="start"
-                android:text="@string/inventory_desc3"
+                android:text="@string/inventory_desc4"
+                android:textColor="@color/light1"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/textViewConsultationDescription2"
+                android:layout_below="@id/textViewConsultationDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:fontFamily="@font/archivo_regular"
+                android:gravity="start"
+                android:text="@string/inventory_desc5"
                 android:textColor="@color/light1"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/textViewConsultationName"
-                android:layout_below="@id/textViewConsultationDescription"
+                android:layout_below="@id/textViewConsultationDescription2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -115,17 +128,16 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/archivo_regular"
                 android:gravity="start"
-                android:text="Medicine Name"
+                android:text="Patient Diagnosis"
                 android:textColor="@color/light1"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="normal" />
 
             <EditText
-                android:id="@+id/editTextConsultationName"
+                android:id="@+id/editTextPatientDiagnosis"
                 android:layout_below="@id/textViewConsultationName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:backgroundTint="@color/dark2"
@@ -137,162 +149,68 @@
                 />
 
             <TextView
-                android:id="@+id/textViewConsultationCnicFirstTwoDigit"
-                android:layout_below="@id/editTextConsultationName"
-                android:layout_alignParentLeft="true"
-                android:layout_width="@dimen/_130sdp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:fontFamily="@font/archivo_regular"
-                android:gravity="start"
-                android:text="CNIC First 2 Digit"
-                android:textColor="@color/light1"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="normal" />
-
-            <EditText
-                android:id="@+id/editTextConsultatioCnicFirstTwoDigit"
-                android:layout_below="@id/textViewConsultationCnicFirstTwoDigit"
-                android:layout_width="@dimen/_130sdp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:layout_alignParentLeft="true"
-                android:maxLength="2"
-                android:backgroundTint="@color/dark2"
-                android:inputType="number"
-                android:imeOptions="actionNext"
-                android:hint="12"
-                android:autofillHints="@string/name"
-                android:textColor="@color/dark2"
-                android:textColorHint="@color/light1"
-                />
-
-            <TextView
-                android:id="@+id/textViewConsultationCnicLastFourDigit"
+                android:id="@+id/textViewPatientDiagnosisDes"
                 android:layout_below="@id/editTextPatientDiagnosis"
-                android:layout_alignParentRight="true"
-                android:layout_width="@dimen/_130sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/archivo_regular"
                 android:gravity="start"
-                android:text="CNIC Last 4 Digit"
+                android:text="Description"
                 android:textColor="@color/light1"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="normal" />
 
             <EditText
-                android:id="@+id/editTextConsultatioCnicLastFourDigit"
-                android:layout_below="@id/textViewConsultationCnicLastFourDigit"
-                android:layout_width="@dimen/_130sdp"
+                android:id="@+id/editTextPatientDiagnosisDes"
+                android:layout_below="@id/textViewPatientDiagnosisDes"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:layout_alignParentRight="true"
-                android:maxLength="4"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:backgroundTint="@color/dark2"
-                android:inputType="number"
+                android:inputType="textPersonName"
                 android:imeOptions="actionNext"
-                android:hint="4567"
-                android:autofillHints="@string/name"
-                android:textColor="@color/dark2"
-                android:textColorHint="@color/light1"
-                />
-
-            <TextView
-                android:id="@+id/textViewConsultationAge"
-                android:layout_below="@id/editTextConsultatioCnicFirstTwoDigit"
-                android:layout_alignParentLeft="true"
-                android:layout_width="@dimen/_130sdp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:fontFamily="@font/archivo_regular"
-                android:gravity="start"
-                android:text="Age"
-                android:textColor="@color/light1"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="normal" />
-
-            <EditText
-                android:id="@+id/editTextConsultatioAge"
-                android:layout_below="@id/textViewConsultationAge"
-                android:layout_width="@dimen/_130sdp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:layout_alignParentLeft="true"
-                android:maxLength="2"
-                android:backgroundTint="@color/dark2"
-                android:inputType="number"
-                android:imeOptions="actionDone"
-                android:hint="35"
-                android:autofillHints="@string/name"
-                android:textColor="@color/dark2"
-                android:textColorHint="@color/light1"
+                android:hint="@string/name"
+                android:textColor="@color/dark"
+                android:textColorHint="@color/dark"
                 />
 
             <com.tiper.MaterialSpinner
-                android:id="@+id/material_spinner_gender"
-                android:layout_below="@+id/editTextConsultatioCnicLastFourDigit"
-                android:layout_width="@dimen/_130sdp"
+                android:id="@+id/materialSpinnerPrescribedMedicine"
+                android:layout_below="@+id/editTextPatientDiagnosisDes"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:hint="Gender"
+                android:hint="Prescribed Medicine"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_marginRight="@dimen/_10sdp"
-                android:textSize="@dimen/_6sdp"
                 android:textColor="@color/dark2"
                 android:textColorHint="@color/light1"
                 app:backgroundTint="@color/dark2"
                 app:spinnerMode="dialog" />
 
-            <Button
-                android:id="@+id/buttonTakePatientPhoto"
-                android:layout_below="@+id/editTextConsultatioAge"
+            <com.tiper.MaterialSpinner
+                android:id="@+id/materialSpinnerPrescribedMedicineFre"
+                android:layout_below="@+id/materialSpinnerPrescribedMedicine"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
+                android:layout_height="wrap_content"
+                android:hint="Frequency"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/rounded_shape_white_color"
-                android:onClick="@{clickHandler::onClick}"
-                android:gravity="center"
-                android:text="Take Patient Picture"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_10sdp"
                 android:textColor="@color/dark2"
-                android:textSize="@dimen/_16sdp" />
+                android:textColorHint="@color/light1"
+                app:backgroundTint="@color/dark2"
+                app:spinnerMode="dialog" />
+
+
 
 
         </RelativeLayout>
 
-
-        <Button
-            android:id="@+id/buttonNextConsultation"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_30sdp"
-            android:layout_marginEnd="@dimen/_30sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_30sdp"
-            android:background="@drawable/rounded_shape"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:onClick="@{clickHandler::onClick}"
-            android:text="Next"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_16sdp" />
-
-
     </RelativeLayout>
+
 </layout>

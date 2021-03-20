@@ -5,10 +5,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera" />
 
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:name=".base.MyApplication"
@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MDU"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.activities.AddNewConsultationActivity"></activity>
+        <activity android:name=".view.activities.AddDiagnosisAndMedicineActivity"></activity>
+        <activity android:name=".view.activities.AddNewConsultationActivity" />
         <activity android:name=".view.activities.AddNewInventoryDetailsActivity" />
         <activity
             android:name=".view.activities.AddNewInventoryActivity"
