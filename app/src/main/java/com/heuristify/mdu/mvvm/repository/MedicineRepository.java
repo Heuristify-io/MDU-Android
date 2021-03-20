@@ -17,7 +17,6 @@ import com.heuristify.mdu.pojo.StockMedicineList;
 
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,7 +37,7 @@ public class MedicineRepository {
         call.enqueue(new Callback<MedicineList>() {
 
             @Override
-            public void onResponse(@NonNull Call<MedicineList> call, Response<MedicineList> response) {
+            public void onResponse(@NonNull Call<MedicineList> call, @NonNull Response<MedicineList> response) {
                 if (response.isSuccessful()) {
                     Log.e("medicine_response", "" + response.body().getMedicineList().size());
                     if (response.body().getMedicineList().size() > 0) {
@@ -49,7 +48,7 @@ public class MedicineRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<MedicineList> call, Throwable t) {
+            public void onFailure(@NonNull Call<MedicineList> call, @NonNull Throwable t) {
 
                 Log.e("medicine_responseFail", "" + t.getMessage());
 
@@ -83,7 +82,7 @@ public class MedicineRepository {
             public Response<MedicineList> response;
 
             @Override
-            public void onResponse(@NonNull Call<MedicineList> call, Response<MedicineList> response) {
+            public void onResponse(@NonNull Call<MedicineList> call, @NonNull Response<MedicineList> response) {
                 this.call = call;
                 this.response = response;
                 isSuggestion.setValue(true);
@@ -91,7 +90,7 @@ public class MedicineRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<MedicineList> call, Throwable t) {
+            public void onFailure(@NonNull Call<MedicineList> call, @NonNull Throwable t) {
                 isSuggestion.setValue(false);
                 error_msg.setValue(t.getMessage());
             }
@@ -107,7 +106,7 @@ public class MedicineRepository {
         Call<StockMedicineList> responseBodyCall = MyApplication.getInstance().getRetrofitServicesWithToken().createMedicine(medicineName, from, strength, units, quantity);
         responseBodyCall.enqueue(new Callback<StockMedicineList>() {
             @Override
-            public void onResponse(@NonNull Call<StockMedicineList> call, Response<StockMedicineList> response) {
+            public void onResponse(@NonNull Call<StockMedicineList> call, @NonNull Response<StockMedicineList> response) {
                 try {
 
                     if (response.code() == 201) {
@@ -137,7 +136,7 @@ public class MedicineRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<StockMedicineList> call, Throwable t) {
+            public void onFailure(@NonNull Call<StockMedicineList> call, @NonNull Throwable t) {
                 error_msg.setValue(t.getMessage());
             }
         });
@@ -196,9 +195,7 @@ public class MedicineRepository {
 
     public MutableLiveData<Response<StockMedicineList>> getStockMedicineList() {
 
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            callGetMedicineList();
-        }, 200);
+        new Handler(Looper.getMainLooper()).postDelayed(this::callGetMedicineList, 200);
 
         return getMedicineList;
     }
@@ -210,7 +207,7 @@ public class MedicineRepository {
             public Call<StockMedicineList> call;
             public Response<StockMedicineList> response;
 
-            public void onResponse(@NonNull Call<StockMedicineList> call, Response<StockMedicineList> response) {
+            public void onResponse(@NonNull Call<StockMedicineList> call, @NonNull Response<StockMedicineList> response) {
                 this.call = call;
                 this.response = response;
                 if (response.isSuccessful()) {
@@ -225,7 +222,7 @@ public class MedicineRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<StockMedicineList> call, Throwable t) {
+            public void onFailure(@NonNull Call<StockMedicineList> call, @NonNull Throwable t) {
                 get_medicine_error_msg.setValue(t.getMessage());
             }
         });
