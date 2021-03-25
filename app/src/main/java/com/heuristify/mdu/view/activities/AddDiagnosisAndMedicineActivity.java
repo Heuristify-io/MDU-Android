@@ -13,11 +13,13 @@ import com.heuristify.mdu.adapter.AddDiagnosisAndMedicineAdapter;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
+import com.heuristify.mdu.database.entity.PatientWithDiagnosisAndMedicine;
 import com.heuristify.mdu.databinding.ActivityAddDiagnosisAndMedicineBinding;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
+import com.heuristify.mdu.pojo.Patient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     private List<WidgetList> widgetLists;
     private List<StoreClickWidget> storeClickWidgetList;
     private AddDiagnosisAndMedicineAdapter addDiagnosisAndMedicineAdapter;
-    private int patientId;
+    private Patient patient;
     private final String TAG = "AddDiagnosisAndMedicineActivity";
 
     @Override
@@ -34,8 +36,8 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         super.onCreate(savedInstanceState);
         getDataBinding().setClickHandler(this);
         if (getIntent().getExtras() != null) {
-            patientId = getIntent().getExtras().getInt("patientID");
-            DisplayLog.showLog(TAG, " patientID " + patientId);
+            patient = (Patient) getIntent().getSerializableExtra("patient");
+            DisplayLog.showLog(TAG, " patientID " + patient.getId());
         }
         initializeRecycleView();
 
@@ -86,31 +88,26 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     }
 
     private void addIntoLocalDb() {
-
+        List<DiagnosisAndMedicine> diagnosisAndMedicineList = new ArrayList<>();
         for (int i = 0; i < storeClickWidgetList.size(); i++) {
             DiagnosisAndMedicine diagnosisAndMedicine = new DiagnosisAndMedicine();
             diagnosisAndMedicine.setPatientDiagnosis("ggg");
             diagnosisAndMedicine.setDescription("panadol");
             diagnosisAndMedicine.setLat(0.0);
             diagnosisAndMedicine.setLng(0.0);
-            diagnosisAndMedicine.setPatientId(patientId);
-            List<DiagnosisAndMedicine> diagnosisAndMedicineList = new ArrayList<>();
+            diagnosisAndMedicine.setPatientId(patient.getId());
             diagnosisAndMedicineList.add(diagnosisAndMedicine);
+        }
+
+        if (diagnosisAndMedicineList.size() > 0) {
+
+            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicineList);
+
             new Thread(() -> {
-
-                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertPatientDiagnosis(diagnosisAndMedicineList);
-//                if(insert > 0){
-//
-//                    runOnUiThread(() -> Toast.makeText(mContext, "Diagnosis Added Successfully", Toast.LENGTH_SHORT).show());
-//                }
-//                else {
-//                    Toast.makeText(mContext, "Diagnosis Not Added Successfully", Toast.LENGTH_SHORT).show();
-//                }
-
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertPatientDiagnosis(patientWithDiagnosisAndMedicine.diagnosisAndMedicineList);
+                runOnUiThread(() -> Toast.makeText(mContext, "Diagnosis Added Successfully", Toast.LENGTH_SHORT).show());
+                finish();
             }).start();
-
-            storeClickWidgetList.clear();
-            widgetLists.clear();
         }
     }
 

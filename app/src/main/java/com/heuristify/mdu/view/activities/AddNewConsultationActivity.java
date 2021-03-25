@@ -162,7 +162,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
                         runOnUiThread(() -> {
                             Toast.makeText(mContext, "Patient Created Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patientID", patient2.getId()));
+                            startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient2));
                         });
 
                     }

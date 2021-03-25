@@ -29,7 +29,7 @@ public interface TaskDao {
     long insertPatient(Patient patient);
 
     @Insert()
-     void insertPatientDiagnosis(List<DiagnosisAndMedicine> diagnosisAndMedicine);
+    void insertPatientDiagnosis(List<DiagnosisAndMedicine> diagnosisAndMedicine);
 
 
     // select query
