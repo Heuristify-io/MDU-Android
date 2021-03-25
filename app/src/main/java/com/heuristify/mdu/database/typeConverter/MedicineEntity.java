@@ -1,4 +1,4 @@
-package com.heuristify.mdu.database.entity;
+package com.heuristify.mdu.database.typeConverter;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

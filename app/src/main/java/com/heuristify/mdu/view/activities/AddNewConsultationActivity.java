@@ -126,6 +126,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
         } else {
             Toast.makeText(mContext, "All fields are required", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class));
         }
 
     }
@@ -134,6 +135,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
         new Thread(() -> {
 
+            // check patient exist against these fields
             Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
             if (patient != null) {
                 runOnUiThread(() -> Toast.makeText(mContext, "Patient Already Exist", Toast.LENGTH_SHORT).show());
@@ -144,14 +146,26 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                 patient1.setCnicLast4Digits(Integer.parseInt(cNicLastFourDigit));
                 patient1.setAge(Integer.parseInt(age));
                 patient1.setGender(gender);
-                patient1.setImage_path(compressedImageFile.getPath());
+                if(compressedImageFile != null){
+                    patient1.setImage_path(compressedImageFile.getPath());
+                }
+                else{
+                    patient1.setImage_path("");
+                }
                 int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertPatient(patient1);
 
                 if (insert > 0) {
-                    runOnUiThread(() -> {
-                        Toast.makeText(mContext, "Patient Created Successfully", Toast.LENGTH_SHORT).show();
-                        finish();
-                    });
+
+                    // get created patient id
+                    Patient patient2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
+                    if (patient2 != null) {
+
+                        runOnUiThread(() -> {
+                            Toast.makeText(mContext, "Patient Created Successfully", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patientID", patient2.getId()));
+                        });
+
+                    }
                 }
             }
 

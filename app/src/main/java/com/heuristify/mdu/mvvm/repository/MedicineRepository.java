@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
-import com.heuristify.mdu.database.entity.MedicineEntity;
+import com.heuristify.mdu.database.typeConverter.MedicineEntity;
 import com.heuristify.mdu.pojo.MedicineList;
 import com.heuristify.mdu.pojo.StockMedicine;
 import com.heuristify.mdu.pojo.StockMedicineList;

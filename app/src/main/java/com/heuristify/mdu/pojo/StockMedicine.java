@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 
 
-@Entity(tableName = "stock_medicine")
+@Entity(tableName = "doctor_med_stocks")
 public class StockMedicine {
 
     @PrimaryKey()

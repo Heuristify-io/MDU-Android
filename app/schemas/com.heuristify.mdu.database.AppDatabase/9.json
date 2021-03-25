@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 3,
-    "identityHash": "9693fe9d878bf10edadb8a145741430d",
+    "version": 9,
+    "identityHash": "3f92e6ce30c36fdcf2a626167c813a7a",
     "entities": [
       {
         "tableName": "medicine_list_entity",
@@ -70,7 +70,7 @@
       },
       {
         "tableName": "patients",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullName` TEXT, `cnicFirst2Digits` INTEGER NOT NULL, `cnicLast4Digits` INTEGER NOT NULL, `gender` TEXT, `age` INTEGER NOT NULL, `image_path` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullName` TEXT, `cnicFirst2Digits` INTEGER NOT NULL, `cnicLast2Digits` INTEGER NOT NULL, `gender` TEXT, `age` INTEGER NOT NULL, `imageURL` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -92,7 +92,7 @@
           },
           {
             "fieldPath": "cnicLast4Digits",
-            "columnName": "cnicLast4Digits",
+            "columnName": "cnicLast2Digits",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -110,7 +110,7 @@
           },
           {
             "fieldPath": "image_path",
-            "columnName": "image_path",
+            "columnName": "imageURL",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -123,12 +123,74 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "consultations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patientDiagnosis` TEXT, `description` TEXT, `lat` REAL NOT NULL, `lng` REAL NOT NULL, `patientId` INTEGER NOT NULL, FOREIGN KEY(`patientId`) REFERENCES `patients`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "patientDiagnosis",
+            "columnName": "patientDiagnosis",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "lat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lng",
+            "columnName": "lng",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "patientId",
+            "columnName": "patientId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "patients",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "patientId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9693fe9d878bf10edadb8a145741430d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3f92e6ce30c36fdcf2a626167c813a7a')"
     ]
   }
 }

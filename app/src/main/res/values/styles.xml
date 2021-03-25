@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxStrokeColor">#6C18A4</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+    <style name="MyAutoCompleteTextView" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/dark2</item>
+        <item name="colorControlActivated">@color/dark2</item>
+    </style>
+</resources>

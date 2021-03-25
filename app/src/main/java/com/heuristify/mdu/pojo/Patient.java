@@ -8,32 +8,22 @@ import androidx.room.PrimaryKey;
 public class Patient {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo
+    @ColumnInfo(name = "id")
     private int id;
-    @ColumnInfo
+    @ColumnInfo(name = "fullName")
     private String fullName;
-    @ColumnInfo
+    @ColumnInfo(name = "cnicFirst2Digits")
     private int cnicFirst2Digits;
-    @ColumnInfo
+    @ColumnInfo(name = "cnicLast2Digits")
     private int cnicLast4Digits;
-    @ColumnInfo
+    @ColumnInfo(name = "gender")
     private String gender;
-    @ColumnInfo
+    @ColumnInfo(name = "age")
     private int age;
-    @ColumnInfo
+    @ColumnInfo(name = "imageURL")
     private String image_path;
 
     public Patient() {
-    }
-
-    public Patient(int id, String fullName, int cnicFirst2Digits, int cnicLast4Digits, String gender, int age, String image_path) {
-        this.id = id;
-        this.fullName = fullName;
-        this.cnicFirst2Digits = cnicFirst2Digits;
-        this.cnicLast4Digits = cnicLast4Digits;
-        this.gender = gender;
-        this.age = age;
-        this.image_path = image_path;
     }
 
     public int getId() {

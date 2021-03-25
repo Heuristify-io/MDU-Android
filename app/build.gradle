@@ -76,4 +76,7 @@ dependencies {
 
     // Image Compressor library
     implementation 'id.zelory:compressor:2.1.0'
+
+    //material design
+    implementation 'com.google.android.material:material:1.0.0-beta01'
 }

@@ -21,7 +21,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MDU"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.activities.AddDiagnosisAndMedicineActivity"></activity>
+        <activity android:name=".view.activities.AddDiagnosisAndMedicineActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MDU.NoActionBar"
+            android:windowSoftInputMode="adjustResize"
+            />
+
         <activity android:name=".view.activities.AddNewConsultationActivity" />
         <activity android:name=".view.activities.AddNewInventoryDetailsActivity" />
         <activity

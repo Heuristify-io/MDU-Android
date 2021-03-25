@@ -5,7 +5,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.heuristify.mdu.database.entity.MedicineEntity;
+import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
+import com.heuristify.mdu.database.typeConverter.MedicineEntity;
 import com.heuristify.mdu.pojo.Patient;
 import com.heuristify.mdu.pojo.StockMedicine;
 
@@ -16,7 +17,7 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface TaskDao {
 
-    /**********insert query**********/
+    // insert query
 
     @Insert(onConflict = REPLACE)
     void insertMedicineList(MedicineEntity medicine);
@@ -27,31 +28,38 @@ public interface TaskDao {
     @Insert()
     long insertPatient(Patient patient);
 
+    @Insert()
+     void insertPatientDiagnosis(List<DiagnosisAndMedicine> diagnosisAndMedicine);
 
-    /**********select query**********/
+
+    // select query
 
     @Query("SELECT * FROM medicine_list_entity")
     MedicineEntity getMedicine();
 
-    @Query("SELECT * FROM stock_medicine WHERE " + "stock_medicine_name =:medicine_name")
+    @Query("SELECT * FROM doctor_med_stocks WHERE " + "stock_medicine_name =:medicine_name")
     StockMedicine getMedicineQuantityAndTotal(String medicine_name);
 
-    @Query("SELECT * FROM stock_medicine")
+    @Query("SELECT * FROM doctor_med_stocks")
     List<StockMedicine> getStockMedicines();
 
-    @Query("SELECT * FROM patients WHERE fullName =:name AND cnicFirst2Digits =:firstTwoDigit AND cnicLast4Digits =:lastFourDigit AND age =:age")
-    Patient getPatient(String name,int firstTwoDigit,int lastFourDigit,int age);
+    @Query("SELECT * FROM patients WHERE fullName =:name AND cnicFirst2Digits =:firstTwoDigit AND cnicLast2Digits =:lastFourDigit AND age =:age")
+    Patient getPatient(String name, int firstTwoDigit, int lastFourDigit, int age);
 
 
-    /**********delete query**********/
+    @Query("SELECT * FROM doctor_med_stocks WHERE stock_medicine_name LIKE :name || '%'")
+    List<StockMedicine> getStockMedicine(String name);
 
-    @Query("DELETE FROM stock_medicine")
+
+    // delete query
+
+    @Query("DELETE FROM doctor_med_stocks")
     void deleteStockMedicines();
 
-    /**********update query**********/
+    // update query
 
-    @Query("UPDATE stock_medicine SET stock_medicine_quantity = :medicine_quantity, stock_medicine_total = :total WHERE stock_medicine_medicineId =:stock_medicine_medicineId")
-    void update(int medicine_quantity, int total,int stock_medicine_medicineId);
+    @Query("UPDATE doctor_med_stocks SET stock_medicine_quantity = :medicine_quantity, stock_medicine_total = :total WHERE stock_medicine_medicineId =:stock_medicine_medicineId")
+    void update(int medicine_quantity, int total, int stock_medicine_medicineId);
 
 
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@color/light"
+    >
+
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView"
+        android:layout_width="0dp"
+        android:layout_weight="1.5"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_arrow_drop_down"
+        android:imeOptions="actionDone"
+        android:hint="Prescribed Medicine"
+        android:inputType="text"
+        android:singleLine="true"
+        android:theme="@style/MyAutoCompleteTextView" />
+
+    <com.tiper.MaterialSpinner
+        android:id="@+id/material_spinner_frequencies"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:hint="@string/frequency"
+        android:textColor="@color/dark2"
+        android:textColorHint="@color/light1"
+        app:backgroundTint="@color/dark2"
+        app:spinnerMode="dialog" />
+
+</LinearLayout>
