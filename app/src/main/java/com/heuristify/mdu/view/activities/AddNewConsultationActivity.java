@@ -126,7 +126,6 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
         } else {
             Toast.makeText(mContext, "All fields are required", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class));
         }
 
     }

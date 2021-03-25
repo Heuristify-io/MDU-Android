@@ -113,9 +113,6 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
         loginViewModel.getError_msg().observe(lifecycleOwner, s -> {
             Log.e(TAG, "getError_msg " + s);
             Toast.makeText(context, "Some thing went wrong", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(PinViewActivity.this, AttendingActivity.class));
-            finish();
-
         });
 
         loginViewModel.getProgress().observe(lifecycleOwner, aBoolean -> {
