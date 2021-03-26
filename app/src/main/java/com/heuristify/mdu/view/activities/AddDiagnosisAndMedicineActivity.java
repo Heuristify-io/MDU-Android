@@ -88,27 +88,28 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     }
 
     private void addIntoLocalDb() {
-        List<DiagnosisAndMedicine> diagnosisAndMedicineList = new ArrayList<>();
-        for (int i = 0; i < storeClickWidgetList.size(); i++) {
-            DiagnosisAndMedicine diagnosisAndMedicine = new DiagnosisAndMedicine();
-            diagnosisAndMedicine.setPatientDiagnosis("ggg");
-            diagnosisAndMedicine.setDescription("panadol");
-            diagnosisAndMedicine.setLat(0.0);
-            diagnosisAndMedicine.setLng(0.0);
-            diagnosisAndMedicine.setPatientId(patient.getId());
-            diagnosisAndMedicineList.add(diagnosisAndMedicine);
-        }
 
-        if (diagnosisAndMedicineList.size() > 0) {
-
-            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicineList);
-
-            new Thread(() -> {
-                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertPatientDiagnosis(patientWithDiagnosisAndMedicine.diagnosisAndMedicineList);
-                runOnUiThread(() -> Toast.makeText(mContext, "Diagnosis Added Successfully", Toast.LENGTH_SHORT).show());
-                finish();
-            }).start();
-        }
+//        List<DiagnosisAndMedicine> diagnosisAndMedicineList = new ArrayList<>();
+//        for (int i = 0; i < storeClickWidgetList.size(); i++) {
+//            DiagnosisAndMedicine diagnosisAndMedicine = new DiagnosisAndMedicine();
+//            diagnosisAndMedicine.setPatientDiagnosis("ggg");
+//            diagnosisAndMedicine.setDescription("panadol");
+//            diagnosisAndMedicine.setLat(0.0);
+//            diagnosisAndMedicine.setLng(0.0);
+//            diagnosisAndMedicine.setPatientId(patient.getId());
+//            diagnosisAndMedicineList.add(diagnosisAndMedicine);
+//        }
+//
+//        if (diagnosisAndMedicineList.size() > 0) {
+//
+//            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicineList);
+//
+//            new Thread(() -> {
+//                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertPatientDiagnosis(patientWithDiagnosisAndMedicine.diagnosisAndMedicineList);
+//                runOnUiThread(() -> Toast.makeText(mContext, "Diagnosis Added Successfully", Toast.LENGTH_SHORT).show());
+//                finish();
+//            }).start();
+//        }
     }
 
     private void addAnotherItem() {

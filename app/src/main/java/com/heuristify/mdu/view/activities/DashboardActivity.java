@@ -2,6 +2,7 @@ package com.heuristify.mdu.view.activities;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -35,6 +36,8 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
 
         getDataBinding().imageViewInventory.setOnClickListener(v -> inventoryFragment());
 
+        getDataBinding().floatingActionButton.setOnClickListener(v -> startActivity(new Intent(DashboardActivity.this, AddNewConsultationActivity.class)));
+
 
     }
 
@@ -42,16 +45,16 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
         darkInventory();
         fragment = new InventoryFragment();
 
-        InventoryFragment myFragment = (InventoryFragment)getSupportFragmentManager().findFragmentByTag("Inventory");
+        InventoryFragment myFragment = (InventoryFragment) getSupportFragmentManager().findFragmentByTag("Inventory");
         if (!(myFragment != null && myFragment.isVisible())) {
-            fragmentManager.beginTransaction().replace(R.id.frameLayout, fragment,"Inventory").addToBackStack("Inventory").commit();
+            fragmentManager.beginTransaction().replace(R.id.frameLayout, fragment, "Inventory").addToBackStack("Inventory").commit();
         }
     }
 
     private void dashboardFragment() {
         darkDashboard();
         fragment = new DashboardFragment();
-        fragmentManager.beginTransaction().replace(R.id.frameLayout, fragment,"Dashboard").addToBackStack("Dashboard").commit();
+        fragmentManager.beginTransaction().replace(R.id.frameLayout, fragment, "Dashboard").addToBackStack("Dashboard").commit();
 
     }
 
@@ -76,9 +79,9 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
 
     @Override
     public void onBackPressed() {
-        DashboardFragment myFragment = (DashboardFragment)getSupportFragmentManager().findFragmentByTag("Dashboard");
+        DashboardFragment myFragment = (DashboardFragment) getSupportFragmentManager().findFragmentByTag("Dashboard");
         if (myFragment != null && myFragment.isVisible()) {
-             finish();
+            finish();
         } else {
             darkDashboard();
             fragmentManager.popBackStack();

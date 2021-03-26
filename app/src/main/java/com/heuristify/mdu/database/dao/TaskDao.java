@@ -58,7 +58,7 @@ public interface TaskDao {
 
     // update query
 
-    @Query("UPDATE doctor_med_stocks SET stock_medicine_quantity = :medicine_quantity, stock_medicine_total = :total WHERE stock_medicine_medicineId =:stock_medicine_medicineId")
+    @Query("UPDATE doctor_med_stocks SET stock_medicine_quantity = :medicine_quantity, stock_medicine_total = :total WHERE id =:stock_medicine_medicineId")
     void update(int medicine_quantity, int total, int stock_medicine_medicineId);
 
 

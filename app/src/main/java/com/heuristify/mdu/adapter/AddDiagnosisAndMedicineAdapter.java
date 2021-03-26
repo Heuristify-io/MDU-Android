@@ -124,6 +124,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     private void setListToAdapter(ViewHolder holder) {
 
         aAdapter = new AutoCompleteTextViewAdapter(context, R.layout.custom_symbol_list_item, stockMedicineList);
+        holder.autoCompleteTextView.setThreshold(1);
         holder.autoCompleteTextView.setAdapter(aAdapter);
         aAdapter.notifyDataSetChanged();
     }

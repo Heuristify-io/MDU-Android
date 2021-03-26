@@ -12,8 +12,8 @@ import com.google.gson.annotations.SerializedName;
 public class StockMedicine {
 
     @PrimaryKey()
-    @ColumnInfo
-    @SerializedName("medicineId")
+    @ColumnInfo(name = "id")
+    @SerializedName("id")
     private int stock_medicine_medicineId;
     @ColumnInfo
     @SerializedName("medicineName")

@@ -139,7 +139,9 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
             // check patient exist against these fields
             Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
             if (patient != null) {
-                runOnUiThread(() -> Toast.makeText(mContext, "Patient Already Exist", Toast.LENGTH_SHORT).show());
+//                runOnUiThread(() -> Toast.makeText(mContext, "Patient Already Exist", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient));
+
             } else {
                 Patient patient1 = new Patient();
                 patient1.setFullName(name);
@@ -147,10 +149,9 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                 patient1.setCnicLast4Digits(Integer.parseInt(cNicLastFourDigit));
                 patient1.setAge(Integer.parseInt(age));
                 patient1.setGender(gender);
-                if(compressedImageFile != null){
+                if (compressedImageFile != null) {
                     patient1.setImage_path(compressedImageFile.getPath());
-                }
-                else{
+                } else {
                     patient1.setImage_path("");
                 }
                 int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertPatient(patient1);

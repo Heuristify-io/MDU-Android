@@ -6,14 +6,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(
-        tableName = "consultations",
-        foreignKeys = {
-                @ForeignKey(
-                        entity = Patient.class,
-                        parentColumns = {"id"},
-                        childColumns = {"patientId"},
-                        onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)})
+@Entity(tableName = "consultations")
 
 
 public class DiagnosisAndMedicine {
@@ -29,7 +22,7 @@ public class DiagnosisAndMedicine {
     @ColumnInfo(name = "lng")
     private double lng;
     @ColumnInfo(name = "isSync")
-    private boolean isSync;
+    private boolean isSync = false;
     @ColumnInfo(name = "patientId")
     private int patientId;
 

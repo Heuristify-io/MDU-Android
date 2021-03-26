@@ -36,9 +36,8 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
 
     @Override
     public void OnCreateView(LayoutInflater inflater, @Nullable Bundle savedInstanceState) {
-        getDataBinding().buttonAttending2.setOnClickListener(v -> startActivity(new Intent(getActivity(), AddNewConsultationActivity.class)));
-
-        getDataBinding().buttonAttending22.setOnClickListener(v -> startActivity(new Intent(getActivity(), AddNewConsultationActivity.class)));
+//        getDataBinding().buttonAttending2.setOnClickListener(v -> startActivity(new Intent(getActivity(), AddNewConsultationActivity.class)));
+//        getDataBinding().buttonAttending22.setOnClickListener(v -> startActivity(new Intent(getActivity(), AddNewConsultationActivity.class)));
 
     }
 
