@@ -8,6 +8,7 @@ import androidx.room.Query;
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
 import com.heuristify.mdu.database.entity.MedicineEntity;
 import com.heuristify.mdu.database.entity.Patient;
+import com.heuristify.mdu.database.entity.PrescribedMedicine;
 import com.heuristify.mdu.database.entity.StockMedicine;
 
 import java.util.List;
@@ -29,7 +30,10 @@ public interface TaskDao {
     long insertPatient(Patient patient);
 
     @Insert()
-    void insertPatientDiagnosis(List<DiagnosisAndMedicine> diagnosisAndMedicine);
+    long insertPatientDiagnosis(DiagnosisAndMedicine diagnosisAndMedicine);
+
+    @Insert()
+    long[] insertPrescribedMedicine(List<PrescribedMedicine> prescribedMedicines);
 
 
     // select query
@@ -37,17 +41,20 @@ public interface TaskDao {
     @Query("SELECT * FROM medicine_list_entity")
     MedicineEntity getMedicine();
 
-    @Query("SELECT * FROM doctor_med_stocks WHERE " + "stock_medicine_name =:medicine_name")
+    @Query("SELECT * FROM doctor_med_stocks WHERE " + "medicineName =:medicine_name")
     StockMedicine getMedicineQuantityAndTotal(String medicine_name);
 
     @Query("SELECT * FROM doctor_med_stocks")
     List<StockMedicine> getStockMedicines();
 
+    @Query("SELECT quantity FROM doctor_med_stocks WHERE " + "id =:id")
+    String getStockMedicinesQuantity(int id);
+
     @Query("SELECT * FROM patients WHERE fullName =:name AND cnicFirst2Digits =:firstTwoDigit AND cnicLast2Digits =:lastFourDigit AND age =:age")
     Patient getPatient(String name, int firstTwoDigit, int lastFourDigit, int age);
 
 
-    @Query("SELECT * FROM doctor_med_stocks WHERE stock_medicine_name LIKE :name || '%'")
+    @Query("SELECT * FROM doctor_med_stocks WHERE medicineName LIKE :name || '%'")
     List<StockMedicine> getStockMedicine(String name);
 
 
@@ -58,7 +65,7 @@ public interface TaskDao {
 
     // update query
 
-    @Query("UPDATE doctor_med_stocks SET stock_medicine_quantity = :medicine_quantity, stock_medicine_total = :total WHERE id =:stock_medicine_medicineId")
+    @Query("UPDATE doctor_med_stocks SET quantity = :medicine_quantity, quantity = :total WHERE id =:stock_medicine_medicineId")
     void update(int medicine_quantity, int total, int stock_medicine_medicineId);
 
 

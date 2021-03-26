@@ -3,11 +3,13 @@ package com.heuristify.mdu.adapter;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,9 +55,12 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        holder.setIsRecyclable(false);
         frequency_adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, frequencies);
         frequency_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.materialSpinner.setAdapter(frequency_adapter);
+
+
 //        holder.materialSpinner.getEditText().setText(frequencies[0]);
 
         holder.materialSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
@@ -70,6 +75,28 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
                 storeClickWidgetList.get(position).setEditTextFrequency(String.valueOf(materialSpinner.getEditText().getText()));
             }
 
+        });
+
+
+        holder.editTextDays.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+
+                storeClickWidgetList.get(position).setEditTextDays(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
 
@@ -136,10 +163,12 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MaterialSpinner materialSpinner;
+        EditText editTextDays;
         AutoCompleteTextView autoCompleteTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            editTextDays = itemView.findViewById(R.id.editTextDays);
             materialSpinner = itemView.findViewById(R.id.material_spinner_frequencies);
             autoCompleteTextView = itemView.findViewById(R.id.autoCompleteTextView);
         }

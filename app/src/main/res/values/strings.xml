@@ -13,5 +13,6 @@
     <string name="inventory_desc5">prescribed medicine. </string>
     <string name="prescribed_medicine">Prescribed Medicine</string>
     <string name="frequency">Frequency</string>
+    <string name="days">Days</string>
 
 </resources>

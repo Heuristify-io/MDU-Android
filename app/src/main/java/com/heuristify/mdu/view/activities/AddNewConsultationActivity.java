@@ -126,7 +126,6 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
         } else {
             Toast.makeText(mContext, "All fields are required", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class));
 
         }
 
@@ -165,6 +164,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                         runOnUiThread(() -> {
                             Toast.makeText(mContext, "Patient Created Successfully", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient2));
+                            finish();
                         });
 
                     }

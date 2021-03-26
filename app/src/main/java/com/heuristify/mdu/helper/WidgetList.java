@@ -6,6 +6,7 @@ public class WidgetList {
 
     StockMedicine stockMedicine;
     String edtSpinner = "";
+    String daysSpinner = "";
 
     public StockMedicine getStockMedicine() {
         return stockMedicine;
@@ -21,5 +22,13 @@ public class WidgetList {
 
     public void setEdtSpinner(String edtSpinner) {
         this.edtSpinner = edtSpinner;
+    }
+
+    public String getDaysSpinner() {
+        return daysSpinner;
+    }
+
+    public void setDaysSpinner(String daysSpinner) {
+        this.daysSpinner = daysSpinner;
     }
 }

@@ -6,6 +6,7 @@ public class StoreClickWidget {
 
     StockMedicine stockMedicine;
     String editTextFrequency;
+    String editTextDays;
 
 
 
@@ -23,5 +24,13 @@ public class StoreClickWidget {
 
     public void setEditTextFrequency(String editTextFrequency) {
         this.editTextFrequency = editTextFrequency;
+    }
+
+    public String getEditTextDays() {
+        return editTextDays;
+    }
+
+    public void setEditTextDays(String editTextDays) {
+        this.editTextDays = editTextDays;
     }
 }

@@ -9,10 +9,10 @@ public class PatientWithDiagnosisAndMedicine {
     @Embedded
     public Patient patient;
     @Relation(parentColumn = "id", entityColumn = "patientId")
-    public DiagnosisAndMedicine diagnosisAndMedicineList;
+    public DiagnosisAndMedicine diagnosisAndMedicine;
 
     public PatientWithDiagnosisAndMedicine(Patient patient, DiagnosisAndMedicine diagnosisAndMedicineList) {
         this.patient = patient;
-        this.diagnosisAndMedicineList = diagnosisAndMedicineList;
+        this.diagnosisAndMedicine = diagnosisAndMedicineList;
     }
 }

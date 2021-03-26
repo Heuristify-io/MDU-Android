@@ -15,13 +15,13 @@ public class StockMedicine {
     @ColumnInfo(name = "id")
     @SerializedName("id")
     private int stock_medicine_medicineId;
-    @ColumnInfo
+    @ColumnInfo(name = "medicineName")
     @SerializedName("medicineName")
     private String stock_medicine_name;
-    @ColumnInfo
+    @ColumnInfo(name = "quantity")
     @SerializedName("quantity")
     private String stock_medicine_quantity;
-    @ColumnInfo
+    @ColumnInfo(name = "total")
     @SerializedName("total")
     private String stock_medicine_total;
 
