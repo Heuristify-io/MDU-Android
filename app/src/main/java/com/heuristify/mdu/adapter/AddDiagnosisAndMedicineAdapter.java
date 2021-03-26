@@ -18,7 +18,7 @@ import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.WidgetList;
-import com.heuristify.mdu.pojo.StockMedicine;
+import com.heuristify.mdu.database.entity.StockMedicine;
 import com.tiper.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -95,7 +95,8 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
 
         holder.autoCompleteTextView.setOnItemClickListener((parent, view, position1, l) -> {
             StockMedicine stockMedicine = (StockMedicine) parent.getItemAtPosition(position1);
-            storeClickWidgetList.get(position1).setStockMedicine(stockMedicine);
+            holder.autoCompleteTextView.setText(stockMedicine.getStock_medicine_name());
+            storeClickWidgetList.get(position).setStockMedicine(stockMedicine);
 
         });
 

@@ -115,7 +115,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/archivo_regular"
                 android:gravity="start"
-                android:text="Medicine Name"
+                android:text="Patient Full Name"
                 android:textColor="@color/light1"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="normal" />

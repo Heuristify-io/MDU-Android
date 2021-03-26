@@ -17,7 +17,7 @@ import com.heuristify.mdu.adapter.MedicineInventoryAdapter;
 import com.heuristify.mdu.base.BindingBaseFragment;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.FragmentInventoryBinding;
-import com.heuristify.mdu.pojo.StockMedicine;
+import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.view.activities.AddNewInventoryActivity;
 
 import java.util.ArrayList;

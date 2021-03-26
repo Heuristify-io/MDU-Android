@@ -8,7 +8,7 @@
 
         <variable
             name="medicine"
-            type="com.heuristify.mdu.pojo.StockMedicine" />
+            type="com.heuristify.mdu.database.entity.StockMedicine" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

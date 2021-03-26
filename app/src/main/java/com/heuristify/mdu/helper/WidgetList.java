@@ -1,6 +1,6 @@
 package com.heuristify.mdu.helper;
 
-import com.heuristify.mdu.pojo.StockMedicine;
+import com.heuristify.mdu.database.entity.StockMedicine;
 
 public class WidgetList {
 

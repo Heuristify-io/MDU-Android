@@ -19,7 +19,7 @@ import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
-import com.heuristify.mdu.pojo.Patient;
+import com.heuristify.mdu.database.entity.Patient;
 
 import java.util.ArrayList;
 import java.util.List;

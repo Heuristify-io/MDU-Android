@@ -1,11 +1,11 @@
-package com.heuristify.mdu.database.typeConverter;
+package com.heuristify.mdu.database.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.heuristify.mdu.database.databasehelper.MedicineConverter;
+import com.heuristify.mdu.database.typeConverter.MedicineConverter;
 import com.heuristify.mdu.pojo.Medicine;
 
 import java.util.List;

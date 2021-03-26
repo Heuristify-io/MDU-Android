@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 9,
-    "identityHash": "3f92e6ce30c36fdcf2a626167c813a7a",
+    "identityHash": "671527c678c57d585bf4b215dc7af8f7",
     "entities": [
       {
         "tableName": "medicine_list_entity",
@@ -126,7 +126,7 @@
       },
       {
         "tableName": "consultations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patientDiagnosis` TEXT, `description` TEXT, `lat` REAL NOT NULL, `lng` REAL NOT NULL, `patientId` INTEGER NOT NULL, FOREIGN KEY(`patientId`) REFERENCES `patients`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patientDiagnosis` TEXT, `description` TEXT, `lat` REAL NOT NULL, `lng` REAL NOT NULL, `patientId` INTEGER NOT NULL, `isSync` INTEGER NOT NULL, FOREIGN KEY(`patientId`) REFERENCES `patients`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -163,6 +163,12 @@
             "columnName": "patientId",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "isSync",
+            "columnName": "isSync",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -190,7 +196,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3f92e6ce30c36fdcf2a626167c813a7a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '671527c678c57d585bf4b215dc7af8f7')"
     ]
   }
 }

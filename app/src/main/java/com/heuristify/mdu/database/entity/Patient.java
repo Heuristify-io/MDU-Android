@@ -1,4 +1,4 @@
-package com.heuristify.mdu.pojo;
+package com.heuristify.mdu.database.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

@@ -35,7 +35,7 @@ import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.ActivityAddNewConsultationBinding;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
-import com.heuristify.mdu.pojo.Patient;
+import com.heuristify.mdu.database.entity.Patient;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -126,6 +126,8 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
         } else {
             Toast.makeText(mContext, "All fields are required", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class));
+
         }
 
     }

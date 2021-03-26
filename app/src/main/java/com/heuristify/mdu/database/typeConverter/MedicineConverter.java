@@ -1,4 +1,4 @@
-package com.heuristify.mdu.database.databasehelper;
+package com.heuristify.mdu.database.typeConverter;
 
 import androidx.room.TypeConverter;
 

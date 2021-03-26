@@ -6,9 +6,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
-import com.heuristify.mdu.database.typeConverter.MedicineEntity;
-import com.heuristify.mdu.pojo.Patient;
-import com.heuristify.mdu.pojo.StockMedicine;
+import com.heuristify.mdu.database.entity.MedicineEntity;
+import com.heuristify.mdu.database.entity.Patient;
+import com.heuristify.mdu.database.entity.StockMedicine;
 
 import java.util.List;
 

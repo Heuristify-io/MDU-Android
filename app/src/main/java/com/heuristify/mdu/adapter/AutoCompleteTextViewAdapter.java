@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 
 import com.heuristify.mdu.R;
-import com.heuristify.mdu.pojo.StockMedicine;
+import com.heuristify.mdu.database.entity.StockMedicine;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package com.heuristify.mdu.pojo;
 
 import com.google.gson.annotations.SerializedName;
+import com.heuristify.mdu.database.entity.StockMedicine;
 
 import java.util.List;
 

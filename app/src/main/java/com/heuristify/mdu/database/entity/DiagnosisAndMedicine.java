@@ -6,8 +6,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import com.heuristify.mdu.pojo.Patient;
-
 @Entity(
         tableName = "consultations",
         foreignKeys = {
@@ -30,8 +28,11 @@ public class DiagnosisAndMedicine {
     private double lat;
     @ColumnInfo(name = "lng")
     private double lng;
+    @ColumnInfo(name = "isSync")
+    private boolean isSync;
     @ColumnInfo(name = "patientId")
     private int patientId;
+
 
     public int getId() {
         return id;
@@ -79,5 +80,13 @@ public class DiagnosisAndMedicine {
 
     public void setPatientId(int patientId) {
         this.patientId = patientId;
+    }
+
+    public boolean isSync() {
+        return isSync;
+    }
+
+    public void setSync(boolean sync) {
+        isSync = sync;
     }
 }

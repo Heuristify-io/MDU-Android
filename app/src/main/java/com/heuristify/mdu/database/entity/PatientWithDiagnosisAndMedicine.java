@@ -3,8 +3,6 @@ package com.heuristify.mdu.database.entity;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
-import com.heuristify.mdu.pojo.Patient;
-
 import java.util.List;
 
 public class PatientWithDiagnosisAndMedicine {
