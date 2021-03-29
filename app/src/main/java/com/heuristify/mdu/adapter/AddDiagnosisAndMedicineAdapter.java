@@ -34,7 +34,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     private final String[] frequencies = {"T.D.S", "T.D.F", "T.D.E", "T.D.A"};
     ArrayAdapter frequency_adapter;
     AutoCompleteTextViewAdapter aAdapter;
-    List<StockMedicine> stockMedicineList = new ArrayList<>();
+    List<StockMedicine> stockMedicineList;
 
 
     public AddDiagnosisAndMedicineAdapter(List<WidgetList> widgetLists, Context context, List<StoreClickWidget> storeClickWidgetList) {
@@ -119,12 +119,12 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
 
         });
 
-        holder.autoCompleteTextView.setOnItemClickListener((parent, view, position1, l) -> {
-            StockMedicine stockMedicine = (StockMedicine) parent.getItemAtPosition(position1);
-            holder.autoCompleteTextView.setText(stockMedicine.getStock_medicine_name());
-            storeClickWidgetList.get(position).setStockMedicine(stockMedicine);
-
-        });
+//        holder.autoCompleteTextView.setOnItemClickListener((parent, view, position1, l) -> {
+//            StockMedicine stockMedicine = (StockMedicine) parent.getItemAtPosition(position1);
+//            holder.autoCompleteTextView.setText(stockMedicine.getStock_medicine_name());
+//            storeClickWidgetList.get(position).setStockMedicine(stockMedicine);
+//
+//        });
 
 
     }
@@ -134,7 +134,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         new Thread(() -> {
             List<StockMedicine> stockMedicineList1 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicine(toString);
             if (stockMedicineList1 != null) {
-                stockMedicineList.clear();
+                stockMedicineList = new ArrayList<>();
                 stockMedicineList.addAll(stockMedicineList1);
                 ((AppCompatActivity) context).runOnUiThread(new Runnable() {
                     @Override
@@ -148,9 +148,9 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     }
 
     private void setListToAdapter(ViewHolder holder) {
-        aAdapter = new AutoCompleteTextViewAdapter(context, R.layout.custom_symbol_list_item, stockMedicineList);
-        holder.autoCompleteTextView.setAdapter(aAdapter);
-        aAdapter.notifyDataSetChanged();
+//        aAdapter = new AutoCompleteTextViewAdapter(context, R.layout.custom_symbol_list_item, stockMedicineList);
+//        holder.autoCompleteTextView.setAdapter(aAdapter);
+//        aAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -167,7 +167,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
             super(itemView);
             editTextDays = itemView.findViewById(R.id.editTextDays);
             materialSpinner = itemView.findViewById(R.id.material_spinner_frequencies);
-            autoCompleteTextView = itemView.findViewById(R.id.autoCompleteTextView);
+//            autoCompleteTextView = itemView.findViewById(R.id.autoCompleteTextView);
         }
     }
 }

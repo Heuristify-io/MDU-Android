@@ -3,48 +3,78 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@color/light"
     >
 
 
-    <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView"
-        android:layout_width="0dp"
-        android:layout_weight="1.5"
-        android:layout_height="wrap_content"
-        android:drawableRight="@drawable/ic_arrow_drop_down"
-        android:imeOptions="actionDone"
-        android:hint="Prescribed Medicine"
-        android:inputType="text"
-        android:singleLine="true"
-        android:completionThreshold="1"
-        android:theme="@style/MyAutoCompleteTextView" />
+<!--    <AutoCompleteTextView-->
+<!--        android:id="@+id/autoCompleteTextView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_weight="1.5"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:drawableRight="@drawable/ic_arrow_drop_down"-->
+<!--        android:imeOptions="actionDone"-->
+<!--        android:hint="Prescribed Medicine"-->
+<!--        android:inputType="text"-->
+<!--        android:singleLine="true"-->
+<!--        android:completionThreshold="1"-->
+<!--        android:theme="@style/MyAutoCompleteTextView" />-->
 
-    <com.tiper.MaterialSpinner
-        android:id="@+id/material_spinner_frequencies"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/frequency"
-        android:textColor="@color/dark2"
-        android:textColorHint="@color/light1"
-        app:backgroundTint="@color/dark2"
-        app:spinnerMode="dialog" />
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/editTextDays"
-        android:layout_width="0dp"
-        android:layout_weight="0.5"
+        <EditText
+            android:id="@+id/editTextPatientDiagnosis"
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewConsultationName"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:backgroundTint="@color/dark2"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName"
+            android:textColor="@color/dark"
+            android:textColorHint="@color/dark" />
+        <com.tiper.MaterialSpinner
+            android:id="@+id/material_spinner_frequencies"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/frequency"
+            android:textColor="@color/dark2"
+            android:textColorHint="@color/light1"
+            app:backgroundTint="@color/dark2"
+            app:spinnerMode="dialog" />
+        <EditText
+            android:id="@+id/editTextDays"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewConsultationName"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:hint="Enter Days"
+            android:backgroundTint="@color/dark2"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:textColor="@color/dark"
+            android:textColorHint="@color/dark" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMedicineSearch"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textViewConsultationName"
+        android:visibility="gone"
+        android:background="@drawable/bottom_corner_round_white"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        android:hint="Enter Days"
-        android:backgroundTint="@color/dark2"
-        android:imeOptions="actionDone"
-        android:inputType="number"
-        android:textColor="@color/dark"
-        android:textColorHint="@color/dark" />
+        android:layout_marginEnd="@dimen/_10sdp" />
 
 </LinearLayout>

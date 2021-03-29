@@ -1,6 +1,7 @@
 package com.heuristify.mdu.network;
 
 import com.heuristify.mdu.pojo.MedicineList;
+import com.heuristify.mdu.pojo.PatientHistoryList;
 import com.heuristify.mdu.pojo.StockMedicineList;
 
 import okhttp3.ResponseBody;
@@ -25,6 +26,9 @@ public interface RetrofitServices {
 
     @GET("/medicines/search/{name}")
     Call<MedicineList>  getSearchMedicine(@Path("name") String name);
+
+    @GET("/consultations/patienthistory/{patient_id}")
+    Call<PatientHistoryList>  getPatientHistory(@Path("patient_id") int patient_id);
 
     @FormUrlEncoded
     @POST("/medicines/create")

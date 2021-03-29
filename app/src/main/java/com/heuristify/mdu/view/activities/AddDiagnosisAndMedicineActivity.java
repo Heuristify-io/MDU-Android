@@ -1,5 +1,8 @@
 package com.heuristify.mdu.view.activities;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -9,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -17,6 +21,7 @@ import android.widget.Toast;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.adapter.AddDiagnosisAndMedicineAdapter;
+import com.heuristify.mdu.adapter.PatientHistoryAdapter;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
@@ -29,15 +34,21 @@ import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.database.entity.Patient;
-
+import com.heuristify.mdu.mvvm.viewmodel.PatientViewModel;
+import com.heuristify.mdu.pojo.PatientHistory;
+import com.heuristify.mdu.pojo.PatientHistoryList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<ActivityAddDiagnosisAndMedicineBinding> implements OnClickHandlerInterface {
+import retrofit2.Response;
+
+public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<ActivityAddDiagnosisAndMedicineBinding> implements OnClickHandlerInterface, LifecycleOwner {
     private List<WidgetList> widgetLists;
     private List<StoreClickWidget> storeClickWidgetList;
+    private List<PatientHistory> patientHistoryList;
     private AddDiagnosisAndMedicineAdapter addDiagnosisAndMedicineAdapter;
+    private PatientHistoryAdapter patientHistoryAdapter;
     private Patient patient;
     private final String TAG = "AddDiagnosisAndMedicineActivity";
     private Dialog mDialog;
@@ -45,12 +56,39 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LifecycleOwner lifecycleOwner = this;
+        Observer observer;
         getDataBinding().setClickHandler(this);
         if (getIntent().getExtras() != null) {
             patient = (Patient) getIntent().getSerializableExtra("patient");
             DisplayLog.showLog(TAG, " patientID " + patient.getId());
         }
+        showProgressDialog();
         initializeRecycleView();
+        PatientViewModel patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
+
+
+        observer = (Observer<Response<PatientHistoryList>>) responseBodyResponse -> {
+            dismissProgressDialog();
+            Log.e("patientHistory ", "" + responseBodyResponse.code());
+            if (responseBodyResponse.isSuccessful()) {
+                PatientHistoryList patientHistoryList1 = responseBodyResponse.body();
+                if (patientHistoryList != null) {
+                    assert patientHistoryList1 != null;
+                    patientHistoryList.addAll(patientHistoryList1.getPatientHistoryList());
+                    patientHistoryAdapter.notifyDataSetChanged();
+                }
+            }
+        };
+
+        patientViewModel.getError_msg().observe(lifecycleOwner, s -> {
+            dismissProgressDialog();
+            DisplayLog.showLog(TAG, "patient_history_getError" + s);
+        });
+
+
+        patientViewModel.getPatientResponseMutableLiveData(1).observe(lifecycleOwner, observer);
+
 
 
     }
@@ -75,6 +113,14 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         addDiagnosisAndMedicineAdapter.notifyItemInserted(widgetLists.size());
         getDataBinding().recyclerViewPrescribedMedicine.scrollToPosition(widgetLists.size());
 
+        patientHistoryList = new ArrayList<>();
+        getDataBinding().recyclerViewPatientHistory.setHasFixedSize(true);
+        getDataBinding().recyclerViewPatientHistory.setItemAnimator(new DefaultItemAnimator());
+        getDataBinding().recyclerViewPatientHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        patientHistoryAdapter = new PatientHistoryAdapter(patientHistoryList);
+        getDataBinding().recyclerViewPatientHistory.setAdapter(patientHistoryAdapter);
+        getDataBinding().recyclerViewPatientHistory.setItemAnimator(null);
+
 
     }
 
@@ -93,6 +139,14 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             case R.id.imageViewAdd:
                 addAnotherItem();
                 break;
+            case R.id.imageViewUp:
+                if(getDataBinding().recyclerViewPatientHistory.getVisibility() == View.VISIBLE){
+                    getDataBinding().recyclerViewPatientHistory.setVisibility(View.GONE);
+                }
+                else{
+                    getDataBinding().recyclerViewPatientHistory.setVisibility(View.VISIBLE);
+                }
+                break;
             case R.id.buttonNextConsultation:
                 if (dataBinding.editTextPatientDiagnosis.getText().toString().isEmpty() || dataBinding.editTextPatientDiagnosisDes.getText().toString().isEmpty()) {
                     Toast.makeText(mContext, "Diagnosis Name and Description  Required", Toast.LENGTH_SHORT).show();
@@ -103,6 +157,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void showMedicineDialog(String medicineName, String quantity) {
         mDialog = new Dialog(this);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
