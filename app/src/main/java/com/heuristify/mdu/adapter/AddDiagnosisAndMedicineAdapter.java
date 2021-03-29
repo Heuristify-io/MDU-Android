@@ -34,7 +34,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     private final String[] frequencies = {"T.D.S", "T.D.F", "T.D.E", "T.D.A"};
     ArrayAdapter frequency_adapter;
     AutoCompleteTextViewAdapter aAdapter;
-    List<StockMedicine> stockMedicineList;
+    List<StockMedicine> stockMedicineList = new ArrayList<>();
 
 
     public AddDiagnosisAndMedicineAdapter(List<WidgetList> widgetLists, Context context, List<StoreClickWidget> storeClickWidgetList) {
@@ -54,15 +54,6 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-//
-//        if(storeClickWidgetList.size() > 0){
-//
-//            if(storeClickWidgetList.get(position) != null){
-//                holder.autoCompleteTextView.setText(widgetLists.get(position).getStockMedicine().getStock_medicine_name());
-//                holder.materialSpinner.getEditText().setText(widgetLists.get(position).getFrequencySpinner());
-//                holder.editTextDays.setText(widgetLists.get(position).getEditTextDays());
-//            }
-//        }
 
         frequency_adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, frequencies);
         frequency_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -143,7 +134,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         new Thread(() -> {
             List<StockMedicine> stockMedicineList1 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicine(toString);
             if (stockMedicineList1 != null) {
-                stockMedicineList = new ArrayList<>();
+                stockMedicineList.clear();
                 stockMedicineList.addAll(stockMedicineList1);
                 ((AppCompatActivity) context).runOnUiThread(new Runnable() {
                     @Override
@@ -157,9 +148,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     }
 
     private void setListToAdapter(ViewHolder holder) {
-
         aAdapter = new AutoCompleteTextViewAdapter(context, R.layout.custom_symbol_list_item, stockMedicineList);
-        holder.autoCompleteTextView.setThreshold(1);
         holder.autoCompleteTextView.setAdapter(aAdapter);
         aAdapter.notifyDataSetChanged();
     }
