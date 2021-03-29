@@ -5,8 +5,8 @@ import com.heuristify.mdu.database.entity.StockMedicine;
 public class WidgetList {
 
     StockMedicine stockMedicine;
-    String edtSpinner = "";
-    String daysSpinner = "";
+    String frequencySpinner = "";
+    String editTextDays = "";
 
     public StockMedicine getStockMedicine() {
         return stockMedicine;
@@ -16,19 +16,19 @@ public class WidgetList {
         this.stockMedicine = stockMedicine;
     }
 
-    public String getEdtSpinner() {
-        return edtSpinner;
+    public String getFrequencySpinner() {
+        return frequencySpinner;
     }
 
-    public void setEdtSpinner(String edtSpinner) {
-        this.edtSpinner = edtSpinner;
+    public void setFrequencySpinner(String frequencySpinner) {
+        this.frequencySpinner = frequencySpinner;
     }
 
-    public String getDaysSpinner() {
-        return daysSpinner;
+    public String getEditTextDays() {
+        return editTextDays;
     }
 
-    public void setDaysSpinner(String daysSpinner) {
-        this.daysSpinner = daysSpinner;
+    public void setEditTextDays(String editTextDays) {
+        this.editTextDays = editTextDays;
     }
 }

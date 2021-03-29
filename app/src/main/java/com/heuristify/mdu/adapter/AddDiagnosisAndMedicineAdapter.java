@@ -3,7 +3,6 @@ package com.heuristify.mdu.adapter;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,16 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.setIsRecyclable(false);
+//
+//        if(storeClickWidgetList.size() > 0){
+//
+//            if(storeClickWidgetList.get(position) != null){
+//                holder.autoCompleteTextView.setText(widgetLists.get(position).getStockMedicine().getStock_medicine_name());
+//                holder.materialSpinner.getEditText().setText(widgetLists.get(position).getFrequencySpinner());
+//                holder.editTextDays.setText(widgetLists.get(position).getEditTextDays());
+//            }
+//        }
+
         frequency_adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, frequencies);
         frequency_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.materialSpinner.setAdapter(frequency_adapter);

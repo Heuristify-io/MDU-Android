@@ -73,6 +73,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         storeClickWidgetList.add(new StoreClickWidget());
         widgetLists.add(new WidgetList());
         addDiagnosisAndMedicineAdapter.notifyItemInserted(widgetLists.size());
+        getDataBinding().recyclerViewPrescribedMedicine.scrollToPosition(widgetLists.size());
 
 
     }
@@ -197,7 +198,9 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     private void addAnotherItem() {
         storeClickWidgetList.add(new StoreClickWidget());
         widgetLists.add(new WidgetList());
-//        addDiagnosisAndMedicineAdapter.notifyItemInserted(widgetLists.size());
-        addDiagnosisAndMedicineAdapter.notifyDataSetChanged();
+        addDiagnosisAndMedicineAdapter.notifyItemInserted(widgetLists.size());
+        getDataBinding().recyclerViewPrescribedMedicine.scrollToPosition(widgetLists.size());
+
+//        addDiagnosisAndMedicineAdapter.notifyDataSetChanged();
     }
 }
