@@ -29,7 +29,7 @@ public class CustomProgressDialog {
         mProgressBar = (ProgressBar) mDialog.findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.setIndeterminate(true);
-        mDialog.setCancelable(true);
+        mDialog.setCancelable(false);
         mDialog.show();
     }
 

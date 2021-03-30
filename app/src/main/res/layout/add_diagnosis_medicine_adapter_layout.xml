@@ -27,18 +27,18 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editTextPatientDiagnosis"
+            android:id="@+id/editTextSearchMedicine"
             android:layout_width="0dp"
             android:layout_weight="1.5"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewConsultationName"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
             android:backgroundTint="@color/dark2"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionDone"
+            android:hint="Prescribed Medicine"
             android:inputType="textPersonName"
             android:textColor="@color/dark"
+            android:textSize="@dimen/_12sdp"
             android:textColorHint="@color/dark" />
+
         <com.tiper.MaterialSpinner
             android:id="@+id/material_spinner_frequencies"
             android:layout_width="0dp"
@@ -46,19 +46,22 @@
             android:layout_height="wrap_content"
             android:hint="@string/frequency"
             android:textColor="@color/dark2"
+            android:textSize="@dimen/_4sdp"
             android:textColorHint="@color/light1"
             app:backgroundTint="@color/dark2"
             app:spinnerMode="dialog" />
+
         <EditText
             android:id="@+id/editTextDays"
             android:layout_width="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.8"
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewConsultationName"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:hint="Enter Days"
             android:backgroundTint="@color/dark2"
+            android:textSize="@dimen/_12sdp"
             android:imeOptions="actionDone"
             android:inputType="number"
             android:textColor="@color/dark"
@@ -70,11 +73,9 @@
         android:id="@+id/recyclerViewMedicineSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:background="@drawable/bottom_corner_round_white"
         android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginBottom="@dimen/_5sdp"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp" />
+        android:layout_marginBottom="@dimen/_5sdp" />
 
 </LinearLayout>

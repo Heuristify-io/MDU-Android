@@ -90,7 +90,6 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         patientViewModel.getPatientResponseMutableLiveData(1).observe(lifecycleOwner, observer);
 
 
-
     }
 
     @Override
@@ -140,10 +139,9 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                 addAnotherItem();
                 break;
             case R.id.imageViewUp:
-                if(getDataBinding().recyclerViewPatientHistory.getVisibility() == View.VISIBLE){
+                if (getDataBinding().recyclerViewPatientHistory.getVisibility() == View.VISIBLE) {
                     getDataBinding().recyclerViewPatientHistory.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     getDataBinding().recyclerViewPatientHistory.setVisibility(View.VISIBLE);
                 }
                 break;
@@ -184,13 +182,15 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
             for (int i = 0; i < storeClickWidgetList.size(); i++) {
                 if (storeClickWidgetList.get(i).getStockMedicine() != null && storeClickWidgetList.get(i).getEditTextFrequency() != null && storeClickWidgetList.get(i).getEditTextDays() != null) {
-                    int mul;
+                    int mul = 0;
+
                     if (storeClickWidgetList.get(i).getEditTextFrequency().equals("T.D.S")) {
                         mul = 2 * Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays());
 
                     } else {
                         mul = 3 * Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays());
                     }
+
 
                     //check medicine quantity available
                     String quantity = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicinesQuantity(storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
@@ -204,6 +204,9 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                         addDiagnosisAndPrescribedMedicine();
                         break;
                     }
+                } else {
+                    runOnUiThread(() -> Toast.makeText(mContext, "Fill all fields", Toast.LENGTH_SHORT).show());
+                    break;
                 }
             }
 

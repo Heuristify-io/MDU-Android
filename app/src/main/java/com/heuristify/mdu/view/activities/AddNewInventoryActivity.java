@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,12 +20,10 @@ import com.heuristify.mdu.databinding.ActivityAddNewInventoryBinding;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
 import com.heuristify.mdu.pojo.Medicine;
-import com.heuristify.mdu.pojo.MedicineList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Response;
 
 public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewInventoryBinding> implements OnClickHandlerInterface {
     MedicineViewModel medicineViewModel;
