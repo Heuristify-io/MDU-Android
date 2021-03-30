@@ -10,6 +10,7 @@ import com.heuristify.mdu.database.entity.MedicineEntity;
 import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.database.entity.PrescribedMedicine;
 import com.heuristify.mdu.database.entity.StockMedicine;
+import com.heuristify.mdu.pojo.PatientPrescribedMedicine;
 
 import java.util.List;
 
@@ -56,6 +57,13 @@ public interface TaskDao {
 
     @Query("SELECT * FROM doctor_med_stocks WHERE medicineName LIKE :name || '%'")
     List<StockMedicine> getStockMedicine(String name);
+
+    @Query("SELECT prescribed_medicine.id,prescribed_medicine.frequency,prescribed_medicine.days,doctor_med_stocks.medicineName FROM prescribed_medicine  " +
+            "JOIN doctor_med_stocks ON doctor_med_stocks.id = prescribed_medicine.medicineId WHERE prescribed_medicine.consultationId =:consultation_id")
+    List<PatientPrescribedMedicine> getPatientPrescribedMedicine(int  consultation_id);
+
+    @Query("SELECT * FROM consultations WHERE " + "id =:consultation_id")
+    DiagnosisAndMedicine getDiagnosisAndMedicine(int consultation_id);
 
 
     // delete query

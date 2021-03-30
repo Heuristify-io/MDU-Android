@@ -24,7 +24,7 @@ import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.database.entity.StockMedicine;
-import com.heuristify.mdu.mvvm.OnItemClick;
+import com.heuristify.mdu.interfaces.OnItemClick;
 import com.tiper.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -224,7 +224,6 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
                         holder.recyclerView.setVisibility(View.VISIBLE);
                         stockMedicineList.addAll(stockMedicineList1);
                         searchMedicineAdapter.notifyDataSetChanged();
-                        DisplayLog.showLog("stock_medicine_list2", "" + stockMedicineList.size());
                         holders = holder;
                         positions = position;
                     }

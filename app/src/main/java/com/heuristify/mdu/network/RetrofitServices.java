@@ -15,22 +15,22 @@ import retrofit2.http.Path;
 public interface RetrofitServices {
 
     @FormUrlEncoded
-    @POST("/auth/app/login")
+    @POST("auth/app/login")
     Call<ResponseBody> loginPin(@Field("loginPin") int loginPin);
 
-    @GET("/medicines/")
+    @GET("medicines/")
     Call<MedicineList>  getMedicine();
 
-    @GET("/medicines/stocks")
+    @GET("medicines/stocks")
     Call<StockMedicineList>  getMedicineStock();
 
-    @GET("/medicines/search/{name}")
+    @GET("medicines/search/{name}")
     Call<MedicineList>  getSearchMedicine(@Path("name") String name);
 
-    @GET("/consultations/patienthistory/{patient_id}")
+    @GET("consultations/patienthistory/{patient_id}")
     Call<PatientHistoryList>  getPatientHistory(@Path("patient_id") int patient_id);
 
     @FormUrlEncoded
-    @POST("/medicines/create")
+    @POST("medicines/create")
     Call<StockMedicineList> createMedicine(@Field("medicineName") String medicineName,@Field("form") String form,@Field("strength") String strength,@Field("units") String units,@Field("quantity") int quantity);
 }

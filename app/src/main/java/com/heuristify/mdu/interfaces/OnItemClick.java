@@ -1,4 +1,4 @@
-package com.heuristify.mdu.mvvm;
+package com.heuristify.mdu.interfaces;
 
 import androidx.recyclerview.widget.RecyclerView;
 

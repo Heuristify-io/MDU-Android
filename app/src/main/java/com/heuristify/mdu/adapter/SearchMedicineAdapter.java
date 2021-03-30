@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.databinding.AdapterSearchMedicineBinding;
-import com.heuristify.mdu.mvvm.OnItemClick;
+import com.heuristify.mdu.interfaces.OnItemClick;
 
 import java.util.List;
 

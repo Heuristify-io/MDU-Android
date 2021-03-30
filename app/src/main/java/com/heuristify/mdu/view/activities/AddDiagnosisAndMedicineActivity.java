@@ -147,7 +147,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                 break;
             case R.id.buttonNextConsultation:
                 if (dataBinding.editTextPatientDiagnosis.getText().toString().isEmpty() || dataBinding.editTextPatientDiagnosisDes.getText().toString().isEmpty()) {
-                    Toast.makeText(mContext, "Diagnosis Name and Description  Required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Patient Diagnosis and Description  Required", Toast.LENGTH_SHORT).show();
                 } else {
                     addIntoLocalDb();
                 }
@@ -240,9 +240,9 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                 long[] ids = MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().taskDao().insertPrescribedMedicine(prescribedMedicineWithConsultation.prescribedMedicineList);
                 if (ids.length > 0) {
                     runOnUiThread(() -> Toast.makeText(mContext, "Consultation Added Successfully", Toast.LENGTH_SHORT).show());
-                    Intent intent = new Intent(AddDiagnosisAndMedicineActivity.this, DashboardActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent intent = new Intent(AddDiagnosisAndMedicineActivity.this, ConsultationSummaryActivity.class);
+                    intent.putExtra("patient",patient);
+                    intent.putExtra("consultation_id",id);
                     startActivity(intent);
                     finish();
                 }

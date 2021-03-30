@@ -14,5 +14,6 @@
     <string name="prescribed_medicine">Prescribed Medicine</string>
     <string name="frequency">Frequency</string>
     <string name="days">Days</string>
+    <string name="consultation_desc">Please review the details for the</string>
 
 </resources>
