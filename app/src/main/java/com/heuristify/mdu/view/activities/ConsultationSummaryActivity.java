@@ -6,8 +6,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.adapter.ConsultationSummaryAdapter;
 import com.heuristify.mdu.base.BindingBaseActivity;
@@ -25,7 +29,7 @@ import java.util.List;
 public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityConsultationSummaryBinding> implements OnClickHandlerInterface, LifecycleOwner {
     private final String TAG = "ConsultationSummaryActivity";
     private int consultation_id;
-    private List<PatientPrescribedMedicine>patientPrescribedMedicinesList;
+    private List<PatientPrescribedMedicine> patientPrescribedMedicinesList;
     private ConsultationSummaryAdapter consultationSummaryAdapter;
 
     @Override
@@ -50,13 +54,13 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 
         observer = (Observer<PatientPrescribedMedicineAndDiagnosis>) patientPrescribedMedicineAndDiagnosis -> {
 
-            if(patientPrescribedMedicineAndDiagnosis.getDiagnosisAndMedicine() != null){
+            if (patientPrescribedMedicineAndDiagnosis.getDiagnosisAndMedicine() != null) {
                 getDataBinding().editTextTextPatientDiagnosis.setText(patientPrescribedMedicineAndDiagnosis.getDiagnosisAndMedicine().getPatientDiagnosis());
                 getDataBinding().editTextTextPatientDescription.setText(patientPrescribedMedicineAndDiagnosis.getDiagnosisAndMedicine().getDescription());
             }
 
-            if(patientPrescribedMedicineAndDiagnosis.getList() != null){
-                DisplayLog.showLog(TAG,"prescribed_med_list "+patientPrescribedMedicineAndDiagnosis.getList().size());
+            if (patientPrescribedMedicineAndDiagnosis.getList() != null) {
+                DisplayLog.showLog(TAG, "prescribed_med_list " + patientPrescribedMedicineAndDiagnosis.getList().size());
                 patientPrescribedMedicinesList.addAll(patientPrescribedMedicineAndDiagnosis.getList());
                 consultationSummaryAdapter.notifyDataSetChanged();
             }
@@ -72,8 +76,24 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
         return R.layout.activity_consultation_summary;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.imageViewBack:
+                finish();
+                break;
+            case R.id.textViewBack:
+                finish();
+            case R.id.buttonPrint:
+                break;
+            case R.id.buttonDone:
+                Intent intent = new Intent(ConsultationSummaryActivity.this, DashboardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                break;
+        }
 
     }
 
@@ -82,7 +102,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
         getDataBinding().recyclerViewConsultation.setHasFixedSize(true);
         getDataBinding().recyclerViewConsultation.setItemAnimator(new DefaultItemAnimator());
         getDataBinding().recyclerViewConsultation.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        consultationSummaryAdapter = new ConsultationSummaryAdapter( this, patientPrescribedMedicinesList);
+        consultationSummaryAdapter = new ConsultationSummaryAdapter(this, patientPrescribedMedicinesList);
         getDataBinding().recyclerViewConsultation.setAdapter(consultationSummaryAdapter);
         getDataBinding().recyclerViewConsultation.setItemAnimator(null);
     }

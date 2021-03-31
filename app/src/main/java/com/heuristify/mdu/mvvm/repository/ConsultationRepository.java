@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
+import com.heuristify.mdu.pojo.ConsultationHistory;
 import com.heuristify.mdu.pojo.PatientPrescribedMedicine;
 import com.heuristify.mdu.pojo.PatientPrescribedMedicineAndDiagnosis;
 
@@ -12,10 +13,26 @@ import java.util.List;
 public class ConsultationRepository {
 
     MutableLiveData<PatientPrescribedMedicineAndDiagnosis> patientPrescribedMedicineList = new MutableLiveData<>();
+    MutableLiveData<List<ConsultationHistory>> consultationHistoryMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<PatientPrescribedMedicineAndDiagnosis> getPatientPrescribedMedicineList(int consultation_id) {
         getPatientPrescribedMedicine(consultation_id);
         return patientPrescribedMedicineList;
+    }
+
+    public MutableLiveData<List<ConsultationHistory>> getConsultationHistoryMutableLiveData() {
+        getConsultationAndPatient();
+        return consultationHistoryMutableLiveData;
+    }
+
+    private void getConsultationAndPatient() {
+        new Thread(() -> {
+            List<ConsultationHistory> consultationHistory = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getPatientAndConsultation();
+            MyApplication.getInstance().getActivity().runOnUiThread(() -> {
+                consultationHistoryMutableLiveData.setValue(consultationHistory);
+            });
+
+        }).start();
     }
 
     private void getPatientPrescribedMedicine(int consultation_id) {

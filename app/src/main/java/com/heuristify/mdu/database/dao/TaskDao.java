@@ -10,6 +10,7 @@ import com.heuristify.mdu.database.entity.MedicineEntity;
 import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.database.entity.PrescribedMedicine;
 import com.heuristify.mdu.database.entity.StockMedicine;
+import com.heuristify.mdu.pojo.ConsultationHistory;
 import com.heuristify.mdu.pojo.PatientPrescribedMedicine;
 
 import java.util.List;
@@ -64,6 +65,10 @@ public interface TaskDao {
 
     @Query("SELECT * FROM consultations WHERE " + "id =:consultation_id")
     DiagnosisAndMedicine getDiagnosisAndMedicine(int consultation_id);
+
+
+    @Query("SELECT c1.id,c1.patientDiagnosis,p1.fullName FROM consultations c1 INNER JOIN patients p1 ON p1.id = c1.patientId")
+    List<ConsultationHistory> getPatientAndConsultation();
 
 
     // delete query

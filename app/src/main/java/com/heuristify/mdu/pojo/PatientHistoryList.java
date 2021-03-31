@@ -8,7 +8,6 @@ public class PatientHistoryList {
 
     @SerializedName("data")
     private List<PatientHistory> patientHistoryList;
-
     public List<PatientHistory> getPatientHistoryList() {
         return patientHistoryList;
     }

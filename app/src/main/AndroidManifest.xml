@@ -21,10 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MDU"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.activities.ConsultationSummaryActivity"
+        <activity android:name=".view.activities.ConsultationHistoryActivity"></activity>
+        <activity
+            android:name=".view.activities.ConsultationSummaryActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MDU.NoActionBar"
-            />
+            android:theme="@style/Theme.MDU.NoActionBar" />
         <activity
             android:name=".view.activities.AddDiagnosisAndMedicineActivity"
             android:screenOrientation="portrait"
