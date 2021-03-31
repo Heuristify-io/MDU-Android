@@ -11,6 +11,7 @@ import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.database.entity.PrescribedMedicine;
 import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.pojo.ConsultationHistory;
+import com.heuristify.mdu.pojo.MedicineName;
 import com.heuristify.mdu.pojo.PatientPrescribedMedicine;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public interface TaskDao {
 
     @Query("SELECT prescribed_medicine.id,prescribed_medicine.frequency,prescribed_medicine.days,doctor_med_stocks.medicineName FROM prescribed_medicine  " +
             "JOIN doctor_med_stocks ON doctor_med_stocks.id = prescribed_medicine.medicineId WHERE prescribed_medicine.consultationId =:consultation_id")
-    List<PatientPrescribedMedicine> getPatientPrescribedMedicine(int  consultation_id);
+    List<PatientPrescribedMedicine> getPatientPrescribedMedicine(int consultation_id);
 
     @Query("SELECT * FROM consultations WHERE " + "id =:consultation_id")
     DiagnosisAndMedicine getDiagnosisAndMedicine(int consultation_id);
@@ -69,6 +70,9 @@ public interface TaskDao {
 
     @Query("SELECT c1.id,c1.patientDiagnosis,p1.fullName FROM consultations c1 INNER JOIN patients p1 ON p1.id = c1.patientId")
     List<ConsultationHistory> getPatientAndConsultation();
+
+    @Query("SELECT med.medicineName From prescribed_medicine p1 INNER JOIN doctor_med_stocks med ON med.id = p1.medicineId WHERE p1.consultationId =:consultation_id")
+    List<MedicineName> getPatientMedicines(int consultation_id);
 
 
     // delete query

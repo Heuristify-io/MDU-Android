@@ -15,32 +15,51 @@ import com.heuristify.mdu.R;
 import com.heuristify.mdu.adapter.ConsultationHistoryAdapter;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.databinding.ActivityConsultationHistoryBinding;
+import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
+import com.heuristify.mdu.interfaces.OnItemClickId;
 import com.heuristify.mdu.mvvm.viewmodel.ConsultationViewModel;
 import com.heuristify.mdu.pojo.ConsultationHistory;
+import com.heuristify.mdu.pojo.MedicineName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsultationHistoryActivity extends BindingBaseActivity<ActivityConsultationHistoryBinding> implements OnClickHandlerInterface, LifecycleOwner {
+public class ConsultationHistoryActivity extends BindingBaseActivity<ActivityConsultationHistoryBinding> implements OnClickHandlerInterface, OnItemClickId,LifecycleOwner {
 
     private List<ConsultationHistory> consultationHistoryList;
     private ConsultationHistoryAdapter consultationHistoryAdapter;
+    LifecycleOwner lifecycleOwner;
+    Observer patientMedicineObserver;
+    ConsultationViewModel consultationViewModel;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LifecycleOwner lifecycleOwner = this;
+        lifecycleOwner = this;
         Observer observer;
         getDataBinding().setClickHandler(this);
         initializeRecycleView();
 
-        ConsultationViewModel consultationViewModel = ViewModelProviders.of(this).get(ConsultationViewModel.class);
+        consultationViewModel = ViewModelProviders.of(this).get(ConsultationViewModel.class);
+
         observer = (Observer<List<ConsultationHistory>>) consultationHistoryList2 -> {
 
             if (consultationHistoryList2 != null) {
                 consultationHistoryList.addAll(consultationHistoryList2);
                 consultationHistoryAdapter.notifyDataSetChanged();
+            }else{
+                getDataBinding().recyclerViewConsultationHistory.setVisibility(View.GONE);
+                getDataBinding().textViewNoConsultationAvailable.setVisibility(View.VISIBLE);
+            }
+
+        };
+
+        patientMedicineObserver = (Observer<List<MedicineName>>) medicineNames -> {
+
+            if (medicineNames != null) {
+                consultationHistoryAdapter.updateList(position,medicineNames);
             }
 
         };
@@ -78,5 +97,12 @@ public class ConsultationHistoryActivity extends BindingBaseActivity<ActivityCon
         consultationHistoryAdapter = new ConsultationHistoryAdapter(this, consultationHistoryList);
         getDataBinding().recyclerViewConsultationHistory.setAdapter(consultationHistoryAdapter);
         getDataBinding().recyclerViewConsultationHistory.setItemAnimator(null);
+        consultationHistoryAdapter.setOnItemClickId(this);
+    }
+
+    @Override
+    public void onRecyclerViewItemClick(int position,int id) {
+        this.position = position;
+        consultationViewModel.getPatientMedicineList(id).observe(lifecycleOwner, patientMedicineObserver);
     }
 }

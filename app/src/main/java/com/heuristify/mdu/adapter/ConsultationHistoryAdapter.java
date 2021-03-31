@@ -7,21 +7,31 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.databinding.AdapterConsultationHistoryBinding;
+import com.heuristify.mdu.interfaces.OnItemClickId;
 import com.heuristify.mdu.pojo.ConsultationHistory;
+import com.heuristify.mdu.pojo.MedicineName;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ConsultationHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ConsultationHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
-    private List<ConsultationHistory> consultationHistoryList;
+    private final Context context;
+    private final List<ConsultationHistory> consultationHistoryList;
+    private NestedMedicineAdapter nestedMedicineAdapter;
+    private List<MedicineName> childMedicineNamesList;
+    private OnItemClickId onItemClickId;
+    private int focus_position = -1;
 
     public ConsultationHistoryAdapter(Context context, List<ConsultationHistory> consultationHistoryList) {
         this.context = context;
+        childMedicineNamesList = new ArrayList<>();
         this.consultationHistoryList = consultationHistoryList;
     }
 
@@ -34,27 +44,33 @@ public class ConsultationHistoryAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ConsultationHistoryViewHolder viewHolder = (ConsultationHistoryViewHolder)holder;
+        ConsultationHistoryViewHolder viewHolder = (ConsultationHistoryViewHolder) holder;
         viewHolder.adapterConsultationHistoryBinding.setConsultationHistory(consultationHistoryList.get(position));
+        if(focus_position == position){
+            initializeRecycleView(viewHolder);
+        }
 
-        viewHolder.adapterConsultationHistoryBinding.imageView2.setOnClickListener(v -> {
-            checkView(viewHolder,position);
 
-        });
 
-        viewHolder.adapterConsultationHistoryBinding.textViewName.setOnClickListener(v -> checkView(viewHolder,position));
+        viewHolder.adapterConsultationHistoryBinding.imageView2.setOnClickListener(v -> checkView(viewHolder, position));
+        viewHolder.adapterConsultationHistoryBinding.textViewName.setOnClickListener(v -> checkView(viewHolder, position));
 
 
     }
 
+    public void setOnItemClickId(OnItemClickId onItemClickId) {
+        this.onItemClickId = onItemClickId;
+    }
+
     private void checkView(ConsultationHistoryViewHolder viewHolder, int position) {
-        if(viewHolder.adapterConsultationHistoryBinding.group2.getVisibility() == View.VISIBLE){
+        if (viewHolder.adapterConsultationHistoryBinding.group2.getVisibility() == View.VISIBLE) {
             viewHolder.adapterConsultationHistoryBinding.group2.setVisibility(View.GONE);
             viewHolder.adapterConsultationHistoryBinding.imageView2.setImageResource(R.drawable.chevron_down_24px);
-        }else{
+        } else {
             viewHolder.adapterConsultationHistoryBinding.group2.setVisibility(View.VISIBLE);
             viewHolder.adapterConsultationHistoryBinding.imageView2.setImageResource(R.drawable.chevron_up_icon_24px);
             //get data medicine name from db
+            onItemClickId.onRecyclerViewItemClick(position,consultationHistoryList.get(position).getId());
         }
     }
 
@@ -65,9 +81,30 @@ public class ConsultationHistoryAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private static class ConsultationHistoryViewHolder extends RecyclerView.ViewHolder {
         AdapterConsultationHistoryBinding adapterConsultationHistoryBinding;
+
         public ConsultationHistoryViewHolder(AdapterConsultationHistoryBinding adapterConsultationHistoryBinding) {
             super(adapterConsultationHistoryBinding.getRoot());
             this.adapterConsultationHistoryBinding = adapterConsultationHistoryBinding;
         }
+    }
+
+    public void updateList(int position,List<MedicineName> medicineNamesList){
+        focus_position=position;
+        if(!childMedicineNamesList.isEmpty()){
+            childMedicineNamesList.clear();
+        }
+        childMedicineNamesList.addAll(medicineNamesList);
+        notifyDataSetChanged();
+       // nestedMedicineAdapter.notifyDataSetChanged();
+    }
+
+    private void initializeRecycleView(ConsultationHistoryViewHolder viewHolder) {
+
+        viewHolder.adapterConsultationHistoryBinding.recyclerView.setHasFixedSize(true);
+        viewHolder.adapterConsultationHistoryBinding.recyclerView.setItemAnimator(new DefaultItemAnimator());
+        viewHolder.adapterConsultationHistoryBinding.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        nestedMedicineAdapter = new NestedMedicineAdapter(context, childMedicineNamesList);
+        viewHolder.adapterConsultationHistoryBinding.recyclerView.setAdapter(nestedMedicineAdapter);
+        viewHolder.adapterConsultationHistoryBinding.recyclerView.setItemAnimator(null);
     }
 }
