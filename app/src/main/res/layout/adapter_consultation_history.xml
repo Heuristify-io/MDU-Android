@@ -166,7 +166,7 @@
             android:layout_marginRight="@dimen/_10sdp"
             android:fontFamily="@font/archive"
             android:gravity="start"
-            android:text="12/03/2021"
+            android:text="@{consultationHistory.created_date}"
             android:textColor="@color/dark"
             android:textSize="@dimen/_11sdp"
             android:textStyle="normal"

@@ -5,10 +5,13 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.heuristify.mdu.database.typeConverter.DateConverter;
+
+import java.util.Date;
 
 @Entity(tableName = "consultations")
-
-
 public class DiagnosisAndMedicine {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -25,6 +28,8 @@ public class DiagnosisAndMedicine {
     private boolean isSync = false;
     @ColumnInfo(name = "patientId")
     private int patientId;
+    @ColumnInfo(name = "created_date")
+    private Date created_date;
 
 
     public int getId() {
@@ -81,5 +86,13 @@ public class DiagnosisAndMedicine {
 
     public void setSync(boolean sync) {
         isSync = sync;
+    }
+
+    public Date getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(Date created_date) {
+        this.created_date = created_date;
     }
 }

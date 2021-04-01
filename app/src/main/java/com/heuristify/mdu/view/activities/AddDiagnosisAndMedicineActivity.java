@@ -39,6 +39,7 @@ import com.heuristify.mdu.pojo.PatientHistory;
 import com.heuristify.mdu.pojo.PatientHistoryList;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Response;
@@ -221,6 +222,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             diagnosisAndMedicine.setDescription(dataBinding.editTextPatientDiagnosisDes.getText().toString());
             diagnosisAndMedicine.setLat(0.0);
             diagnosisAndMedicine.setLng(0.0);
+            diagnosisAndMedicine.setCreated_date(new Date());
             diagnosisAndMedicine.setPatientId(patient.getId());
             PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicine);
             int id = (int) MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().taskDao().insertPatientDiagnosis(patientWithDiagnosisAndMedicine.diagnosisAndMedicine);

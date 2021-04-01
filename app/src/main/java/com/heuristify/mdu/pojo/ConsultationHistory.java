@@ -9,6 +9,7 @@ public class ConsultationHistory extends BaseObservable {
     private int id;
     private String patientDiagnosis;
     private String fullName;
+    private String created_date;
 
     @Bindable
     public int getId() {
@@ -38,5 +39,15 @@ public class ConsultationHistory extends BaseObservable {
     public void setFullName(String fullName) {
         this.fullName = fullName;
         notifyPropertyChanged(BR.fullName);
+    }
+
+    @Bindable
+    public String getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(String created_date) {
+        this.created_date = created_date;
+        notifyPropertyChanged(BR.created_date);
     }
 }

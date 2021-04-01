@@ -25,7 +25,7 @@ import com.heuristify.mdu.pojo.MedicineName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsultationHistoryActivity extends BindingBaseActivity<ActivityConsultationHistoryBinding> implements OnClickHandlerInterface, OnItemClickId,LifecycleOwner {
+public class ConsultationHistoryActivity extends BindingBaseActivity<ActivityConsultationHistoryBinding> implements OnClickHandlerInterface, OnItemClickId, LifecycleOwner {
 
     private List<ConsultationHistory> consultationHistoryList;
     private ConsultationHistoryAdapter consultationHistoryAdapter;
@@ -47,11 +47,13 @@ public class ConsultationHistoryActivity extends BindingBaseActivity<ActivityCon
         observer = (Observer<List<ConsultationHistory>>) consultationHistoryList2 -> {
 
             if (consultationHistoryList2 != null) {
-                consultationHistoryList.addAll(consultationHistoryList2);
-                consultationHistoryAdapter.notifyDataSetChanged();
-            }else{
-                getDataBinding().recyclerViewConsultationHistory.setVisibility(View.GONE);
-                getDataBinding().textViewNoConsultationAvailable.setVisibility(View.VISIBLE);
+                if (consultationHistoryList2.size() > 0) {
+                    consultationHistoryList.addAll(consultationHistoryList2);
+                    consultationHistoryAdapter.notifyDataSetChanged();
+                }else{
+                    getDataBinding().recyclerViewConsultationHistory.setVisibility(View.GONE);
+                    getDataBinding().textViewNoConsultationAvailable.setVisibility(View.VISIBLE);
+                }
             }
 
         };
@@ -59,7 +61,7 @@ public class ConsultationHistoryActivity extends BindingBaseActivity<ActivityCon
         patientMedicineObserver = (Observer<List<MedicineName>>) medicineNames -> {
 
             if (medicineNames != null) {
-                consultationHistoryAdapter.updateList(position,medicineNames);
+                consultationHistoryAdapter.updateList(position, medicineNames);
             }
 
         };
@@ -101,7 +103,7 @@ public class ConsultationHistoryActivity extends BindingBaseActivity<ActivityCon
     }
 
     @Override
-    public void onRecyclerViewItemClick(int position,int id) {
+    public void onRecyclerViewItemClick(int position, int id) {
         this.position = position;
         consultationViewModel.getPatientMedicineList(id).observe(lifecycleOwner, patientMedicineObserver);
     }
