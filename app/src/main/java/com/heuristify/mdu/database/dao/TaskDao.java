@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
+import com.heuristify.mdu.database.entity.DoctorAttendance;
 import com.heuristify.mdu.database.entity.MedicineEntity;
 import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.database.entity.PrescribedMedicine;
@@ -31,6 +32,9 @@ public interface TaskDao {
 
     @Insert()
     long insertPatient(Patient patient);
+
+    @Insert()
+    long insertDoctorAttendDance(DoctorAttendance doctorAttendance);
 
     @Insert()
     long insertPatientDiagnosis(DiagnosisAndMedicine diagnosisAndMedicine);
@@ -73,6 +77,9 @@ public interface TaskDao {
 
     @Query("SELECT med.medicineName From prescribed_medicine p1 INNER JOIN doctor_med_stocks med ON med.id = p1.medicineId WHERE p1.consultationId =:consultation_id")
     List<MedicineName> getPatientMedicines(int consultation_id);
+
+    @Query("SELECT attendanceDate FROM doctor_attendance WHERE attendanceDate =:date")
+    String checkAttendance(String date);
 
 
     // delete query

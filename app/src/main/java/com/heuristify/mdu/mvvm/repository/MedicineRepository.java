@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.MedicineEntity;
+import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.pojo.MedicineList;
 import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.pojo.StockMedicineList;
@@ -111,10 +112,12 @@ public class MedicineRepository {
                     if (response.code() == 200) {
 
                         //update medicine fields
+                        DisplayLog.showLog("medicine_code1",""+response.code());
                         updateMedicine(response, medicineName, quantity);
 
                     } else if (response.code() == 201) {
                         //add new medicine
+                        DisplayLog.showLog("medicine_code2",""+response.code());
                         addNewMedicine(response, response.body().getMedicine().getMedicine_id(), medicineName, quantity);
                     } else {
                         createMedicineResponse.setValue(response);
@@ -155,14 +158,12 @@ public class MedicineRepository {
 
     private void addNewMedicine(Response<StockMedicineList> response, int medicine_id, String medicineName, int quantity) {
         new Thread(() -> {
-
             StockMedicine stockMedicine = new StockMedicine();
             stockMedicine.setStock_medicine_medicineId(medicine_id);
             stockMedicine.setStock_medicine_name(medicineName);
             stockMedicine.setStock_medicine_quantity(String.valueOf(quantity));
             stockMedicine.setStock_medicine_total(String.valueOf(quantity));
             storeInToDb(stockMedicine);
-
             MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
 
         }).start();

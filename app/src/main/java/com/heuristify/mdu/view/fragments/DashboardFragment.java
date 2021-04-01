@@ -13,6 +13,7 @@ import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseFragment;
 import com.heuristify.mdu.databinding.FragmentDashboardBinding;
 import com.heuristify.mdu.view.activities.AddNewConsultationActivity;
+import com.heuristify.mdu.view.activities.AttendingActivity;
 import com.heuristify.mdu.view.activities.ConsultationHistoryActivity;
 
 
@@ -37,7 +38,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
 
     @Override
     public void OnCreateView(LayoutInflater inflater, @Nullable Bundle savedInstanceState) {
-//        getDataBinding().buttonAttending22.setOnClickListener(v -> startActivity(new Intent(getActivity(), AddNewConsultationActivity.class)));
+        getDataBinding().buttonAttending22.setOnClickListener(v -> startActivity(new Intent(getActivity(), AttendingActivity.class)));
         getDataBinding().buttonAttending2.setOnClickListener(v -> startActivity(new Intent(getActivity(), ConsultationHistoryActivity.class)));
 
     }

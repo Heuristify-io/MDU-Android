@@ -23,6 +23,8 @@ import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
 import com.heuristify.mdu.pojo.StockMedicineList;
 
+import java.util.Objects;
+
 import retrofit2.Response;
 
 public class AddNewInventoryDetailsActivity extends BindingBaseActivity<ActivityAddNewInventoryDetailsBinding> implements OnClickHandlerInterface {
@@ -66,9 +68,9 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
         getDataBinding().materialSpinnerStrength.setAdapter(strength_adapter);
         getDataBinding().materialSpinnerUnit.setAdapter(unit_adapter);
 
-        getDataBinding().materialSpinnerForm.getEditText().setText(From[0]);
-        getDataBinding().materialSpinnerStrength.getEditText().setText(Strength[0]);
-        getDataBinding().materialSpinnerUnit.getEditText().setText(Unit[0]);
+        Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(From[0]);
+        Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(Strength[0]);
+        Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(Unit[0]);
 
         getDataBinding().editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -151,7 +153,7 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
                 break;
             case R.id.buttonNextInventoryDetais:
                 showProgressDialog();
-                createMedicine(getDataBinding().editTextSearch.getText().toString(), getDataBinding().materialSpinnerForm.getEditText().getText().toString(), getDataBinding().materialSpinnerStrength.getEditText().getText().toString(), getDataBinding().materialSpinnerUnit.getEditText().getText().toString(), Integer.parseInt(getDataBinding().textViewNumber.getText().toString()));
+                createMedicine(getDataBinding().editTextSearch.getText().toString(), Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).getText().toString(), getDataBinding().materialSpinnerStrength.getEditText().getText().toString(), getDataBinding().materialSpinnerUnit.getEditText().getText().toString(), Integer.parseInt(getDataBinding().textViewNumber.getText().toString()));
                 break;
         }
 
