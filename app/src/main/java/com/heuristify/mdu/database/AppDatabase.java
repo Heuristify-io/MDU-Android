@@ -13,7 +13,6 @@ import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.database.typeConverter.DateConverter;
 
 @Database(version = 5, entities = {MedicineEntity.class, StockMedicine.class, Patient.class, DiagnosisAndMedicine.class, PrescribedMedicine.class})
-@TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TaskDao taskDao();
 }

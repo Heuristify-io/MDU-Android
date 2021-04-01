@@ -29,6 +29,7 @@ public class DiagnosisAndMedicine {
     @ColumnInfo(name = "patientId")
     private int patientId;
     @ColumnInfo(name = "created_date")
+    @TypeConverters(DateConverter.class)
     private Date created_date;
 
 
