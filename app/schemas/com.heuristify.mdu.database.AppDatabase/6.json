@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "a92dd0e1313d5b0621f155eb75bcd0f3",
+    "identityHash": "3584dfb60d5e4cca4be3b07e7ac55ed5",
     "entities": [
       {
         "tableName": "medicine_list_entity",
@@ -70,7 +70,7 @@
       },
       {
         "tableName": "patients",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullName` TEXT, `cnicFirst2Digits` INTEGER NOT NULL, `cnicLast2Digits` INTEGER NOT NULL, `gender` TEXT, `age` INTEGER NOT NULL, `imageURL` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullName` TEXT, `cnicFirst2Digits` INTEGER NOT NULL, `cnicLast2Digits` INTEGER NOT NULL, `gender` TEXT, `age` INTEGER NOT NULL, `imageURL` TEXT, `sync` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -113,6 +113,12 @@
             "columnName": "imageURL",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "image_sync",
+            "columnName": "sync",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -289,7 +295,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a92dd0e1313d5b0621f155eb75bcd0f3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3584dfb60d5e4cca4be3b07e7ac55ed5')"
     ]
   }
 }

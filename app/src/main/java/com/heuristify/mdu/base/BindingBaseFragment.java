@@ -48,7 +48,7 @@ public abstract class BindingBaseFragment<DB extends ViewDataBinding> extends Fr
 
     }
 
-    public void hideProgressDialog() {
+    public void dismissProgressDialog() {
         customProgressDialog.dismiss();
     }
 

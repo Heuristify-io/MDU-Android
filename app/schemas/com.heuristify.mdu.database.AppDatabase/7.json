@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "c9359e8a93d9f2398332729e7d19b4a1",
+    "identityHash": "3584dfb60d5e4cca4be3b07e7ac55ed5",
     "entities": [
       {
         "tableName": "medicine_list_entity",
@@ -32,36 +32,36 @@
       },
       {
         "tableName": "doctor_med_stocks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`stock_medicine_medicineId` INTEGER NOT NULL, `stock_medicine_name` TEXT, `stock_medicine_quantity` TEXT, `stock_medicine_total` TEXT, PRIMARY KEY(`stock_medicine_medicineId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `medicineName` TEXT, `quantity` TEXT, `total` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "stock_medicine_medicineId",
-            "columnName": "stock_medicine_medicineId",
+            "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "stock_medicine_name",
-            "columnName": "stock_medicine_name",
+            "columnName": "medicineName",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "stock_medicine_quantity",
-            "columnName": "stock_medicine_quantity",
+            "columnName": "quantity",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "stock_medicine_total",
-            "columnName": "stock_medicine_total",
+            "columnName": "total",
             "affinity": "TEXT",
             "notNull": false
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "stock_medicine_medicineId"
+            "id"
           ],
           "autoGenerate": false
         },
@@ -70,7 +70,7 @@
       },
       {
         "tableName": "patients",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullName` TEXT, `cnicFirst2Digits` INTEGER NOT NULL, `cnicLast4Digits` INTEGER NOT NULL, `gender` TEXT, `age` INTEGER NOT NULL, `image_path` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullName` TEXT, `cnicFirst2Digits` INTEGER NOT NULL, `cnicLast2Digits` INTEGER NOT NULL, `gender` TEXT, `age` INTEGER NOT NULL, `imageURL` TEXT, `sync` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -92,7 +92,7 @@
           },
           {
             "fieldPath": "cnicLast4Digits",
-            "columnName": "cnicLast4Digits",
+            "columnName": "cnicLast2Digits",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -110,9 +110,15 @@
           },
           {
             "fieldPath": "image_path",
-            "columnName": "image_path",
+            "columnName": "imageURL",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "image_sync",
+            "columnName": "sync",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -126,7 +132,7 @@
       },
       {
         "tableName": "consultations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patientDiagnosis` TEXT, `description` TEXT, `lat` REAL NOT NULL, `lng` REAL NOT NULL, `patientId` INTEGER NOT NULL, FOREIGN KEY(`patientId`) REFERENCES `patients`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patientDiagnosis` TEXT, `description` TEXT, `lat` REAL NOT NULL, `lng` REAL NOT NULL, `isSync` INTEGER NOT NULL, `patientId` INTEGER NOT NULL, `created_date` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -159,8 +165,70 @@
             "notNull": true
           },
           {
+            "fieldPath": "isSync",
+            "columnName": "isSync",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "patientId",
             "columnName": "patientId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_date",
+            "columnName": "created_date",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "prescribed_medicine",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineId` INTEGER NOT NULL, `consultationId` INTEGER NOT NULL, `days` INTEGER NOT NULL, `frequency` TEXT, `frequencyNum` INTEGER NOT NULL, FOREIGN KEY(`consultationId`) REFERENCES `consultations`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`medicineId`) REFERENCES `doctor_med_stocks`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medicineId",
+            "columnName": "medicineId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "consultationId",
+            "columnName": "consultationId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "days",
+            "columnName": "days",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "frequency",
+            "columnName": "frequency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "frequencyNum",
+            "columnName": "frequencyNum",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -174,23 +242,60 @@
         "indices": [],
         "foreignKeys": [
           {
-            "table": "patients",
+            "table": "consultations",
             "onDelete": "CASCADE",
             "onUpdate": "CASCADE",
             "columns": [
-              "patientId"
+              "consultationId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "doctor_med_stocks",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "medicineId"
             ],
             "referencedColumns": [
               "id"
             ]
           }
         ]
+      },
+      {
+        "tableName": "doctor_attendance",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `attendanceDate` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attendanceDate",
+            "columnName": "attendanceDate",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c9359e8a93d9f2398332729e7d19b4a1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3584dfb60d5e4cca4be3b07e7ac55ed5')"
     ]
   }
 }

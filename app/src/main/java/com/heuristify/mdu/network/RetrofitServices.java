@@ -39,6 +39,6 @@ public interface RetrofitServices {
     Call<StockMedicineList> createMedicine(@Field("medicineName") String medicineName,@Field("form") String form,@Field("strength") String strength,@Field("units") String units,@Field("quantity") int quantity);
 
     @Multipart
-    @POST("upload-image")
+    @POST("patients/upload-image")
     Call<ResponseBody> uploadImages(@Part MultipartBody.Part file, @Part("image") RequestBody name);
 }

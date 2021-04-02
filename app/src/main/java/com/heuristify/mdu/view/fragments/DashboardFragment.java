@@ -15,6 +15,7 @@ import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseFragment;
 import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.databinding.FragmentDashboardBinding;
+import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
 import com.heuristify.mdu.view.activities.ConsultationHistoryActivity;
 
@@ -49,7 +50,10 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     @Override
     public void OnCreateView(LayoutInflater inflater, @Nullable Bundle savedInstanceState) {
 
-//        getDataBinding().buttonAttending22.setOnClickListener(v -> getAllPatients());
+        getDataBinding().buttonAttending22.setOnClickListener(v -> {
+            showProgressDialog();
+            getAllPatients();
+        });
         getDataBinding().buttonAttending2.setOnClickListener(v -> startActivity(new Intent(getActivity(), ConsultationHistoryActivity.class)));
 
     }
@@ -59,7 +63,9 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         observeGetPatientList();
+        observerErrorMsg();
     }
+
 
     @Override
     protected int getLayoutRes() {
@@ -67,13 +73,22 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     }
 
     private void getAllPatients() {
-        dataSyncViewModel.callGetAllPatientMethod();
+        //sync field value
+        dataSyncViewModel.callGetAllPatientMethod(0);
     }
 
     private void observeGetPatientList() {
-
         dataSyncViewModel.getPatientList().observe(getViewLifecycleOwner(), patientList -> {
+            dismissProgressDialog();
+            DisplayLog.showLog(TAG,"imageResponse "+patientList);
         });
 
+    }
+
+    private void observerErrorMsg() {
+        dataSyncViewModel.errorMsg().observe(getViewLifecycleOwner(),String ->{
+            dismissProgressDialog();
+            DisplayLog.showLog(TAG,"imageError "+String);
+        });
     }
 }

@@ -23,8 +23,12 @@ public class DataSyncViewModel extends AndroidViewModel {
         return dataSyncRepository.getAllPatientMutableLiveData();
     }
 
-    public void callGetAllPatientMethod(){
-        dataSyncRepository.getPatientList();
+    public MutableLiveData<String> errorMsg(){
+        return dataSyncRepository.getGetPatientListMutableLiveDataError();
+    }
+
+    public void callGetAllPatientMethod(int sync){
+        dataSyncRepository.getPatientList(sync);
     }
 
 }
