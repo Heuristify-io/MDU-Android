@@ -407,7 +407,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                         path = getRealPathFromURI(imageToUploadUri);
                         try {
                             compressedImageFile = new Compressor(getApplicationContext()).compressToFile(new File(compressImage(path)));
-                            //                       profileImage.setImageBitmap(Bitmap.createScaledBitmap(compressedImageBitmap, (int) (compressedImageBitmap.getWidth() * 0.5), (int) (compressedImageBitmap.getHeight() * 0.5), true));
+                            //  profileImage.setImageBitmap(Bitmap.createScaledBitmap(compressedImageBitmap, (int) (compressedImageBitmap.getWidth() * 0.5), (int) (compressedImageBitmap.getHeight() * 0.5), true));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
