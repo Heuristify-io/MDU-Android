@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.MyApplication;
-import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.database.entity.StockMedicine;
@@ -213,7 +212,6 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
 //                stockMedicineList = new ArrayList<>();
 
                 ((AppCompatActivity) context).runOnUiThread(() -> {
-                    DisplayLog.showLog("stock_medicine_list", "" + stockMedicineList.size());
 
                     if (!stockMedicineList.isEmpty()) {
                         stockMedicineList.clear();

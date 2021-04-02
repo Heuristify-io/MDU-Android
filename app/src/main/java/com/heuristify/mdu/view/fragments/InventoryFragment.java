@@ -69,7 +69,6 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
             if (stockMedicines != null) {
                 medicineList.addAll(stockMedicines);
                 getActivity().runOnUiThread(() -> {
-                    Log.e("list_size",""+medicineList.size());
                     medicineInventoryAdapter.notifyDataSetChanged();
                 });
             }

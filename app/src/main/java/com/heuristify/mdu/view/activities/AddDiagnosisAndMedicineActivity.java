@@ -1,6 +1,5 @@
 package com.heuristify.mdu.view.activities;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -12,7 +11,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -25,11 +23,8 @@ import com.heuristify.mdu.adapter.PatientHistoryAdapter;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
-import com.heuristify.mdu.database.entity.PatientWithDiagnosisAndMedicine;
 import com.heuristify.mdu.database.entity.PrescribedMedicine;
-import com.heuristify.mdu.database.entity.PrescribedMedicineWithConsultation;
 import com.heuristify.mdu.databinding.ActivityAddDiagnosisAndMedicineBinding;
-import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
@@ -44,7 +39,7 @@ import java.util.List;
 
 import retrofit2.Response;
 
-public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<ActivityAddDiagnosisAndMedicineBinding> implements OnClickHandlerInterface, LifecycleOwner {
+public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<ActivityAddDiagnosisAndMedicineBinding> implements OnClickHandlerInterface {
     private List<WidgetList> widgetLists;
     private List<StoreClickWidget> storeClickWidgetList;
     private List<PatientHistory> patientHistoryList;
@@ -57,12 +52,10 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LifecycleOwner lifecycleOwner = this;
         Observer observer;
         getDataBinding().setClickHandler(this);
         if (getIntent().getExtras() != null) {
             patient = (Patient) getIntent().getSerializableExtra("patient");
-            DisplayLog.showLog(TAG, " patientID " + patient.getId());
         }
         showProgressDialog();
         initializeRecycleView();
@@ -71,24 +64,21 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
         observer = (Observer<Response<PatientHistoryList>>) responseBodyResponse -> {
             dismissProgressDialog();
-            Log.e("patientHistory ", "" + responseBodyResponse.code());
             if (responseBodyResponse.isSuccessful()) {
                 PatientHistoryList patientHistoryList1 = responseBodyResponse.body();
-                if (patientHistoryList != null) {
-                    assert patientHistoryList1 != null;
+                if (patientHistoryList1 != null) {
                     patientHistoryList.addAll(patientHistoryList1.getPatientHistoryList());
                     patientHistoryAdapter.notifyDataSetChanged();
                 }
             }
         };
 
-        patientViewModel.getError_msg().observe(lifecycleOwner, s -> {
+        patientViewModel.getError_msg().observe(this, s -> {
             dismissProgressDialog();
-            DisplayLog.showLog(TAG, "patient_history_getError" + s);
         });
 
 
-        patientViewModel.getPatientResponseMutableLiveData(1).observe(lifecycleOwner, observer);
+        patientViewModel.getPatientResponseMutableLiveData(1).observe(this, observer);
 
 
     }
@@ -224,10 +214,9 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             diagnosisAndMedicine.setLng(0.0);
             diagnosisAndMedicine.setCreated_date(new Date());
             diagnosisAndMedicine.setPatientId(patient.getId());
-            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicine);
-            int id = (int) MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().taskDao().insertPatientDiagnosis(patientWithDiagnosisAndMedicine.diagnosisAndMedicine);
+//            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicine);
+            int id = (int) MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().taskDao().insertPatientDiagnosis(diagnosisAndMedicine);
             if (id > 0) {
-                DisplayLog.showLog(TAG, "Consultation id " + id);
                 for (int i = 0; i < storeClickWidgetList.size(); i++) {
                     PrescribedMedicine prescribedMedicine = new PrescribedMedicine();
                     prescribedMedicine.setConsultationId(id);
@@ -238,8 +227,8 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                     prescribedMedicineList.add(prescribedMedicine);
                 }
 
-                PrescribedMedicineWithConsultation prescribedMedicineWithConsultation = new PrescribedMedicineWithConsultation(diagnosisAndMedicine, prescribedMedicineList);
-                long[] ids = MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().taskDao().insertPrescribedMedicine(prescribedMedicineWithConsultation.prescribedMedicineList);
+//                PrescribedMedicineWithConsultation prescribedMedicineWithConsultation = new PrescribedMedicineWithConsultation(diagnosisAndMedicine, prescribedMedicineList);
+                long[] ids = MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().taskDao().insertPrescribedMedicine(prescribedMedicineList);
                 if (ids.length > 0) {
                     runOnUiThread(() -> Toast.makeText(mContext, "Consultation Added Successfully", Toast.LENGTH_SHORT).show());
                     Intent intent = new Intent(AddDiagnosisAndMedicineActivity.this, ConsultationSummaryActivity.class);

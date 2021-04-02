@@ -81,6 +81,9 @@ public interface TaskDao {
     @Query("SELECT attendanceDate FROM doctor_attendance WHERE attendanceDate =:date")
     String checkAttendance(String date);
 
+    @Query("SELECT * from patients")
+    List<Patient> getAllPatient();
+
 
     // delete query
 

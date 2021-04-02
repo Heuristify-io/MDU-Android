@@ -1,14 +1,12 @@
 package com.heuristify.mdu.view.activities;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -25,7 +22,6 @@ import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.ActivityPinViewBinding;
-import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.Helper;
 import com.heuristify.mdu.mvvm.viewmodel.LoginViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
@@ -40,10 +36,9 @@ import java.io.IOException;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding> implements View.OnClickListener, LifecycleOwner {
+public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding> implements View.OnClickListener {
     LoginViewModel loginViewModel;
     private final String TAG = "PinViewActivity";
-    private Context context;
     private Observer<Response<ResponseBody>> observer;
     private Observer<Response<StockMedicineList>> medicine_observer;
     private int count;
@@ -64,14 +59,12 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
         dataBinding.imageViewBack.setOnClickListener(this);
         dataBinding.buttonSignIn.setOnClickListener(this);
         dataBinding.linearBack.setOnClickListener(this);
-        context = this;
         medicineViewModel = ViewModelProviders.of(this).get(MedicineViewModel.class);
 
 
-        LifecycleOwner lifecycleOwner = this;
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
 
-        observer = (Observer<Response<ResponseBody>>) responseBodyResponse -> {
+        observer = responseBodyResponse -> {
             if (responseBodyResponse.isSuccessful()) {
                 try {
                     JSONObject jsonObject = new JSONObject(responseBodyResponse.body().string());
@@ -91,16 +84,14 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                 }
             } else {
 
-                Toast.makeText(context, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
             }
-            Log.e(TAG, "response" + responseBodyResponse.code());
 
 
         };
 
-        medicine_observer = (Observer<Response<StockMedicineList>>) responseBodyResponse -> {
+        medicine_observer = responseBodyResponse -> {
            dismissProgressDialog();
-            DisplayLog.showLog(TAG, "medicine_observer " + responseBodyResponse.body());
             if (responseBodyResponse.isSuccessful()) {
                 startActivity(new Intent(PinViewActivity.this, AttendingActivity.class));
                 finish();
@@ -110,13 +101,11 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
         };
 
 
-        loginViewModel.getError_msg().observe(lifecycleOwner, s -> {
-            Log.e(TAG, "getError_msg " + s);
-            Toast.makeText(context, "Some thing went wrong", Toast.LENGTH_SHORT).show();
+        loginViewModel.getError_msg().observe(this, s -> {
+            Toast.makeText(mContext, "Some thing went wrong", Toast.LENGTH_SHORT).show();
         });
 
-        loginViewModel.getProgress().observe(lifecycleOwner, aBoolean -> {
-            Log.e(TAG, "getProgress ");
+        loginViewModel.getProgress().observe(this, aBoolean -> {
             if (aBoolean) {
                 showProgressDialog();
             } else {
@@ -124,9 +113,8 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
             }
         });
 
-        medicineViewModel.get_medicine_error_msg().observe(lifecycleOwner, s -> {
+        medicineViewModel.get_medicine_error_msg().observe(this, s -> {
             dismissProgressDialog();
-            DisplayLog.showLog(TAG, "get_medicine_error_msg " + s);
             showMedicineDialog();
         });
 
@@ -233,7 +221,7 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
     }
 
     private void showMedicineDialog() {
-        mDialog = new Dialog(context);
+        mDialog = new Dialog(mContext);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.custom_medicine_dialog_view);
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -255,12 +243,12 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
 
     private void callGetMedicineApi() {
         showProgressDialog();
-        medicineViewModel.getStockMedicineList().observe((AppCompatActivity) context, medicine_observer);
+        medicineViewModel.getStockMedicineList().observe((AppCompatActivity) mContext, medicine_observer);
     }
 
     private void sendLoginPinCode(String toStrin1, String toString2, String toString3, String toString4) {
         String pin_code = toStrin1 + toString2 + toString3 + toString4;
-        loginViewModel.getLoginRepository(Integer.parseInt(pin_code)).observe((AppCompatActivity) context, observer);
+        loginViewModel.getLoginRepository(Integer.parseInt(pin_code)).observe((AppCompatActivity) mContext, observer);
 
     }
 
@@ -293,7 +281,7 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
         if (count >= 2) {
             finish();
         } else {
-            Toast.makeText(context, "Press Again To Exist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Press Again To Exist", Toast.LENGTH_SHORT).show();
         }
     }
 

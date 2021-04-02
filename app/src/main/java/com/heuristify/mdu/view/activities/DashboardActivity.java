@@ -15,6 +15,7 @@ import com.heuristify.mdu.databinding.ActivityDashboardBinding;
 import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.Helper;
+import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.DoctorViewModel;
 import com.heuristify.mdu.sharedPreferences.SharedHelper;
 import com.heuristify.mdu.view.fragments.DashboardFragment;
@@ -33,6 +34,7 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
     Date date;
     SimpleDateFormat df;
     DoctorViewModel doctorViewModel;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -61,6 +63,7 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
         });
 
     }
+
 
     private void observeAttendance() {
         doctorViewModel.getDoctorAttendanceMutableLiveData1().observe(this, (String String) -> {
