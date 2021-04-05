@@ -21,7 +21,7 @@ public class DoctorRepository {
 
     public void insertDoctorAttendance(DoctorAttendance doctorAttendance){
         new Thread(() -> {
-            long doctorAttendance1 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertDoctorAttendDance(doctorAttendance);
+            long doctorAttendance1 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().doctorAttendanceDao().insertDoctorAttendDance(doctorAttendance);
             doctorAttendanceMutableLiveData.postValue(doctorAttendance1);
 
         }).start();
@@ -29,7 +29,7 @@ public class DoctorRepository {
 
     public void checkAttendance(String date) {
         new Thread(() -> {
-            String date2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().checkAttendance(date);
+            String date2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().doctorAttendanceDao().checkAttendance(date);
             checkDoctorAttendanceMutableLiveData1.postValue(date2);
         }).start();
     }

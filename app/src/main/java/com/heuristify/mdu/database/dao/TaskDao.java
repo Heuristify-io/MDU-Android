@@ -27,49 +27,15 @@ public interface TaskDao {
     @Insert(onConflict = REPLACE)
     void insertMedicineList(MedicineEntity medicine);
 
-    @Insert()
-    void insertStockMedicine(StockMedicine stockMedicine);
-
-    @Insert()
-    long insertPatient(Patient patient);
-
-    @Insert()
-    long insertDoctorAttendDance(DoctorAttendance doctorAttendance);
-
-    @Insert()
-    long insertPatientDiagnosis(DiagnosisAndMedicine diagnosisAndMedicine);
-
-    @Insert()
-    long[] insertPrescribedMedicine(List<PrescribedMedicine> prescribedMedicines);
-
-
     // select query
 
     @Query("SELECT * FROM medicine_list_entity")
     MedicineEntity getMedicine();
 
-    @Query("SELECT * FROM doctor_med_stocks WHERE " + "medicineName =:medicine_name")
-    StockMedicine getMedicineQuantityAndTotal(String medicine_name);
-
-    @Query("SELECT * FROM doctor_med_stocks")
-    List<StockMedicine> getStockMedicines();
-
-    @Query("SELECT quantity FROM doctor_med_stocks WHERE " + "id =:id")
-    String getStockMedicinesQuantity(int id);
-
-    @Query("SELECT * FROM patients WHERE fullName =:name AND cnicFirst2Digits =:firstTwoDigit AND cnicLast2Digits =:lastFourDigit AND age =:age")
-    Patient getPatient(String name, int firstTwoDigit, int lastFourDigit, int age);
-
-
-    @Query("SELECT * FROM doctor_med_stocks WHERE medicineName LIKE :name || '%'")
-    List<StockMedicine> getStockMedicine(String name);
 
     @Query("SELECT prescribed_medicine.id,prescribed_medicine.frequency,prescribed_medicine.days,doctor_med_stocks.medicineName FROM prescribed_medicine  " +
             "JOIN doctor_med_stocks ON doctor_med_stocks.id = prescribed_medicine.medicineId WHERE prescribed_medicine.consultationId =:consultation_id")
     List<PatientPrescribedMedicine> getPatientPrescribedMedicine(int consultation_id);
-
-    @Query("SELECT * FROM consultations WHERE " + "id =:consultation_id")
-    DiagnosisAndMedicine getDiagnosisAndMedicine(int consultation_id);
 
 
     @Query("SELECT c1.id,c1.patientDiagnosis,c1.created_date,p1.fullName FROM consultations c1 INNER JOIN patients p1 ON p1.id = c1.patientId")
@@ -78,22 +44,9 @@ public interface TaskDao {
     @Query("SELECT med.medicineName From prescribed_medicine p1 INNER JOIN doctor_med_stocks med ON med.id = p1.medicineId WHERE p1.consultationId =:consultation_id")
     List<MedicineName> getPatientMedicines(int consultation_id);
 
-    @Query("SELECT attendanceDate FROM doctor_attendance WHERE attendanceDate =:date")
-    String checkAttendance(String date);
-
-    @Query("SELECT * from patients WHERE sync =:sync AND imageURL IS NOT NULL AND imageURL != ''")
-    List<Patient> getAllPatient(int sync);
 
 
-    // delete query
 
-    @Query("DELETE FROM doctor_med_stocks")
-    void deleteStockMedicines();
-
-    // update query
-
-    @Query("UPDATE doctor_med_stocks SET quantity = :medicine_quantity, quantity = :total WHERE id =:stock_medicine_medicineId")
-    void update(int medicine_quantity, int total, int stock_medicine_medicineId);
 
 
 }

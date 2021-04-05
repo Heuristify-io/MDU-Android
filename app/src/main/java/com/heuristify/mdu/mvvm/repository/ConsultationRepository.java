@@ -55,7 +55,7 @@ public class ConsultationRepository {
     private void getPatientPrescribedMedicine(int consultation_id) {
 
         new Thread(() -> {
-            DiagnosisAndMedicine diagnosisAndMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getDiagnosisAndMedicine(consultation_id);
+            DiagnosisAndMedicine diagnosisAndMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getDiagnosisAndMedicine(consultation_id);
             List<PatientPrescribedMedicine> prescribedMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getPatientPrescribedMedicine(consultation_id);
             PatientPrescribedMedicineAndDiagnosis patientPrescribedMedicineAndDiagnosis = new PatientPrescribedMedicineAndDiagnosis();
             patientPrescribedMedicineAndDiagnosis.setDiagnosisAndMedicine(diagnosisAndMedicine);

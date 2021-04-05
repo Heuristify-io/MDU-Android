@@ -184,7 +184,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
 
                     //check medicine quantity available
-                    String quantity = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicinesQuantity(storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
+                    String quantity = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicinesQuantity(storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
                     if (Integer.parseInt(quantity) < mul) {
                         int finalI = i;
                         runOnUiThread(() -> showMedicineDialog(storeClickWidgetList.get(finalI).getStockMedicine().getStock_medicine_name(), quantity));
@@ -215,7 +215,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             diagnosisAndMedicine.setCreated_date(new Date());
             diagnosisAndMedicine.setPatientId(patient.getId());
 //            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicine);
-            int id = (int) MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().taskDao().insertPatientDiagnosis(diagnosisAndMedicine);
+            int id = (int) MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().diagnosisAndMedicineDao().insertPatientDiagnosis(diagnosisAndMedicine);
             if (id > 0) {
                 for (int i = 0; i < storeClickWidgetList.size(); i++) {
                     PrescribedMedicine prescribedMedicine = new PrescribedMedicine();
@@ -228,7 +228,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                 }
 
 //                PrescribedMedicineWithConsultation prescribedMedicineWithConsultation = new PrescribedMedicineWithConsultation(diagnosisAndMedicine, prescribedMedicineList);
-                long[] ids = MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().taskDao().insertPrescribedMedicine(prescribedMedicineList);
+                long[] ids = MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().prescribedMedicineDao().insertPrescribedMedicine(prescribedMedicineList);
                 if (ids.length > 0) {
                     runOnUiThread(() -> Toast.makeText(mContext, "Consultation Added Successfully", Toast.LENGTH_SHORT).show());
                     Intent intent = new Intent(AddDiagnosisAndMedicineActivity.this, ConsultationSummaryActivity.class);

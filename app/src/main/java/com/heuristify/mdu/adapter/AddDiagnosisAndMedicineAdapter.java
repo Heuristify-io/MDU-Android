@@ -207,7 +207,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     private void getDataFromDb(String toString, ViewHolder holder, int position) {
 
         new Thread(() -> {
-            List<StockMedicine> stockMedicineList1 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicine(toString);
+            List<StockMedicine> stockMedicineList1 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicine(toString);
             if (stockMedicineList1 != null) {
 //                stockMedicineList = new ArrayList<>();
 

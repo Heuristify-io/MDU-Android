@@ -24,7 +24,7 @@ public class Patient implements Serializable {
     private int age;
     @ColumnInfo(name = "imageURL")
     private String image_path;
-    @ColumnInfo(name = "sync")
+    @ColumnInfo(name = "isSync")
     private int image_sync = 0;
 
     public Patient() {

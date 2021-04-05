@@ -36,6 +36,8 @@ public class PrescribedMedicine {
     private String frequency;
     @ColumnInfo(name = "frequencyNum")
     private int frequencyNum;
+    @ColumnInfo(name = "isSync")
+    private int isSync = 0;
 
     public int getId() {
         return id;
@@ -83,5 +85,13 @@ public class PrescribedMedicine {
 
     public void setFrequencyNum(int frequencyNum) {
         this.frequencyNum = frequencyNum;
+    }
+
+    public int getIsSync() {
+        return isSync;
+    }
+
+    public void setIsSync(int isSync) {
+        this.isSync = isSync;
     }
 }

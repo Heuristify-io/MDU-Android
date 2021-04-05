@@ -136,7 +136,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
         new Thread(() -> {
 
             // check patient exist against these fields
-            Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
+            Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
             if (patient != null) {
 //                runOnUiThread(() -> Toast.makeText(mContext, "Patient Already Exist", Toast.LENGTH_SHORT).show());
                 startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient));
@@ -153,12 +153,12 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                 } else {
                     patient1.setImage_path("");
                 }
-                int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertPatient(patient1);
+                int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().insertPatient(patient1);
 
                 if (insert > 0) {
 
                     // get created patient id
-                    Patient patient2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
+                    Patient patient2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
                     if (patient2 != null) {
 
                         runOnUiThread(() -> {

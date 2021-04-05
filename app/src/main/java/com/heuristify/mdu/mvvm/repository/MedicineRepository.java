@@ -141,14 +141,14 @@ public class MedicineRepository {
     private void updateMedicine(Response<StockMedicineList> response, String medicineName, int quantity) {
         new Thread(() -> {
 
-            StockMedicine stockMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getMedicineQuantityAndTotal(medicineName);
+            StockMedicine stockMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getMedicineQuantityAndTotal(medicineName);
             if (stockMedicine != null) {
 
                 String q1 = stockMedicine.getStock_medicine_quantity();
                 String t1 = stockMedicine.getStock_medicine_total();
                 int add_quantity = Integer.parseInt(q1) + quantity;
                 int add_total = Integer.parseInt(t1) + quantity;
-                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().update(add_quantity, add_total,stockMedicine.getStock_medicine_medicineId());
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().update(add_quantity, add_total,stockMedicine.getStock_medicine_medicineId());
             }
 
             MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
@@ -221,14 +221,14 @@ public class MedicineRepository {
     }
 
     private void storeInToDb(StockMedicine stockMedicine) {
-        MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertStockMedicine(stockMedicine);
+        MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().insertStockMedicine(stockMedicine);
     }
 
     private void deleteOldListAndStoreNewListFromDb(Response<StockMedicineList> response, List<StockMedicine> stockMedicineListList) {
         new Thread(() -> {
-            List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicines();
+            List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicines();
             if (stockMedicines != null) {
-                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().deleteStockMedicines();
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().deleteStockMedicines();
             }
             for (int i = 0; i < stockMedicineListList.size(); i++) {
                 StockMedicine stockMedicine = new StockMedicine();

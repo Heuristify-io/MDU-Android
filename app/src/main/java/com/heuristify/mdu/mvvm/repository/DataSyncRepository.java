@@ -38,7 +38,7 @@ public class DataSyncRepository {
 
     public void getPatientList(int sync) {
         new Thread(() -> {
-            List<Patient> patientList2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getAllPatient(sync);
+            List<Patient> patientList2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatient(sync);
             if (patientList2.size() > 0) {
                 for (int i = 0; i < patientList2.size(); i++) {
                     if (patientList2.get(i).getImage_path() != null) {

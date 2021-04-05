@@ -65,7 +65,7 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
 
         new Thread(() -> {
 
-            List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().getStockMedicines();
+            List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicines();
             if (stockMedicines != null) {
                 medicineList.addAll(stockMedicines);
                 getActivity().runOnUiThread(() -> {
