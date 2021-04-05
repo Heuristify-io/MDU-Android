@@ -1,13 +1,18 @@
 package com.heuristify.mdu.network;
 
+import com.google.gson.JsonObject;
 import com.heuristify.mdu.pojo.MedicineList;
 import com.heuristify.mdu.pojo.PatientHistoryList;
 import com.heuristify.mdu.pojo.StockMedicineList;
+import com.heuristify.mdu.pojo.SyncApiResponse;
+
+import org.json.JSONObject;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -41,4 +46,7 @@ public interface RetrofitServices {
     @Multipart
     @POST("patients/upload-image")
     Call<ResponseBody> uploadImages(@Part MultipartBody.Part file, @Part("image") RequestBody name);
+
+    @POST("doctors/uploadrecords")
+    Call<SyncApiResponse> uploadSyncData(@Body JSONObject jsonObject);
 }

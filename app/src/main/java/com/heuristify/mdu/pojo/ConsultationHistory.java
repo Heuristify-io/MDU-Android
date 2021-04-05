@@ -9,7 +9,7 @@ public class ConsultationHistory extends BaseObservable {
     private int id;
     private String patientDiagnosis;
     private String fullName;
-    private String created_date;
+    private String createdAt;
 
     @Bindable
     public int getId() {
@@ -42,12 +42,12 @@ public class ConsultationHistory extends BaseObservable {
     }
 
     @Bindable
-    public String getCreated_date() {
-        return created_date;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_date(String created_date) {
-        this.created_date = created_date;
-        notifyPropertyChanged(BR.created_date);
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+        notifyPropertyChanged(BR.createdAt);
     }
 }

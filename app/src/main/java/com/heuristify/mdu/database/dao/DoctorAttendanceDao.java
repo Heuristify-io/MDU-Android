@@ -14,8 +14,8 @@ public interface DoctorAttendanceDao {
     @Insert()
     long insertDoctorAttendDance(DoctorAttendance doctorAttendance);
 
-    @Query("SELECT * FROM doctor_attendance")
-    List<DoctorAttendance> getDoctorAttendance();
+    @Query("SELECT attendanceDate FROM doctor_attendance")
+    List<String> getDoctorAttendance();
 
     @Query("SELECT attendanceDate FROM doctor_attendance WHERE attendanceDate =:date")
     String checkAttendance(String date);

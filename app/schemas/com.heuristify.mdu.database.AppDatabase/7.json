@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "ef792fe6ef2e3768cc98f569ac74d778",
+    "identityHash": "276ece68c4ab954eb6b20dd655b843df",
     "entities": [
       {
         "tableName": "medicine_list_entity",
@@ -70,7 +70,7 @@
       },
       {
         "tableName": "patients",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullName` TEXT, `cnicFirst2Digits` INTEGER NOT NULL, `cnicLast2Digits` INTEGER NOT NULL, `gender` TEXT, `age` INTEGER NOT NULL, `imageURL` TEXT, `isSync` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fullName` TEXT, `cnicFirst2Digits` INTEGER NOT NULL, `cnicLast4Digits` INTEGER NOT NULL, `gender` TEXT, `age` INTEGER NOT NULL, `imageUrl` TEXT, `isSync` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -92,7 +92,7 @@
           },
           {
             "fieldPath": "cnicLast4Digits",
-            "columnName": "cnicLast2Digits",
+            "columnName": "cnicLast4Digits",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -110,7 +110,7 @@
           },
           {
             "fieldPath": "image_path",
-            "columnName": "imageURL",
+            "columnName": "imageUrl",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -132,7 +132,7 @@
       },
       {
         "tableName": "consultations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patientDiagnosis` TEXT, `description` TEXT, `lat` REAL NOT NULL, `lng` REAL NOT NULL, `isSync` INTEGER NOT NULL, `patientId` INTEGER NOT NULL, `created_date` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `patientDiagnosis` TEXT, `description` TEXT, `lat` REAL NOT NULL, `lng` REAL NOT NULL, `isSync` INTEGER NOT NULL, `patientId` INTEGER NOT NULL, `createdAt` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -178,7 +178,7 @@
           },
           {
             "fieldPath": "created_date",
-            "columnName": "created_date",
+            "columnName": "createdAt",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -301,7 +301,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ef792fe6ef2e3768cc98f569ac74d778')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '276ece68c4ab954eb6b20dd655b843df')"
     ]
   }
 }

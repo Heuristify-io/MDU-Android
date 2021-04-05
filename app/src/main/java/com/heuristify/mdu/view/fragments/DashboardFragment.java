@@ -15,8 +15,10 @@ import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseFragment;
 import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.databinding.FragmentDashboardBinding;
+import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
+import com.heuristify.mdu.pojo.SyncApiResponse;
 import com.heuristify.mdu.view.activities.ConsultationHistoryActivity;
 
 import java.util.ArrayList;
@@ -64,6 +66,8 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
         super.onViewCreated(view, savedInstanceState);
         observeGetPatientList();
         observerErrorMsg();
+        observerSyncDataResponse();
+        observerSyncDataErrorResponse();
     }
 
 
@@ -74,21 +78,37 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
 
     private void getAllPatients() {
         //sync field value
-        dataSyncViewModel.callGetAllPatientMethod(0);
+        dataSyncViewModel.callGetAllPatientMethod(Constant.patient_sync_zero);
     }
 
     private void observeGetPatientList() {
         dataSyncViewModel.getPatientList().observe(getViewLifecycleOwner(), patientList -> {
-            dismissProgressDialog();
             DisplayLog.showLog(TAG,"imageResponse "+patientList);
+            dataSyncViewModel.callGetDoctorAttendancePatientsConsultationsAndPrescribedMedicine(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
+
         });
 
     }
 
     private void observerErrorMsg() {
         dataSyncViewModel.errorMsg().observe(getViewLifecycleOwner(),String ->{
-            dismissProgressDialog();
             DisplayLog.showLog(TAG,"imageError "+String);
+            dataSyncViewModel.callGetDoctorAttendancePatientsConsultationsAndPrescribedMedicine(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
+        });
+    }
+
+    private void observerSyncDataErrorResponse() {
+        dataSyncViewModel.getSyncMutableLiveDataErrorResponse().observe(getViewLifecycleOwner(),String ->{
+            dismissProgressDialog();
+            DisplayLog.showLog(TAG,"observerSyncDataErrorResponse "+String);
+        });
+
+    }
+
+    private void observerSyncDataResponse() {
+        dataSyncViewModel.getDoctorAttendancePatientsConsultationsAndPrescribedMedicineMutableResponsive().observe(getViewLifecycleOwner(),syncApiResponse -> {
+            DisplayLog.showLog(TAG,"observerSyncDataResponse "+syncApiResponse.code());
+            dismissProgressDialog();
         });
     }
 }

@@ -6,6 +6,8 @@ import androidx.room.Query;
 
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
 
+import java.util.List;
+
 @Dao
 public interface DiagnosisAndMedicineDao {
 
@@ -14,4 +16,7 @@ public interface DiagnosisAndMedicineDao {
 
     @Query("SELECT * FROM consultations WHERE " + "id =:consultation_id")
     DiagnosisAndMedicine getDiagnosisAndMedicine(int consultation_id);
+
+    @Query("SELECT * FROM consultations WHERE  isSync =:sync")
+    List<DiagnosisAndMedicine> getDiagnosis(int sync);
 }
