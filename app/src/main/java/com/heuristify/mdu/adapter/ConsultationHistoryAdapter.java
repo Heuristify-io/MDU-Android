@@ -48,6 +48,12 @@ public class ConsultationHistoryAdapter extends RecyclerView.Adapter<RecyclerVie
         viewHolder.adapterConsultationHistoryBinding.setConsultationHistory(consultationHistoryList.get(position));
         if(focus_position == position){
             initializeRecycleView(viewHolder);
+            viewHolder.adapterConsultationHistoryBinding.group2.setVisibility(View.VISIBLE);
+            viewHolder.adapterConsultationHistoryBinding.imageView2.setImageResource(R.drawable.chevron_up_icon_24px);
+
+        }else{
+            viewHolder.adapterConsultationHistoryBinding.group2.setVisibility(View.GONE);
+            viewHolder.adapterConsultationHistoryBinding.imageView2.setImageResource(R.drawable.chevron_down_24px);
         }
 
 
@@ -63,13 +69,10 @@ public class ConsultationHistoryAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     private void checkView(ConsultationHistoryViewHolder viewHolder, int position) {
-        if (viewHolder.adapterConsultationHistoryBinding.group2.getVisibility() == View.VISIBLE) {
-            viewHolder.adapterConsultationHistoryBinding.group2.setVisibility(View.GONE);
-            viewHolder.adapterConsultationHistoryBinding.imageView2.setImageResource(R.drawable.chevron_down_24px);
-        } else {
-            viewHolder.adapterConsultationHistoryBinding.group2.setVisibility(View.VISIBLE);
-            viewHolder.adapterConsultationHistoryBinding.imageView2.setImageResource(R.drawable.chevron_up_icon_24px);
-            //get data medicine name from db
+        if(focus_position == position){
+            focus_position = -1;
+            notifyDataSetChanged();
+        }else{
             onItemClickId.onRecyclerViewItemClick(position,consultationHistoryList.get(position).getId());
         }
     }

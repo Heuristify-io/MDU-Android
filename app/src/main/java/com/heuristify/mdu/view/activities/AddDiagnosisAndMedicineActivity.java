@@ -68,7 +68,6 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
         SimpleDateFormat df = new SimpleDateFormat(Constant.DOB_FORMAT, Locale.getDefault());
         formattedDate = df.format(c);
-        showProgressDialog();
         initializeRecycleView();
         PatientViewModel patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
 
@@ -88,7 +87,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             dismissProgressDialog();
         });
 
-
+        showProgressDialog();
         patientViewModel.getPatientResponseMutableLiveData(patient.getId()).observe(this, observer);
 
 

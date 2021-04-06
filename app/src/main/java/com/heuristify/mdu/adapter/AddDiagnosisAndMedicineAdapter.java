@@ -187,6 +187,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     }
 
     private void goneRecycleViewAndOtherViews(ViewHolder holder) {
+
         holder.recyclerView.setVisibility(View.GONE);
     }
 
