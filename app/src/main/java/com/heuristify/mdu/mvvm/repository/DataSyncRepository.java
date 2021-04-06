@@ -1,6 +1,9 @@
 package com.heuristify.mdu.mvvm.repository;
 
 
+import android.util.Patterns;
+import android.webkit.URLUtil;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -18,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +35,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DataSyncRepository {
-    MutableLiveData<List<Patient>> getPatientListMutableLiveData = new MutableLiveData<>();
-    MutableLiveData<Response<SyncApiResponse>> syncAttendancePatientsConsultationsAndPrescribedMedicineMutableLiveData = new MutableLiveData<>();
-    MutableLiveData<String> getPatientListMutableLiveDataError = new MutableLiveData<>();
+    MutableLiveData<List<Patient>> patientListMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<Response<SyncApiResponse>> syncRecordMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<String> patientListMutableLiveDataError = new MutableLiveData<>();
     MutableLiveData<String> syncMutableLiveDataError = new MutableLiveData<>();
     List<Patient> patientList = new ArrayList<>();
     List<String> attendanceList = new ArrayList<>();
@@ -41,15 +46,15 @@ public class DataSyncRepository {
     int count = -1;
 
     public MutableLiveData<List<Patient>> getAllPatientMutableLiveData() {
-        return getPatientListMutableLiveData;
+        return patientListMutableLiveData;
     }
 
-    public MutableLiveData<String> getGetPatientListMutableLiveDataError() {
-        return getPatientListMutableLiveDataError;
+    public MutableLiveData<String> getPatientListMutableLiveDataError() {
+        return patientListMutableLiveDataError;
     }
 
-    public MutableLiveData<Response<SyncApiResponse>> getSyncAttendancePatientsConsultationsAndPrescribedMedicineMutableLiveData() {
-        return syncAttendancePatientsConsultationsAndPrescribedMedicineMutableLiveData;
+    public MutableLiveData<Response<SyncApiResponse>> getSyncRecordMutableLiveData() {
+        return syncRecordMutableLiveData;
     }
 
     public MutableLiveData<String> getSyncMutableLiveDataError() {
@@ -58,13 +63,15 @@ public class DataSyncRepository {
 
     public void getPatientList(int sync) {
         new Thread(() -> {
-            List<Patient> patientList2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatient(sync);
+            List<Patient> patientList2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatientWithImages(sync);
             if (patientList2.size() > 0) {
                 for (int i = 0; i < patientList2.size(); i++) {
                     if (patientList2.get(i).getImage_path() != null) {
-                        File file = new File(patientList2.get(i).getImage_path());
-                        if (file.exists()) {
-                            patientList.add(patientList2.get(i));
+                        if (!IsValidUrl(patientList2.get(i).getImage_path())) {
+                            File file = new File(patientList2.get(i).getImage_path());
+                            if (file.exists()) {
+                                patientList.add(patientList2.get(i));
+                            }
                         }
                     }
                 }
@@ -72,21 +79,32 @@ public class DataSyncRepository {
                 if (patientList.size() > 0) {
                     uploadImagesToServer();
                 } else {
-                    getPatientListMutableLiveData.postValue(patientList2);
+                    DisplayLog.showLog("DataSyncRepository ", "localDbEmpty");
+                    patientListMutableLiveData.postValue(patientList2);
                 }
 
             } else {
-                getPatientListMutableLiveData.postValue(patientList2);
+                DisplayLog.showLog("DataSyncRepository ", "localDbEmpty2");
+                patientListMutableLiveData.postValue(patientList2);
             }
 
         }).start();
     }
 
-    public void getDoctorAttendancePatientsConsultationsAndPrescribedMedicine(int patient_sync, int consultation_sync, int prescribed_medicine_syn) {
+    private boolean IsValidUrl(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            return URLUtil.isValidUrl(urlString) && Patterns.WEB_URL.matcher(urlString).matches();
+        } catch (MalformedURLException ignored) {
+        }
+        return false;
+    }
+
+    public void uploadRecord(int patient_sync, int consultation_sync, int prescribed_medicine_syn) {
         patientList.clear();
         new Thread(() -> {
             attendanceList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().doctorAttendanceDao().getDoctorAttendance();
-            patientList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatient(patient_sync);
+            patientList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatients(patient_sync);
             diagnosisAndMedicineList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getDiagnosis(consultation_sync);
             prescribedMedicineList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().prescribedMedicineDao().getPrescribed(prescribed_medicine_syn);
 
@@ -104,8 +122,9 @@ public class DataSyncRepository {
 
                 for (int j = 0; j < patientList.size(); j++) {
                     patientsJsonArray.put(new JSONObject().put("id", patientList.get(j).getId()).put("fullName", patientList.get(j).getFullName())
-                            .put("gender", patientList.get(j).getGender())
-                            .put("age", patientList.get(j).getAge())
+                            .put("gender", patientList.get(j).getGender()).put("age", patientList.get(j).getAge())
+                            .put("cnicFirst2Digits", patientList.get(j).getCnicFirst2Digits())
+                            .put("cnicLast4Digits", patientList.get(j).getCnicLast4Digits())
                             .put("imageUrl", patientList.get(j).getImage_path()));
                 }
 
@@ -130,28 +149,78 @@ public class DataSyncRepository {
                 jsonObject.put("consultations", diagnosisAndMedicineJsonArray);
                 jsonObject.put("prescribed_medicines", prescribedMedicineJsonArray);
                 DisplayLog.showLog("JsonArray", "" + jsonObject.toString());
-
-                Call<SyncApiResponse> apiResponseCall = MyApplication.getInstance().getRetrofitServicesWithToken().uploadSyncData(jsonObject);
-                apiResponseCall.enqueue(new Callback<SyncApiResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<SyncApiResponse> call, @NonNull Response<SyncApiResponse> response) {
-                        syncAttendancePatientsConsultationsAndPrescribedMedicineMutableLiveData.setValue(response);
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<SyncApiResponse> call, @NonNull Throwable t) {
-                        syncMutableLiveDataError.setValue(t.getMessage());
-                    }
-                });
+                JsonObject jsonRequest = new JsonObject();
+                jsonRequest.addProperty("data", String.valueOf(jsonObject));
+                uploadRecordApiCall(jsonRequest);
 
 
             } catch (Exception e) {
                 e.printStackTrace();
-                syncMutableLiveDataError.postValue("exception "+e.getMessage());
+                syncMutableLiveDataError.postValue("exception " + e.getMessage());
             }
 
 
         }).start();
+
+    }
+
+    private void uploadRecordApiCall(JsonObject jsonRequest) {
+
+        Call<SyncApiResponse> apiResponseCall = MyApplication.getInstance().getRetrofitServicesWithToken().uploadSyncData(jsonRequest);
+        apiResponseCall.enqueue(new Callback<SyncApiResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SyncApiResponse> call, @NonNull Response<SyncApiResponse> response) {
+                if (response.code() == 200) {
+                    //delete table anc recreate table with new receive data
+                    deleteAndRecreateTableAgain(response);
+                } else {
+                    syncRecordMutableLiveData.setValue(response);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SyncApiResponse> call, @NonNull Throwable t) {
+                syncMutableLiveDataError.setValue(t.getMessage() + " " + t.getStackTrace() + " " + call.toString() + " " + t.toString());
+            }
+        });
+    }
+
+    private void deleteAndRecreateTableAgain(Response<SyncApiResponse> response) {
+        try {
+
+            new Thread(() -> {
+
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().deleteStockMedicines();
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().doctorAttendanceDao().deleteDoctorAttendance();
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().deletePatients();
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().deleteDiagnosisAndMedicines();
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().prescribedMedicineDao().deletePrescribedMedicines();
+
+                for (int i = 0; i < response.body().getStockMedicineList().size(); i++) {
+                    MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().insertStockMedicine(response.body().getStockMedicineList().get(i));
+                }
+
+                for (int j = 0; j < response.body().getDoctorAttendanceList().size(); j++) {
+                    MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().doctorAttendanceDao().insertDoctorAttendDance(response.body().getDoctorAttendanceList().get(j));
+                }
+
+                for (int k = 0; k < response.body().getPatientList().size(); k++) {
+                    MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().insertPatient(response.body().getPatientList().get(k));
+                }
+
+                for (int m = 0; m < response.body().getDiagnosisAndMedicineList().size(); m++) {
+                    MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().insertPatientDiagnosis(response.body().getDiagnosisAndMedicineList().get(m));
+                }
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().prescribedMedicineDao().insertPrescribedMedicine(response.body().getPrescribedMedicineList());
+                syncRecordMutableLiveData.postValue(response);
+
+
+            }).start();
+
+        } catch (Exception e) {
+            e.getMessage();
+            syncRecordMutableLiveData.setValue(response);
+        }
 
     }
 
@@ -166,7 +235,7 @@ public class DataSyncRepository {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-
+                DisplayLog.showLog("upload_image", "response22 " + response.code());
                 try {
 
                     if (response.code() == 200) {
@@ -180,29 +249,30 @@ public class DataSyncRepository {
                             uploadImagesToServer();
                         } else {
                             clearCountAndImageList();
-                            getPatientListMutableLiveData.setValue(patientList);
+                            patientListMutableLiveData.setValue(patientList);
                         }
                     } else {
                         if (count < patientList.size() - 1) {
                             uploadImagesToServer();
                         } else {
                             clearCountAndImageList();
-                            getPatientListMutableLiveDataError.setValue(response.message());
+                            patientListMutableLiveDataError.setValue(response.message());
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    getPatientListMutableLiveDataError.setValue(response.message());
+                    patientListMutableLiveDataError.setValue(response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                DisplayLog.showLog("upload_image", "response222 " + t.getMessage());
                 if (count < patientList.size() - 1) {
                     uploadImagesToServer();
                 } else {
                     clearCountAndImageList();
-                    getPatientListMutableLiveDataError.setValue(t.getMessage());
+                    patientListMutableLiveDataError.setValue(t.getMessage());
                 }
             }
         });

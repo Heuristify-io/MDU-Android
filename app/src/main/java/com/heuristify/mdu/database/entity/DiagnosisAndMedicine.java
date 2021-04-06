@@ -9,8 +9,12 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import com.heuristify.mdu.database.typeConverter.DateConverter;
+import com.heuristify.mdu.helper.Constant;
 
 import java.util.Date;
 
@@ -49,7 +53,7 @@ public class DiagnosisAndMedicine extends BaseObservable {
     @ColumnInfo(name = "createdAt")
     @SerializedName("createdAt")
     @TypeConverters(DateConverter.class)
-    private Date created_date;
+    private String created_date;
 
 
     @Bindable
@@ -120,11 +124,11 @@ public class DiagnosisAndMedicine extends BaseObservable {
     }
 
     @Bindable
-    public Date getCreated_date() {
+    public String getCreated_date() {
         return created_date;
     }
 
-    public void setCreated_date(Date created_date) {
+    public void setCreated_date(String created_date) {
         this.created_date = created_date;
         notifyPropertyChanged(BR.created_date);
     }

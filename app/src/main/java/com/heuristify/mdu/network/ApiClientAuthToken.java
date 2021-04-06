@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.heuristify.mdu.BuildConfig;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.helper.Helper;
 import com.heuristify.mdu.sharedPreferences.SharedHelper;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -32,7 +34,7 @@ public class ApiClientAuthToken {
                     .readTimeout(100, TimeUnit.SECONDS)
                     .retryOnConnectionFailure(true)
                     .build();
-            httpClient.addInterceptor(new Interceptor() {
+            httpClient.addInterceptor(provideHttpLoggingInterceptor()).addInterceptor(new Interceptor() {
                 @Override
                 public okhttp3.Response intercept(Chain chain) throws IOException {
                     Request original = chain.request();
@@ -63,5 +65,18 @@ public class ApiClientAuthToken {
                     .build();
         }
         return retrofit;
+    }
+
+
+    static HttpLoggingInterceptor provideHttpLoggingInterceptor() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        HttpLoggingInterceptor.Level level;
+        if (BuildConfig.DEBUG) {
+            level = HttpLoggingInterceptor.Level.BODY;
+        } else {
+            level = HttpLoggingInterceptor.Level.NONE;
+        }
+        interceptor.setLevel(level);
+        return interceptor;
     }
 }

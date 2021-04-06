@@ -25,6 +25,7 @@ import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
 import com.heuristify.mdu.database.entity.PrescribedMedicine;
 import com.heuristify.mdu.databinding.ActivityAddDiagnosisAndMedicineBinding;
+import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
@@ -33,9 +34,12 @@ import com.heuristify.mdu.mvvm.viewmodel.PatientViewModel;
 import com.heuristify.mdu.pojo.PatientHistory;
 import com.heuristify.mdu.pojo.PatientHistoryList;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Response;
 
@@ -48,6 +52,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     private Patient patient;
     private final String TAG = "AddDiagnosisAndMedicineActivity";
     private Dialog mDialog;
+    String formattedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,12 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         if (getIntent().getExtras() != null) {
             patient = (Patient) getIntent().getSerializableExtra("patient");
         }
+
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
+
+        SimpleDateFormat df = new SimpleDateFormat(Constant.DOB_FORMAT, Locale.getDefault());
+        formattedDate = df.format(c);
         showProgressDialog();
         initializeRecycleView();
         PatientViewModel patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
@@ -78,7 +89,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         });
 
 
-        patientViewModel.getPatientResponseMutableLiveData(1).observe(this, observer);
+        patientViewModel.getPatientResponseMutableLiveData(patient.getId()).observe(this, observer);
 
 
     }
@@ -212,7 +223,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             diagnosisAndMedicine.setDescription(dataBinding.editTextPatientDiagnosisDes.getText().toString());
             diagnosisAndMedicine.setLat(0.0);
             diagnosisAndMedicine.setLng(0.0);
-            diagnosisAndMedicine.setCreated_date(new Date());
+            diagnosisAndMedicine.setCreated_date(formattedDate);
             diagnosisAndMedicine.setPatientId(patient.getId());
 //            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicine);
             int id = (int) MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().diagnosisAndMedicineDao().insertPatientDiagnosis(diagnosisAndMedicine);
@@ -221,6 +232,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                     PrescribedMedicine prescribedMedicine = new PrescribedMedicine();
                     prescribedMedicine.setConsultationId(id);
                     prescribedMedicine.setMedicineId(storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
+                    prescribedMedicine.setActualMedicineId(storeClickWidgetList.get(i).getStockMedicine().getMedicineId());
                     prescribedMedicine.setDays(Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays()));
                     prescribedMedicine.setFrequency(storeClickWidgetList.get(i).getEditTextFrequency());
                     prescribedMedicine.setFrequencyNum(1);

@@ -8,7 +8,11 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import com.heuristify.mdu.database.typeConverter.DateConverter;
+import com.heuristify.mdu.helper.Constant;
 
 import java.util.Date;
 
@@ -20,7 +24,7 @@ public class DoctorAttendance extends BaseObservable {
     private int id;
     @ColumnInfo(name = "attendanceDate")
     @TypeConverters(DateConverter.class)
-    private Date attendanceDate;
+    private String attendanceDate;
 
 
     @Bindable
@@ -34,11 +38,11 @@ public class DoctorAttendance extends BaseObservable {
     }
 
     @Bindable
-    public Date getAttendanceDate() {
+    public String getAttendanceDate() {
         return attendanceDate;
     }
 
-    public void setAttendanceDate(Date attendanceDate) {
+    public void setAttendanceDate(String attendanceDate) {
         this.attendanceDate = attendanceDate;
         notifyPropertyChanged(BR.attendanceDate);
     }

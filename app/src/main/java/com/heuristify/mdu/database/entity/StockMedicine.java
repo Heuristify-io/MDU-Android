@@ -26,6 +26,10 @@ public class StockMedicine extends BaseObservable {
     @ColumnInfo(name = "total")
     @SerializedName("total")
     private String stock_medicine_total;
+    @ColumnInfo(name = "medicineId")
+    @SerializedName("medicineId")
+    private int medicineId;
+
 
     @Bindable
     public int getStock_medicine_medicineId() {
@@ -65,5 +69,15 @@ public class StockMedicine extends BaseObservable {
     public void setStock_medicine_total(String stock_medicine_total) {
         notifyPropertyChanged(BR.stock_medicine_total);
         this.stock_medicine_total = stock_medicine_total;
+    }
+
+    @Bindable
+    public int getMedicineId() {
+        return medicineId;
+    }
+
+    public void setMedicineId(int medicineId) {
+        this.medicineId = medicineId;
+        notifyPropertyChanged(BR.medicineId);
     }
 }

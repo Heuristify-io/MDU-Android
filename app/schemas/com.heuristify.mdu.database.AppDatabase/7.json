@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "276ece68c4ab954eb6b20dd655b843df",
+    "identityHash": "184f7aa289550c4416567d9a0317884e",
     "entities": [
       {
         "tableName": "medicine_list_entity",
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "doctor_med_stocks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `medicineName` TEXT, `quantity` TEXT, `total` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `medicineName` TEXT, `quantity` TEXT, `total` TEXT, `medicineId` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "stock_medicine_medicineId",
@@ -57,6 +57,12 @@
             "columnName": "total",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "medicineId",
+            "columnName": "medicineId",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -165,7 +171,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "isSync",
+            "fieldPath": "sync",
             "columnName": "isSync",
             "affinity": "INTEGER",
             "notNull": true
@@ -194,7 +200,7 @@
       },
       {
         "tableName": "prescribed_medicine",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineId` INTEGER NOT NULL, `consultationId` INTEGER NOT NULL, `days` INTEGER NOT NULL, `frequency` TEXT, `frequencyNum` INTEGER NOT NULL, `isSync` INTEGER NOT NULL, FOREIGN KEY(`consultationId`) REFERENCES `consultations`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`medicineId`) REFERENCES `doctor_med_stocks`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineId` INTEGER NOT NULL, `consultationId` INTEGER NOT NULL, `actualMedicineId` INTEGER NOT NULL, `days` INTEGER NOT NULL, `frequency` TEXT, `frequencyNum` INTEGER NOT NULL, `isSync` INTEGER NOT NULL, FOREIGN KEY(`consultationId`) REFERENCES `consultations`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`medicineId`) REFERENCES `doctor_med_stocks`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -211,6 +217,12 @@
           {
             "fieldPath": "consultationId",
             "columnName": "consultationId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actualMedicineId",
+            "columnName": "actualMedicineId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -301,7 +313,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '276ece68c4ab954eb6b20dd655b843df')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '184f7aa289550c4416567d9a0317884e')"
     ]
   }
 }

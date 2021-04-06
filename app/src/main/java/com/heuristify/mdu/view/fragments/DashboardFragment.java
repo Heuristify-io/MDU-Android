@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseFragment;
@@ -18,7 +19,6 @@ import com.heuristify.mdu.databinding.FragmentDashboardBinding;
 import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
-import com.heuristify.mdu.pojo.SyncApiResponse;
 import com.heuristify.mdu.view.activities.ConsultationHistoryActivity;
 
 import java.util.ArrayList;
@@ -84,7 +84,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     private void observeGetPatientList() {
         dataSyncViewModel.getPatientList().observe(getViewLifecycleOwner(), patientList -> {
             DisplayLog.showLog(TAG,"imageResponse "+patientList);
-            dataSyncViewModel.callGetDoctorAttendancePatientsConsultationsAndPrescribedMedicine(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
+            dataSyncViewModel.uploadRecords(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
 
         });
 
@@ -93,22 +93,27 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     private void observerErrorMsg() {
         dataSyncViewModel.errorMsg().observe(getViewLifecycleOwner(),String ->{
             DisplayLog.showLog(TAG,"imageError "+String);
-            dataSyncViewModel.callGetDoctorAttendancePatientsConsultationsAndPrescribedMedicine(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
+            dataSyncViewModel.uploadRecords(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
         });
     }
 
     private void observerSyncDataErrorResponse() {
         dataSyncViewModel.getSyncMutableLiveDataErrorResponse().observe(getViewLifecycleOwner(),String ->{
             dismissProgressDialog();
-            DisplayLog.showLog(TAG,"observerSyncDataErrorResponse "+String);
+            DisplayLog.showLog(TAG,"syncErrorResponse "+String);
         });
 
     }
 
     private void observerSyncDataResponse() {
-        dataSyncViewModel.getDoctorAttendancePatientsConsultationsAndPrescribedMedicineMutableResponsive().observe(getViewLifecycleOwner(),syncApiResponse -> {
+        dataSyncViewModel.observeUploadRecordMutableResponsive().observe(getViewLifecycleOwner(), syncApiResponse -> {
             DisplayLog.showLog(TAG,"observerSyncDataResponse "+syncApiResponse.code());
             dismissProgressDialog();
+            if(syncApiResponse.code() == 200){
+                Toast.makeText(mContext, "Data Sync Successfully", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(mContext, "Data Not Sync", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

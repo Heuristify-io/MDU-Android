@@ -42,6 +42,10 @@ public class PrescribedMedicine extends BaseObservable {
     @SerializedName("consultationId")
     private int consultationId;
 
+    @ColumnInfo(name = "actualMedicineId")
+    @SerializedName("actualMedicineId")
+    private int actualMedicineId;
+
     @ColumnInfo(name = "days")
     @SerializedName("days")
     private int days;
@@ -126,5 +130,15 @@ public class PrescribedMedicine extends BaseObservable {
     public void setIsSync(int isSync) {
         this.isSync = isSync;
         notifyPropertyChanged(BR.isSync);
+    }
+
+    @Bindable
+    public int getActualMedicineId() {
+        return actualMedicineId;
+    }
+
+    public void setActualMedicineId(int actualMedicineId) {
+        this.actualMedicineId = actualMedicineId;
+        notifyPropertyChanged(BR.actualMedicineId);
     }
 }

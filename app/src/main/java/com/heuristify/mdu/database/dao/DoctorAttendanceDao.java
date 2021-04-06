@@ -20,5 +20,8 @@ public interface DoctorAttendanceDao {
     @Query("SELECT attendanceDate FROM doctor_attendance WHERE attendanceDate =:date")
     String checkAttendance(String date);
 
+    @Query("DELETE FROM doctor_attendance")
+    void deleteDoctorAttendance();
+
 
 }

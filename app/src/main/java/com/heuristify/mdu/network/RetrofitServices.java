@@ -48,5 +48,5 @@ public interface RetrofitServices {
     Call<ResponseBody> uploadImages(@Part MultipartBody.Part file, @Part("image") RequestBody name);
 
     @POST("doctors/uploadrecords")
-    Call<SyncApiResponse> uploadSyncData(@Body JSONObject jsonObject);
+    Call<SyncApiResponse> uploadSyncData(@Body JsonObject jsonObject);
 }

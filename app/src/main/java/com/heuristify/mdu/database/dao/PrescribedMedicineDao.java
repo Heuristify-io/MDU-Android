@@ -16,4 +16,7 @@ public interface PrescribedMedicineDao {
 
     @Query("SELECT * FROM prescribed_medicine WHERE  isSync =:sync")
     List<PrescribedMedicine> getPrescribed(int sync);
+
+    @Query("DELETE FROM prescribed_medicine")
+    void deletePrescribedMedicines();
 }

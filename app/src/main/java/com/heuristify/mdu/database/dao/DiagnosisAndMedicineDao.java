@@ -19,4 +19,7 @@ public interface DiagnosisAndMedicineDao {
 
     @Query("SELECT * FROM consultations WHERE  isSync =:sync")
     List<DiagnosisAndMedicine> getDiagnosis(int sync);
+
+    @Query("DELETE FROM consultations")
+    void deleteDiagnosisAndMedicines();
 }
