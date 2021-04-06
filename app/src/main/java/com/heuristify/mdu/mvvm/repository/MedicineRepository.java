@@ -110,7 +110,6 @@ public class MedicineRepository {
                 try {
 
                     if (response.code() == 200) {
-
                         //update medicine fields
                         DisplayLog.showLog("medicine_code1",""+response.code());
                         updateMedicine(response, medicineName, quantity);
@@ -159,7 +158,10 @@ public class MedicineRepository {
     private void addNewMedicine(Response<StockMedicineList> response, int medicine_id, String medicineName, int quantity) {
         new Thread(() -> {
             StockMedicine stockMedicine = new StockMedicine();
+            //for primary key
             stockMedicine.setStock_medicine_medicineId(medicine_id);
+            //actual medicine id need for data sync
+            stockMedicine.setMedicineId(medicine_id);
             stockMedicine.setStock_medicine_name(medicineName);
             stockMedicine.setStock_medicine_quantity(String.valueOf(quantity));
             stockMedicine.setStock_medicine_total(String.valueOf(quantity));

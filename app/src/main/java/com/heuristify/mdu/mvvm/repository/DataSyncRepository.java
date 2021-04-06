@@ -137,7 +137,10 @@ public class DataSyncRepository {
                 }
 
                 for (int l = 0; l < prescribedMedicineList.size(); l++) {
-                    prescribedMedicineJsonArray.put(new JSONObject().put("id", prescribedMedicineList.get(l).getId()).put("medicineId", prescribedMedicineList.get(l).getMedicineId())
+                    prescribedMedicineJsonArray.put(new JSONObject().put("id", prescribedMedicineList.get(l).getId())
+
+                            .put("medicineId", prescribedMedicineList.get(l).getActualMedicineId())
+//                            .put("actualMedicineId", prescribedMedicineList.get(l).getActualMedicineId())
                             .put("consultationId", prescribedMedicineList.get(l).getConsultationId())
                             .put("days", prescribedMedicineList.get(l).getDays())
                             .put("frequency", prescribedMedicineList.get(l).getFrequency()));
@@ -211,7 +214,8 @@ public class DataSyncRepository {
                 for (int m = 0; m < response.body().getDiagnosisAndMedicineList().size(); m++) {
                     MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().insertPatientDiagnosis(response.body().getDiagnosisAndMedicineList().get(m));
                 }
-                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().prescribedMedicineDao().insertPrescribedMedicine(response.body().getPrescribedMedicineList());
+                List<PrescribedMedicine> prescribedMedicineList = response.body().getPrescribedMedicineList();
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().prescribedMedicineDao().insertPrescribedMedicine(prescribedMedicineList);
                 syncRecordMutableLiveData.postValue(response);
 
 

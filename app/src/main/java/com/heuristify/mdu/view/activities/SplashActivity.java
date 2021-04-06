@@ -13,16 +13,11 @@ import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.ActivitySplashBinding;
-import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.Helper;
+import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.mvvm.viewmodel.DoctorViewModel;
 import com.heuristify.mdu.sharedPreferences.SharedHelper;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class SplashActivity extends BindingBaseActivity<ActivitySplashBinding> {
 
@@ -30,14 +25,12 @@ public class SplashActivity extends BindingBaseActivity<ActivitySplashBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Date date = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat(Constant.DOB_FORMAT, Locale.getDefault());
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (SharedHelper.getKey(MyApplication.getInstance(), Helper.JWT).length() > 0) {
 
                 DoctorViewModel doctorViewModel = ViewModelProviders.of(this).get(DoctorViewModel.class);
-                doctorViewModel.check(df.format(date));
+                doctorViewModel.checkPatientAttendance(Utilities.currentDate());
                 doctorViewModel.getDoctorAttendanceMutableLiveData1().observe(this, (String String) -> {
                     DisplayLog.showLog("splash", "" + String);
                     if (String == null) {

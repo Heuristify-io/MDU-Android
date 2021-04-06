@@ -12,27 +12,18 @@ import androidx.lifecycle.ViewModelProviders;
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.databinding.ActivityDashboardBinding;
-import com.heuristify.mdu.helper.Constant;
-import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.Helper;
-import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
+import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.mvvm.viewmodel.DoctorViewModel;
 import com.heuristify.mdu.sharedPreferences.SharedHelper;
 import com.heuristify.mdu.view.fragments.DashboardFragment;
 import com.heuristify.mdu.view.fragments.InventoryFragment;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBinding> {
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
     Fragment fragment = null;
 
-    Date date;
-    SimpleDateFormat df;
     DoctorViewModel doctorViewModel;
 
 
@@ -42,8 +33,6 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
         super.onCreate(savedInstanceState);
         getDataBinding().textViewName.setText("Dr. " + SharedHelper.getKey(this, Helper.NAME));
 
-        date = Calendar.getInstance().getTime();
-        df = new SimpleDateFormat(Constant.DOB_FORMAT, Locale.getDefault());
         doctorViewModel = ViewModelProviders.of(this).get(DoctorViewModel.class);
 
         observeAttendance();
@@ -58,7 +47,7 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
         getDataBinding().imageViewInventory.setOnClickListener(v -> inventoryFragment());
 
         getDataBinding().floatingActionButton.setOnClickListener(v -> {
-            doctorViewModel.check(df.format(date));
+            doctorViewModel.checkPatientAttendance(Utilities.currentDate());
 
         });
 

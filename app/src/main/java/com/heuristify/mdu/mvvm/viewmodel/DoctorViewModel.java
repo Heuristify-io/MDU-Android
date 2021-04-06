@@ -27,7 +27,7 @@ public class DoctorViewModel extends AndroidViewModel {
         return doctorRepository.getCheckDoctorAttendanceMutableLiveData1();
     }
 
-    public void check(String date){
+    public void checkPatientAttendance(String date){
         doctorRepository.checkAttendance(date);
     }
 

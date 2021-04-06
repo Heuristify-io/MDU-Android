@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -25,8 +26,8 @@ import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
 import com.heuristify.mdu.database.entity.PrescribedMedicine;
 import com.heuristify.mdu.databinding.ActivityAddDiagnosisAndMedicineBinding;
-import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.StoreClickWidget;
+import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.database.entity.Patient;
@@ -34,12 +35,8 @@ import com.heuristify.mdu.mvvm.viewmodel.PatientViewModel;
 import com.heuristify.mdu.pojo.PatientHistory;
 import com.heuristify.mdu.pojo.PatientHistoryList;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Response;
 
@@ -52,7 +49,6 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     private Patient patient;
     private final String TAG = "AddDiagnosisAndMedicineActivity";
     private Dialog mDialog;
-    String formattedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +59,8 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             patient = (Patient) getIntent().getSerializableExtra("patient");
         }
 
-        Date c = Calendar.getInstance().getTime();
-        System.out.println("Current time => " + c);
 
-        SimpleDateFormat df = new SimpleDateFormat(Constant.DOB_FORMAT, Locale.getDefault());
-        formattedDate = df.format(c);
+
         initializeRecycleView();
         PatientViewModel patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
 
@@ -83,9 +76,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             }
         };
 
-        patientViewModel.getError_msg().observe(this, s -> {
-            dismissProgressDialog();
-        });
+        patientViewModel.getError_msg().observe(this, s -> dismissProgressDialog());
 
         showProgressDialog();
         patientViewModel.getPatientResponseMutableLiveData(patient.getId()).observe(this, observer);
@@ -170,9 +161,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         textViewQuantity.setText("Medicine Quantity " + quantity);
         Button btnRetry = mDialog.findViewById(R.id.buttonRetry);
 
-        btnRetry.setOnClickListener(v -> {
-            mDialog.dismiss();
-        });
+        btnRetry.setOnClickListener(v -> mDialog.dismiss());
 
 
     }
@@ -222,7 +211,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             diagnosisAndMedicine.setDescription(dataBinding.editTextPatientDiagnosisDes.getText().toString());
             diagnosisAndMedicine.setLat(0.0);
             diagnosisAndMedicine.setLng(0.0);
-            diagnosisAndMedicine.setCreated_date(formattedDate);
+            diagnosisAndMedicine.setCreated_date(Utilities.currentDate());
             diagnosisAndMedicine.setPatientId(patient.getId());
 //            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicine);
             int id = (int) MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().diagnosisAndMedicineDao().insertPatientDiagnosis(diagnosisAndMedicine);
