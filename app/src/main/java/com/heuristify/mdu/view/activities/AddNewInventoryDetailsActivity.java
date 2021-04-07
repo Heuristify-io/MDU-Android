@@ -44,17 +44,6 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
         context = this;
         medicineViewModel = ViewModelProviders.of(this).get(MedicineViewModel.class);
 
-        if (getIntent().getExtras() != null) {
-            String medicine_name = getIntent().getExtras().getString("medicine_name");
-            getDataBinding().editTextSearch.setText(medicine_name);
-        }
-
-        if (getDataBinding().editTextSearch.getText().length() > 0) {
-            enableButton();
-        } else {
-            disableButton();
-        }
-
         from_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, From);
         from_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -68,9 +57,27 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
         getDataBinding().materialSpinnerStrength.setAdapter(strength_adapter);
         getDataBinding().materialSpinnerUnit.setAdapter(unit_adapter);
 
-        Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(From[0]);
-        Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(Strength[0]);
-        Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(Unit[0]);
+
+        if (getIntent().getExtras() != null) {
+            String medicine_name = getIntent().getExtras().getString("medicine_name");
+            getDataBinding().editTextSearch.setText(medicine_name);
+            Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(getIntent().getExtras().getString("from"));
+            Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(getIntent().getExtras().getString("strength"));
+            Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(getIntent().getExtras().getString("unit"));
+
+        } else {
+
+            Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(From[0]);
+            Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(Strength[0]);
+            Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(Unit[0]);
+        }
+
+        if (getDataBinding().editTextSearch.getText().length() > 0) {
+            enableButton();
+        } else {
+            disableButton();
+        }
+
 
         getDataBinding().editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -101,14 +108,14 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
                 startActivity(intent);
                 finish();
             }
-            DisplayLog.showLog(TAG,"success "+responseBodyResponse.code());
+            DisplayLog.showLog(TAG, "success " + responseBodyResponse.code());
 
 
         };
 
         medicineViewModel.getError_msg().observe(this, s -> {
             dismissProgressDialog();
-            DisplayLog.showLog(TAG,"getError "+s);
+            DisplayLog.showLog(TAG, "getError " + s);
         });
 
     }

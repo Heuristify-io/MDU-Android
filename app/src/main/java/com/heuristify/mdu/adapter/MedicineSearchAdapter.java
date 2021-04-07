@@ -37,7 +37,12 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         MedicineSearchViewHolder viewHolder = (MedicineSearchViewHolder) holder;
         viewHolder.adapterMedicineSearchBinding.setMedicine(medicineList.get(position));
-        viewHolder.adapterMedicineSearchBinding.relative.setOnClickListener(v -> context.startActivity(new Intent(context, AddNewInventoryDetailsActivity.class).putExtra("medicine_name",medicineList.get(position).getMedicine_name())));
+        viewHolder.adapterMedicineSearchBinding.relative.setOnClickListener(v -> context.startActivity(new Intent(context, AddNewInventoryDetailsActivity.class)
+                .putExtra("medicine_name", medicineList.get(position).getMedicine_name())
+                .putExtra("from", medicineList.get(position).getMedicine_form())
+                .putExtra("strength", medicineList.get(position).getMedicine_strength())
+                .putExtra("unit", medicineList.get(position).getMedicine_units())
+        ));
 
     }
 

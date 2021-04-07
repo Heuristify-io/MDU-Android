@@ -89,21 +89,18 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     }
 
     private void observerPendingConsultation() {
-        consultationViewModel.pendingConsultationObserver().observe(getViewLifecycleOwner(),integer -> {
-            getDataBinding().textViewPending.setText(String.valueOf(integer));
-        });
+        consultationViewModel.pendingConsultationObserver().observe(getViewLifecycleOwner(),integer ->
+                getDataBinding().textViewPending.setText(String.valueOf(integer)));
     }
 
     private void observerUpdateConsultation() {
-        consultationViewModel.updatedConsultationObserver().observe(getViewLifecycleOwner(),integer -> {
-            getDataBinding().textViewUpdate.setText(String.valueOf(integer));
-        });
+        consultationViewModel.updatedConsultationObserver().observe(getViewLifecycleOwner(),integer ->
+                getDataBinding().textViewUpdate.setText(String.valueOf(integer)));
     }
 
     private void observeTotalConsultation() {
-        consultationViewModel.totalConsultationObserver().observe(getViewLifecycleOwner(),integer -> {
-            getDataBinding().textViewTotal.setText(String.valueOf(integer));
-        });
+        consultationViewModel.totalConsultationObserver().observe(getViewLifecycleOwner(),integer ->
+                getDataBinding().textViewTotal.setText(String.valueOf(integer)));
     }
 
     private void getAllPatients() {
@@ -137,7 +134,6 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
 
     private void observerSyncDataResponse() {
         dataSyncViewModel.observeUploadRecordMutableResponsive().observe(getViewLifecycleOwner(), syncApiResponse -> {
-            DisplayLog.showLog(TAG,"observerSyncDataResponse "+syncApiResponse.code());
             dismissProgressDialog();
             if(syncApiResponse.code() == 200){
                 Toast.makeText(mContext, "Data Sync Successfully", Toast.LENGTH_SHORT).show();
