@@ -149,7 +149,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
             Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, cNicFirstTwoDigit, cNicLastFourDigit, Integer.parseInt(age));
             if (patient != null) {
                 startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient));
-
+                finish();
             } else {
                 Patient patient1 = new Patient();
                 patient1.setFullName(name);

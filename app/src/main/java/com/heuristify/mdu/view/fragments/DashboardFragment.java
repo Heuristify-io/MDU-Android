@@ -18,6 +18,7 @@ import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.databinding.FragmentDashboardBinding;
 import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.DisplayLog;
+import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.mvvm.viewmodel.ConsultationViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
 import com.heuristify.mdu.view.activities.ConsultationHistoryActivity;
@@ -61,6 +62,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
             getAllPatients();
         });
         getDataBinding().buttonAttending2.setOnClickListener(v -> startActivity(new Intent(getActivity(), ConsultationHistoryActivity.class)));
+        getDataBinding().textViewDate.setText(Utilities.currentDate());
 
     }
 

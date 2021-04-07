@@ -20,6 +20,9 @@ public interface PatientDao {
     @Query("SELECT * from patients WHERE isSync =:sync")
     List<Patient> getAllPatients(int sync);
 
+    @Query("SELECT id from patients WHERE id =:patient_id AND isSync =:syn")
+    int checkPatient(int patient_id,int syn);
+
     @Query("SELECT * FROM patients WHERE fullName =:name AND cnicFirst2Digits =:firstTwoDigit AND cnicLast4Digits =:lastFourDigit AND age =:age")
     Patient getPatient(String name, int firstTwoDigit, int lastFourDigit, int age);
 
@@ -28,6 +31,8 @@ public interface PatientDao {
 
     @Query("DELETE FROM patients")
     void deletePatients();
+
+
 
 
 }

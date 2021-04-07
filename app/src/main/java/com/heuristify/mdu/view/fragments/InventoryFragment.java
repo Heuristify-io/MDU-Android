@@ -85,7 +85,6 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
     }
 
     private void initialRecycleView() {
-
         getDataBinding().recyclerViewMedicine.setHasFixedSize(true);
         getDataBinding().recyclerViewMedicine.setItemAnimator(new DefaultItemAnimator());
         medicineInventoryAdapter = new MedicineInventoryAdapter(medicineList, getActivity());

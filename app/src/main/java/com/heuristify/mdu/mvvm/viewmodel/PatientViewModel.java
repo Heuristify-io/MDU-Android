@@ -27,8 +27,16 @@ public class PatientViewModel extends AndroidViewModel {
         return patientResponseMutableLiveData;
     }
 
+    public MutableLiveData<Integer> checkPatient() {
+        return patientRepository.getCheckPatientMutableLiveData();
+    }
+
     public MutableLiveData<String> getError_msg() {
         this.error_msg = patientRepository.getError_msg();
         return error_msg;
+    }
+
+    public void checkPatientSync(int patient_id,int sync){
+        patientRepository.checkPatient(patient_id,sync);
     }
 }

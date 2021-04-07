@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
-import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.pojo.PatientHistoryList;
 
 
@@ -17,6 +16,7 @@ public class PatientRepository {
 
     MutableLiveData<Response<PatientHistoryList>> responseMutableLiveData = new MutableLiveData<>();
     MutableLiveData<String> error_msg = new MutableLiveData<>();
+    MutableLiveData<Integer> checkPatientMutableLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<Response<PatientHistoryList>> getPatientHistory(int patient_id) {
@@ -26,6 +26,10 @@ public class PatientRepository {
 
     public MutableLiveData<String> getError_msg() {
         return error_msg;
+    }
+
+    public MutableLiveData<Integer> getCheckPatientMutableLiveData() {
+        return checkPatientMutableLiveData;
     }
 
     private void callPatientHistoryApi(int patient_id) {
@@ -41,5 +45,12 @@ public class PatientRepository {
                 error_msg.setValue(t.getMessage());
             }
         });
+    }
+
+    public void checkPatient(int patient_id,int sync){
+        new Thread(() -> {
+            int id = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().checkPatient(patient_id,sync);
+            checkPatientMutableLiveData.postValue(id);
+        }).start();
     }
 }

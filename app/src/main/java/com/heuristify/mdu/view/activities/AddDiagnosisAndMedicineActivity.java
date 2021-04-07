@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
 import com.heuristify.mdu.database.entity.PrescribedMedicine;
 import com.heuristify.mdu.databinding.ActivityAddDiagnosisAndMedicineBinding;
+import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.helper.WidgetList;
@@ -48,6 +50,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     private Patient patient;
     private final String TAG = "AddDiagnosisAndMedicineActivity";
     private Dialog mDialog;
+    PatientViewModel patientViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +80,16 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
         patientViewModel.getError_msg().observe(this, s -> dismissProgressDialog());
 
-        showProgressDialog();
-        patientViewModel.getPatientResponseMutableLiveData(patient.getId()).observe(this, observer);
+        Log.e("patient_id",""+patient.getId());
+
+        patientViewModel.checkPatient().observe(this,integer -> {
+            Log.e("patient_id2",""+integer);
+            if(integer != null){
+                showProgressDialog();
+                patientViewModel.getPatientResponseMutableLiveData(patient.getId()).observe(this, observer);
+            }
+        });
+        patientViewModel.checkPatientSync(patient.getId(), Constant.patient_sync_one);
 
 
     }
