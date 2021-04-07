@@ -84,7 +84,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
         patientViewModel.checkPatient().observe(this,integer -> {
             Log.e("patient_id2",""+integer);
-            if(integer != null){
+            if(integer > 0){
                 showProgressDialog();
                 patientViewModel.getPatientResponseMutableLiveData(patient.getId()).observe(this, observer);
             }
