@@ -117,12 +117,23 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
     }
 
     private void saveDataIntoDb() {
-        if (getDataBinding().editTextConsultationName.getText().toString().length() > 0 && getDataBinding().editTextConsultatioCnicFirstTwoDigit.getText().toString().length() > 1
-                && dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString().length() > 3 && dataBinding.editTextConsultatioAge.getText().toString().length() > 0
+        if (getDataBinding().editTextConsultationName.getText().toString().length() > 0 && dataBinding.editTextConsultatioAge.getText().toString().length() > 0
                 && dataBinding.materialSpinnerGender.getEditText().getText().toString().length() > 0) {
 
-            saveData(getDataBinding().editTextConsultationName.getText().toString(), getDataBinding().editTextConsultatioCnicFirstTwoDigit.getText().toString(),
-                    dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString(), dataBinding.editTextConsultatioAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
+            if (compressedImageFile != null && getDataBinding().editTextConsultatioCnicFirstTwoDigit.getText().toString().length() > 1 && dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString().length() > 3) {
+                saveData(getDataBinding().editTextConsultationName.getText().toString(), Integer.parseInt(dataBinding.editTextConsultatioCnicFirstTwoDigit.getText().toString()),
+                        Integer.parseInt(dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString()), dataBinding.editTextConsultatioAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
+
+            } else if (compressedImageFile != null) {
+
+                saveData(getDataBinding().editTextConsultationName.getText().toString(), 0,
+                        0, dataBinding.editTextConsultatioAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
+            } else if (getDataBinding().editTextConsultatioCnicFirstTwoDigit.getText().toString().length() > 1 && dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString().length() > 3) {
+                saveData(getDataBinding().editTextConsultationName.getText().toString(), Integer.parseInt(getDataBinding().editTextConsultatioCnicFirstTwoDigit.getText().toString()),
+                        Integer.parseInt(dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString()), dataBinding.editTextConsultatioAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
+            } else {
+                Toast.makeText(mContext, "Either Upload Image Or Enter Cnic First Two and Last Four Digit", Toast.LENGTH_SHORT).show();
+            }
 
         } else {
             Toast.makeText(mContext, "All fields are required", Toast.LENGTH_SHORT).show();
@@ -131,21 +142,19 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
     }
 
-    private void saveData(String name, String cNicFirstTwoDigit, String cNicLastFourDigit, String age, String gender) {
+    private void saveData(String name, int cNicFirstTwoDigit, int cNicLastFourDigit, String age, String gender) {
 
         new Thread(() -> {
 
-            // check patient exist against these fields
-            Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
+            Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, cNicFirstTwoDigit, cNicLastFourDigit, Integer.parseInt(age));
             if (patient != null) {
-//                runOnUiThread(() -> Toast.makeText(mContext, "Patient Already Exist", Toast.LENGTH_SHORT).show());
                 startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient));
 
             } else {
                 Patient patient1 = new Patient();
                 patient1.setFullName(name);
-                patient1.setCnicFirst2Digits(Integer.parseInt(cNicFirstTwoDigit));
-                patient1.setCnicLast4Digits(Integer.parseInt(cNicLastFourDigit));
+                patient1.setCnicFirst2Digits(cNicFirstTwoDigit);
+                patient1.setCnicLast4Digits(cNicLastFourDigit);
                 patient1.setAge(Integer.parseInt(age));
                 patient1.setGender(gender);
                 if (compressedImageFile != null) {
@@ -156,9 +165,8 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                 int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().insertPatient(patient1);
 
                 if (insert > 0) {
-
                     // get created patient id
-                    Patient patient2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, Integer.parseInt(cNicFirstTwoDigit), Integer.parseInt(cNicLastFourDigit), Integer.parseInt(age));
+                    Patient patient2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, cNicFirstTwoDigit, cNicLastFourDigit, Integer.parseInt(age));
                     if (patient2 != null) {
 
                         runOnUiThread(() -> {

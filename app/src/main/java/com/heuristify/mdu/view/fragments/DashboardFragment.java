@@ -128,6 +128,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
         dataSyncViewModel.getSyncMutableLiveDataErrorResponse().observe(getViewLifecycleOwner(),String ->{
             dismissProgressDialog();
             DisplayLog.showLog(TAG,"syncErrorResponse "+String);
+            Toast.makeText(mContext, "Unable to upload records", Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -136,13 +137,13 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
         dataSyncViewModel.observeUploadRecordMutableResponsive().observe(getViewLifecycleOwner(), syncApiResponse -> {
             dismissProgressDialog();
             if(syncApiResponse.code() == 200){
-                Toast.makeText(mContext, "Data Sync Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Records uploaded", Toast.LENGTH_SHORT).show();
                 consultationViewModel.getAllTotalConsultation();
                 consultationViewModel.getAllUpdatedConsultation();
                 consultationViewModel.getAllPendingConsultation();
 
             }else{
-                Toast.makeText(mContext, "Data Not Sync", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Unable to upload records", Toast.LENGTH_SHORT).show();
             }
         });
     }
