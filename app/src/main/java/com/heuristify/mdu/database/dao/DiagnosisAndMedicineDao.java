@@ -22,4 +22,13 @@ public interface DiagnosisAndMedicineDao {
 
     @Query("DELETE FROM consultations")
     void deleteDiagnosisAndMedicines();
+
+    @Query("SELECT COUNT(*) FROM consultations")
+    int getTotalCount();
+
+    @Query("SELECT COUNT(id) FROM consultations WHERE isSync = 1")
+    int getUpdateCount();
+
+    @Query("SELECT COUNT(id) FROM consultations WHERE isSync = 0")
+    int getPendingCount();
 }

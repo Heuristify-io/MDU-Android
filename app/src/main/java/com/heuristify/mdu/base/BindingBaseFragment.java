@@ -35,6 +35,7 @@ public abstract class BindingBaseFragment<DB extends ViewDataBinding> extends Fr
     }
 
     public abstract void OnCreateView(LayoutInflater inflater,@Nullable Bundle savedInstanceState);
+
     @LayoutRes
     protected abstract int getLayoutRes();
 

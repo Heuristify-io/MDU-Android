@@ -17,6 +17,10 @@ public class ConsultationRepository {
     MutableLiveData<List<ConsultationHistory>> consultationHistoryMutableLiveData = new MutableLiveData<>();
     MutableLiveData<List<MedicineName>> patientMedicineList = new MutableLiveData<>();
 
+    MutableLiveData<Integer> totalConsultationMutableLiveDate = new MutableLiveData<>();
+    MutableLiveData<Integer> updatedConsultationMutableLiveDate = new MutableLiveData<>();
+    MutableLiveData<Integer> pendingConsultationMutableLiveDate = new MutableLiveData<>();
+
     public MutableLiveData<PatientPrescribedMedicineAndDiagnosis> getPatientPrescribedMedicineList(int consultation_id) {
         getPatientPrescribedMedicine(consultation_id);
         return patientPrescribedMedicineList;
@@ -65,7 +69,39 @@ public class ConsultationRepository {
             });
 
         }).start();
+    }
 
 
+    public MutableLiveData<Integer> getTotalConsultationMutableLiveDate() {
+        return totalConsultationMutableLiveDate;
+    }
+
+    public MutableLiveData<Integer> getUpdatedConsultationMutableLiveDate() {
+        return updatedConsultationMutableLiveDate;
+    }
+
+    public MutableLiveData<Integer> getPendingConsultationMutableLiveDate() {
+        return pendingConsultationMutableLiveDate;
+    }
+
+    public void getTotalConsultation() {
+        new Thread(() -> {
+            int count = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getTotalCount();
+            totalConsultationMutableLiveDate.postValue(count);
+        }).start();
+    }
+
+    public void getUpdatedConsultation() {
+        new Thread(() -> {
+            int count = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getUpdateCount();
+            updatedConsultationMutableLiveDate.postValue(count);
+        }).start();
+    }
+
+    public void getPendingConsultation() {
+        new Thread(() -> {
+            int count = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getPendingCount();
+            pendingConsultationMutableLiveDate.postValue(count);
+        }).start();
     }
 }

@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -155,7 +154,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mDialog.setCancelable(false);
         mDialog.show();
-        TextView textViewName = mDialog.findViewById(R.id.textViewMedicineName);
+        TextView textViewName = mDialog.findViewById(R.id.textViewTotal);
         TextView textViewQuantity = mDialog.findViewById(R.id.textViewMedicineQuantity);
         textViewName.setText(medicineName);
         textViewQuantity.setText("Medicine Quantity " + quantity);

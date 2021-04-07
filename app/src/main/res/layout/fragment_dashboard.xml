@@ -98,7 +98,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/view" />
 
                 <TextView
-                    android:id="@+id/textViewMedicineName"
+                    android:id="@+id/textViewTotal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -115,7 +115,7 @@
                     app:layout_constraintVertical_bias="0.645" />
 
                 <TextView
-                    android:id="@+id/textViewRemain"
+                    android:id="@+id/textViewUpdate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -131,7 +131,7 @@
                     app:layout_constraintVertical_bias="0.661" />
 
                 <TextView
-                    android:id="@+id/textViewTotal"
+                    android:id="@+id/textViewPending"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -152,9 +152,9 @@
                     android:layout_height="@dimen/_20sdp"
                     android:background="?android:attr/listDivider"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintEnd_toStartOf="@+id/textViewRemain"
+                    app:layout_constraintEnd_toStartOf="@+id/textViewUpdate"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/textViewMedicineName"
+                    app:layout_constraintStart_toEndOf="@+id/textViewTotal"
                     app:layout_constraintTop_toTopOf="@+id/view"
                     app:layout_constraintVertical_bias="0.615" />
 
@@ -164,9 +164,9 @@
                     android:layout_height="@dimen/_20sdp"
                     android:background="?android:attr/listDivider"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintEnd_toStartOf="@+id/textViewTotal"
+                    app:layout_constraintEnd_toStartOf="@+id/textViewPending"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/textViewRemain"
+                    app:layout_constraintStart_toEndOf="@+id/textViewUpdate"
                     app:layout_constraintTop_toTopOf="@+id/view"
                     app:layout_constraintVertical_bias="0.615" />
 
@@ -209,7 +209,7 @@
                     android:textStyle="normal"
                     app:layout_constraintBottom_toBottomOf="@+id/view2"
                     app:layout_constraintEnd_toEndOf="@+id/view"
-                    app:layout_constraintStart_toEndOf="@+id/textViewRemain"
+                    app:layout_constraintStart_toEndOf="@+id/textViewUpdate"
                     app:layout_constraintTop_toBottomOf="@+id/view" />
 
 

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.mvvm.repository.ConsultationRepository;
 import com.heuristify.mdu.pojo.ConsultationHistory;
 import com.heuristify.mdu.pojo.MedicineName;
@@ -39,5 +40,29 @@ public class ConsultationViewModel extends AndroidViewModel {
     public MutableLiveData<List<MedicineName>> getPatientMedicineList(int consultation_id) {
         this.patientMedicineList = consultationRepository.getPatientMedicineList(consultation_id);
         return patientMedicineList;
+    }
+
+    public MutableLiveData<Integer> totalConsultationObserver() {
+        return consultationRepository.getTotalConsultationMutableLiveDate();
+    }
+
+    public MutableLiveData<Integer> updatedConsultationObserver() {
+        return consultationRepository.getUpdatedConsultationMutableLiveDate();
+    }
+
+    public MutableLiveData<Integer> pendingConsultationObserver() {
+        return consultationRepository.getPendingConsultationMutableLiveDate();
+    }
+
+    public void getAllTotalConsultation() {
+        consultationRepository.getTotalConsultation();
+    }
+
+    public void getAllUpdatedConsultation() {
+        consultationRepository.getUpdatedConsultation();
+    }
+
+    public void getAllPendingConsultation() {
+        consultationRepository.getPendingConsultation();
     }
 }

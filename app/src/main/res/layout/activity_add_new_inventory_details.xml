@@ -105,7 +105,7 @@
                     android:textStyle="normal" />
 
                 <TextView
-                    android:id="@+id/textViewMedicineName"
+                    android:id="@+id/textViewTotal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"

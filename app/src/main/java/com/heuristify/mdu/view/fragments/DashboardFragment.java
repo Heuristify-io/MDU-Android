@@ -18,6 +18,7 @@ import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.databinding.FragmentDashboardBinding;
 import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.DisplayLog;
+import com.heuristify.mdu.mvvm.viewmodel.ConsultationViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
 import com.heuristify.mdu.view.activities.ConsultationHistoryActivity;
 
@@ -35,6 +36,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
 
     public static final String TAG = "DashboardFragment";
     DataSyncViewModel dataSyncViewModel;
+    ConsultationViewModel consultationViewModel;
     List<Patient> patientListContainingImage;
 
     public DashboardFragment() {
@@ -47,6 +49,8 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
         super.onCreate(savedInstanceState);
         patientListContainingImage = new ArrayList<>();
         dataSyncViewModel = ViewModelProviders.of(this).get(DataSyncViewModel.class);
+        consultationViewModel = ViewModelProviders.of(this).get(ConsultationViewModel.class);
+
     }
 
     @Override
@@ -68,12 +72,38 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
         observerErrorMsg();
         observerSyncDataResponse();
         observerSyncDataErrorResponse();
+        observeTotalConsultation();
+        observerUpdateConsultation();
+        observerPendingConsultation();
+
+        consultationViewModel.getAllTotalConsultation();
+        consultationViewModel.getAllUpdatedConsultation();
+        consultationViewModel.getAllPendingConsultation();
+
     }
 
 
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_dashboard;
+    }
+
+    private void observerPendingConsultation() {
+        consultationViewModel.pendingConsultationObserver().observe(getViewLifecycleOwner(),integer -> {
+            getDataBinding().textViewPending.setText(String.valueOf(integer));
+        });
+    }
+
+    private void observerUpdateConsultation() {
+        consultationViewModel.updatedConsultationObserver().observe(getViewLifecycleOwner(),integer -> {
+            getDataBinding().textViewUpdate.setText(String.valueOf(integer));
+        });
+    }
+
+    private void observeTotalConsultation() {
+        consultationViewModel.totalConsultationObserver().observe(getViewLifecycleOwner(),integer -> {
+            getDataBinding().textViewTotal.setText(String.valueOf(integer));
+        });
     }
 
     private void getAllPatients() {
@@ -111,9 +141,15 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
             dismissProgressDialog();
             if(syncApiResponse.code() == 200){
                 Toast.makeText(mContext, "Data Sync Successfully", Toast.LENGTH_SHORT).show();
+                consultationViewModel.getAllTotalConsultation();
+                consultationViewModel.getAllUpdatedConsultation();
+                consultationViewModel.getAllPendingConsultation();
+
             }else{
                 Toast.makeText(mContext, "Data Not Sync", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 }

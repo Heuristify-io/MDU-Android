@@ -125,7 +125,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewInventory" />
 
         <TextView
-            android:id="@+id/textViewMedicineName"
+            android:id="@+id/textViewTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_25sdp"
@@ -160,7 +160,7 @@
             android:textColorHint="@color/dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewMedicineName" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewTotal" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMedicine"
