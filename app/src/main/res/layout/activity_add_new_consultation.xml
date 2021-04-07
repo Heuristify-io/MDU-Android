@@ -131,6 +131,7 @@
                 android:backgroundTint="@color/dark2"
                 android:inputType="textPersonName"
                 android:imeOptions="actionNext"
+                android:maxLength="100"
                 android:hint="@string/name"
                 android:textColor="@color/dark"
                 android:textColorHint="@color/dark"
