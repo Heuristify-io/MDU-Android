@@ -84,16 +84,16 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
     private void goneRecycleViewAndOtherViews() {
         getDataBinding().recyclerViewMedicine.setVisibility(View.GONE);
         getDataBinding().view4.setVisibility(View.GONE);
-        getDataBinding().imageViewAdd.setVisibility(View.GONE);
-        getDataBinding().textViewAddAnotherMedicine.setVisibility(View.GONE);
+//        getDataBinding().imageViewAdd.setVisibility(View.GONE);
+//        getDataBinding().textViewAddAnotherMedicine.setVisibility(View.GONE);
 
     }
 
     private void visibleRecycleViewAndOtherViews() {
         getDataBinding().recyclerViewMedicine.setVisibility(View.VISIBLE);
         getDataBinding().view4.setVisibility(View.VISIBLE);
-        getDataBinding().imageViewAdd.setVisibility(View.VISIBLE);
-        getDataBinding().textViewAddAnotherMedicine.setVisibility(View.VISIBLE);
+//        getDataBinding().imageViewAdd.setVisibility(View.VISIBLE);
+//        getDataBinding().textViewAddAnotherMedicine.setVisibility(View.VISIBLE);
 
     }
 
