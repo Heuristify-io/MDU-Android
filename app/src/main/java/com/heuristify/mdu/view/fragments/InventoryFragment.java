@@ -18,6 +18,7 @@ import com.heuristify.mdu.base.BindingBaseFragment;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.FragmentInventoryBinding;
 import com.heuristify.mdu.database.entity.StockMedicine;
+import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.view.activities.AddNewInventoryActivity;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
         super.onViewCreated(view, savedInstanceState);
         initialRecycleView();
         MyApplication.getInstance().setCurrentActivity(getActivity());
+        getDataBinding().textViewDate.setText(Utilities.currentDate());
 
         new Thread(() -> {
 

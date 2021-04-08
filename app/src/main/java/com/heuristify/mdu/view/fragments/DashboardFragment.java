@@ -113,7 +113,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     private void observeGetPatientList() {
         dataSyncViewModel.getPatientList().observe(getViewLifecycleOwner(), patientList -> {
             DisplayLog.showLog(TAG,"imageResponse "+patientList);
-            dataSyncViewModel.uploadRecords(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
+            dataSyncViewModel.uploadRecords(Constant.patient_sync_one,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
 
         });
 
@@ -122,7 +122,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     private void observerErrorMsg() {
         dataSyncViewModel.errorMsg().observe(getViewLifecycleOwner(),String ->{
             DisplayLog.showLog(TAG,"imageError "+String);
-            dataSyncViewModel.uploadRecords(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
+            dataSyncViewModel.uploadRecords(Constant.patient_sync_one,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
         });
     }
 

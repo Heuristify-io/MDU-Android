@@ -189,6 +189,7 @@ public class DataSyncRepository {
     }
 
     private void deleteAndRecreateTableAgain(Response<SyncApiResponse> response) {
+
         try {
 
             new Thread(() -> {
@@ -247,6 +248,9 @@ public class DataSyncRepository {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         if (jsonObject.optBoolean("success")) {
                             updatePatientImageLink(patientList.get(count).getId(), jsonObject.optString("imageUrl"), Constant.patient_sync_one);
+                        }else{
+                            //temporary
+                            updatePatientImageLink(patientList.get(count).getId(), "", Constant.patient_sync_one);
                         }
 
                         if (count < patientList.size() - 1) {

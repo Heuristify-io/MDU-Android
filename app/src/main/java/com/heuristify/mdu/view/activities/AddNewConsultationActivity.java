@@ -145,12 +145,18 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
     private void saveData(String name, int cNicFirstTwoDigit, int cNicLastFourDigit, String age, String gender) {
 
         new Thread(() -> {
+            Patient patient = null;
+            if (String.valueOf(cNicFirstTwoDigit).length() > 1 && String.valueOf(cNicLastFourDigit).length() > 3) {
+                patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, cNicFirstTwoDigit, cNicLastFourDigit, Integer.parseInt(age));
+            }
 
-            Patient patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, cNicFirstTwoDigit, cNicLastFourDigit, Integer.parseInt(age));
+
             if (patient != null) {
                 startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient));
                 finish();
-            } else {
+            }
+
+            else {
                 Patient patient1 = new Patient();
                 patient1.setFullName(name);
                 patient1.setCnicFirst2Digits(cNicFirstTwoDigit);
