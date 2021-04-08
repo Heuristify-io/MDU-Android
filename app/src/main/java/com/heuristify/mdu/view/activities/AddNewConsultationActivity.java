@@ -28,14 +28,14 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
-import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.ActivityAddNewConsultationBinding;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
-import com.heuristify.mdu.database.entity.Patient;
+import com.heuristify.mdu.mvvm.viewmodel.PatientViewModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,6 +52,8 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
     private Uri imageToUploadUri;
     private String path = "";
     private File compressedImageFile;
+    PatientViewModel patientViewModel;
+    private String TAG = "AddNewConsultationActivity";
 
 
     @Override
@@ -65,7 +67,17 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
         getDataBinding().materialSpinnerGender.setAdapter(gender_adapter);
 
         getDataBinding().materialSpinnerGender.getEditText().setText(Gender[0]);
+        patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
 
+        patientViewModel.getPatient().observe(this, patient -> {
+            if (patient != null) {
+                DisplayLog.showLog(TAG, "id " + patient.getId() + " name " + patient.getFullName());
+                startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient));
+                finish();
+            } else {
+                Toast.makeText(mContext, "Unable to create patient", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -117,75 +129,148 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
     }
 
     private void saveDataIntoDb() {
-        if (getDataBinding().editTextConsultationName.getText().toString().length() > 0 && dataBinding.editTextConsultatioAge.getText().toString().length() > 0
-                && dataBinding.materialSpinnerGender.getEditText().getText().toString().length() > 0) {
 
-            if (compressedImageFile != null && getDataBinding().editTextConsultatioCnicFirstTwoDigit.getText().toString().length() > 1 && dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString().length() > 3) {
-                saveData(getDataBinding().editTextConsultationName.getText().toString(), Integer.parseInt(dataBinding.editTextConsultatioCnicFirstTwoDigit.getText().toString()),
-                        Integer.parseInt(dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString()), dataBinding.editTextConsultatioAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
+        if (!getDataBinding().editConsName.getText().toString().isEmpty()) {
 
-            } else if (compressedImageFile != null) {
+            if (compressedImageFile != null) {
+                //leave cnic
 
-                saveData(getDataBinding().editTextConsultationName.getText().toString(), 0,
-                        0, dataBinding.editTextConsultatioAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
-            } else if (getDataBinding().editTextConsultatioCnicFirstTwoDigit.getText().toString().length() > 1 && dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString().length() > 3) {
-                saveData(getDataBinding().editTextConsultationName.getText().toString(), Integer.parseInt(getDataBinding().editTextConsultatioCnicFirstTwoDigit.getText().toString()),
-                        Integer.parseInt(dataBinding.editTextConsultatioCnicLastFourDigit.getText().toString()), dataBinding.editTextConsultatioAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
+                if (!getDataBinding().editConsAge.getText().toString().isEmpty()) {
+
+                    if (!getDataBinding().materialSpinnerGender.getEditText().getText().toString().isEmpty()) {
+
+                        if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 1 && getDataBinding().editConsCnicLastFourDigit.getText().toString().length() > 3) {
+                            //create patient with all fields
+                            Toast.makeText(mContext, "Create patient with all fields", Toast.LENGTH_SHORT).show();
+                            patientViewModel.createPatientWithImageAndCnicDetails(getDataBinding().editConsName.getText().toString(),
+                                    Integer.parseInt(getDataBinding().editConsCnicFirstTwoDigit.getText().toString()),
+                                    Integer.parseInt(getDataBinding().editConsCnicLastFourDigit.getText().toString()),
+                                    Integer.parseInt(getDataBinding().editConsAge.getText().toString()), getDataBinding().materialSpinnerGender.getEditText().getText().toString(),
+                                    compressedImageFile.getPath());
+
+                        } else {
+                            //create patient with image only
+                            Toast.makeText(mContext, "Create patient with image only", Toast.LENGTH_SHORT).show();
+                            patientViewModel.createPatientWithImage(getDataBinding().editConsName.getText().toString(),
+                                    Integer.parseInt(getDataBinding().editConsAge.getText().toString()), getDataBinding().materialSpinnerGender.getEditText().getText().toString(),
+                                    compressedImageFile.getPath());
+                        }
+
+                    } else {
+                        Toast.makeText(mContext, "Gender is required", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } else {
+                    Toast.makeText(mContext, "Age is required", Toast.LENGTH_SHORT).show();
+                }
+
             } else {
-                Toast.makeText(mContext, "Either Upload Image Or Enter Cnic First Two and Last Four Digit", Toast.LENGTH_SHORT).show();
+
+                if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 1 && getDataBinding().editConsCnicLastFourDigit.getText().toString().length() > 3) {
+
+                    if (!getDataBinding().editConsAge.getText().toString().isEmpty()) {
+
+                        if (!getDataBinding().materialSpinnerGender.getEditText().getText().toString().isEmpty()) {
+
+                            Toast.makeText(mContext, "Patient create without image", Toast.LENGTH_SHORT).show();
+
+                            //create patient without image
+
+                            patientViewModel.createPatientWithOutImage(getDataBinding().editConsName.getText().toString(),
+                                    Integer.parseInt(getDataBinding().editConsCnicFirstTwoDigit.getText().toString()),
+                                    Integer.parseInt(getDataBinding().editConsCnicLastFourDigit.getText().toString()),
+                                    Integer.parseInt(getDataBinding().editConsAge.getText().toString()),
+                                    getDataBinding().materialSpinnerGender.getEditText().getText().toString());
+
+                        } else {
+                            Toast.makeText(mContext, "Gender is required", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    } else {
+                        Toast.makeText(mContext, "Age is required", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } else {
+                    Toast.makeText(mContext, "Cnic first two and last four digit is required", Toast.LENGTH_SHORT).show();
+                }
             }
 
-        } else {
-            Toast.makeText(mContext, "All fields are required", Toast.LENGTH_SHORT).show();
 
+        } else {
+            Toast.makeText(mContext, "Name Required", Toast.LENGTH_SHORT).show();
         }
+
+//
+//        if (getDataBinding().editConsName.getText().toString().length() > 0 && dataBinding.editConsAge.getText().toString().length() > 0
+//                && dataBinding.materialSpinnerGender.getEditText().getText().toString().length() > 0) {
+//
+//            if (compressedImageFile != null && getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 1 && dataBinding.editConsCnicLastFourDigit.getText().toString().length() > 3) {
+//                saveData(getDataBinding().editConsName.getText().toString(), Integer.parseInt(dataBinding.editConsCnicFirstTwoDigit.getText().toString()),
+//                        Integer.parseInt(dataBinding.editConsCnicLastFourDigit.getText().toString()), dataBinding.editConsAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
+//
+//            } else if (compressedImageFile != null) {
+//
+//                saveData(getDataBinding().editConsName.getText().toString(), 0,
+//                        0, dataBinding.editConsAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
+//            } else if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 1 && dataBinding.editConsCnicLastFourDigit.getText().toString().length() > 3) {
+//                saveData(getDataBinding().editConsName.getText().toString(), Integer.parseInt(getDataBinding().editConsCnicFirstTwoDigit.getText().toString()),
+//                        Integer.parseInt(dataBinding.editConsCnicLastFourDigit.getText().toString()), dataBinding.editConsAge.getText().toString(), dataBinding.materialSpinnerGender.getEditText().getText().toString());
+//            } else {
+//                Toast.makeText(mContext, "Either Upload Image Or Enter Cnic First Two and Last Four Digit", Toast.LENGTH_SHORT).show();
+//            }
+//
+//        } else {
+//            Toast.makeText(mContext, "All fields are required", Toast.LENGTH_SHORT).show();
+//
+//        }
 
     }
 
     private void saveData(String name, int cNicFirstTwoDigit, int cNicLastFourDigit, String age, String gender) {
 
-        new Thread(() -> {
-            Patient patient = null;
-            if (String.valueOf(cNicFirstTwoDigit).length() > 1 && String.valueOf(cNicLastFourDigit).length() > 3) {
-                patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, cNicFirstTwoDigit, cNicLastFourDigit, Integer.parseInt(age));
-            }
-
-
-            if (patient != null) {
-                startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient));
-                finish();
-            }
-
-            else {
-                Patient patient1 = new Patient();
-                patient1.setFullName(name);
-                patient1.setCnicFirst2Digits(cNicFirstTwoDigit);
-                patient1.setCnicLast4Digits(cNicLastFourDigit);
-                patient1.setAge(Integer.parseInt(age));
-                patient1.setGender(gender);
-                if (compressedImageFile != null) {
-                    patient1.setImage_path(compressedImageFile.getPath());
-                } else {
-                    patient1.setImage_path("");
-                }
-                int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().insertPatient(patient1);
-
-                if (insert > 0) {
-                    // get created patient id
-                    Patient patient2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, cNicFirstTwoDigit, cNicLastFourDigit, Integer.parseInt(age));
-                    if (patient2 != null) {
-
-                        runOnUiThread(() -> {
-                            Toast.makeText(mContext, "Patient Created Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient2));
-                            finish();
-                        });
-
-                    }
-                }
-            }
-
-        }).start();
+//        new Thread(() -> {
+//            Patient patient = null;
+//            if (String.valueOf(cNicFirstTwoDigit).length() > 1 && String.valueOf(cNicLastFourDigit).length() > 3) {
+//                patient = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, cNicFirstTwoDigit, cNicLastFourDigit, Integer.parseInt(age));
+//            }
+//
+//
+//            if (patient != null) {
+//                startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient));
+//                finish();
+//            } else {
+//                Patient patient1 = new Patient();
+//                patient1.setFullName(name);
+//                patient1.setCnicFirst2Digits(cNicFirstTwoDigit);
+//                patient1.setCnicLast4Digits(cNicLastFourDigit);
+//                patient1.setAge(Integer.parseInt(age));
+//                patient1.setGender(gender);
+//                if (compressedImageFile != null) {
+//                    patient1.setImage_path(compressedImageFile.getPath());
+//                } else {
+//                    patient1.setImage_path("");
+//                }
+//                int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().insertPatient(patient1);
+//
+//                if (insert > 0) {
+//                    // get created patient id
+//                    Patient patient2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatient(name, cNicFirstTwoDigit, cNicLastFourDigit, Integer.parseInt(age));
+//                    if (patient2 != null) {
+//
+//                        runOnUiThread(() -> {
+//                            Toast.makeText(mContext, "Patient Created Successfully", Toast.LENGTH_SHORT).show();
+//                            startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient2));
+//                            finish();
+//                        });
+//
+//                    }
+//                }
+//            }
+//
+//        }).start();
     }
 
     public String getRealPathFromURI(Uri contentUri) {

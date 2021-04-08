@@ -121,7 +121,7 @@
                 android:textStyle="normal" />
 
             <EditText
-                android:id="@+id/editTextConsultationName"
+                android:id="@+id/editConsName"
                 android:layout_below="@id/textViewConsultationName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
 
             <TextView
                 android:id="@+id/textViewConsultationCnicFirstTwoDigit"
-                android:layout_below="@id/editTextConsultationName"
+                android:layout_below="@id/editConsName"
                 android:layout_alignParentLeft="true"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
                 android:textStyle="normal" />
 
             <EditText
-                android:id="@+id/editTextConsultatioCnicFirstTwoDigit"
+                android:id="@+id/editConsCnicFirstTwoDigit"
                 android:layout_below="@id/textViewConsultationCnicFirstTwoDigit"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
@@ -175,7 +175,7 @@
 
             <TextView
                 android:id="@+id/textViewConsultationCnicLastFourDigit"
-                android:layout_below="@id/editTextConsultationName"
+                android:layout_below="@id/editConsName"
                 android:layout_alignParentRight="true"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
                 android:textStyle="normal" />
 
             <EditText
-                android:id="@+id/editTextConsultatioCnicLastFourDigit"
+                android:id="@+id/editConsCnicLastFourDigit"
                 android:layout_below="@id/textViewConsultationCnicLastFourDigit"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
@@ -209,7 +209,7 @@
 
             <TextView
                 android:id="@+id/textViewConsultationAge"
-                android:layout_below="@id/editTextConsultatioCnicFirstTwoDigit"
+                android:layout_below="@id/editConsCnicFirstTwoDigit"
                 android:layout_alignParentLeft="true"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
                 android:textStyle="normal" />
 
             <EditText
-                android:id="@+id/editTextConsultatioAge"
+                android:id="@+id/editConsAge"
                 android:layout_below="@id/textViewConsultationAge"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
@@ -245,7 +245,7 @@
 
             <com.tiper.MaterialSpinner
                 android:id="@+id/material_spinner_gender"
-                android:layout_below="@+id/editTextConsultatioCnicLastFourDigit"
+                android:layout_below="@+id/editConsCnicLastFourDigit"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -261,7 +261,7 @@
 
             <Button
                 android:id="@+id/buttonTakePatientPhoto"
-                android:layout_below="@+id/editTextConsultatioAge"
+                android:layout_below="@+id/editConsAge"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginStart="@dimen/_20sdp"

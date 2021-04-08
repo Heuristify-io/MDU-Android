@@ -233,12 +233,12 @@ public class MedicineRepository {
                 MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().deleteStockMedicines();
             }
             for (int i = 0; i < stockMedicineListList.size(); i++) {
-                StockMedicine stockMedicine = new StockMedicine();
-                stockMedicine.setStock_medicine_medicineId(stockMedicineListList.get(i).getStock_medicine_medicineId());
-                stockMedicine.setStock_medicine_name(stockMedicineListList.get(i).getStock_medicine_name());
-                stockMedicine.setStock_medicine_quantity(stockMedicineListList.get(i).getStock_medicine_quantity());
-                stockMedicine.setStock_medicine_total(stockMedicineListList.get(i).getStock_medicine_total());
-                storeInToDb(stockMedicine);
+//                StockMedicine stockMedicine = new StockMedicine();
+//                stockMedicine.setStock_medicine_medicineId(stockMedicineListList.get(i).getStock_medicine_medicineId());
+//                stockMedicine.setStock_medicine_name(stockMedicineListList.get(i).getStock_medicine_name());
+//                stockMedicine.setStock_medicine_quantity(stockMedicineListList.get(i).getStock_medicine_quantity());
+//                stockMedicine.setStock_medicine_total(stockMedicineListList.get(i).getStock_medicine_total());
+                storeInToDb(stockMedicineListList.get(i));
             }
             if ("getStockMedicineList".equals("createMedicine")) {
                 MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));

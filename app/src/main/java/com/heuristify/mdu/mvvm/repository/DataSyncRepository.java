@@ -67,6 +67,7 @@ public class DataSyncRepository {
             if (patientList2.size() > 0) {
                 for (int i = 0; i < patientList2.size(); i++) {
                     if (patientList2.get(i).getImage_path() != null) {
+
                         if (!IsValidUrl(patientList2.get(i).getImage_path())) {
                             File file = new File(patientList2.get(i).getImage_path());
                             if (file.exists()) {
