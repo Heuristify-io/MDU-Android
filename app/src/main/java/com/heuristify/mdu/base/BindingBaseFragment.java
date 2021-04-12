@@ -45,8 +45,10 @@ public abstract class BindingBaseFragment<DB extends ViewDataBinding> extends Fr
 
     public void showProgressDialog() {
         customProgressDialog.showProgress();
+    }
 
-
+    public void showProgressDialogWithText(String text) {
+        customProgressDialog.showProgressWithCustomText(text);
     }
 
     public void dismissProgressDialog() {

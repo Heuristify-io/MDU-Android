@@ -17,8 +17,8 @@ public interface PatientDao {
     @Query("SELECT * from patients WHERE isSync =:sync AND imageURL IS NOT NULL AND imageURL != ''")
     List<Patient> getAllPatientWithImages(int sync);
 
-    @Query("SELECT * from patients WHERE isSync =:sync")
-    List<Patient> getAllPatients(int sync);
+    @Query("SELECT * from patients WHERE (isSync = 1) OR (isSync = 0  AND (imageUrl = '' OR imageUrl = '' OR imageUrl IS NULL))")
+    List<Patient> getAllPatients();
 
     @Query("SELECT id from patients WHERE id =:patient_id AND isSync =:syn")
     int checkPatient(int patient_id,int syn);

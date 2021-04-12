@@ -26,7 +26,7 @@ public interface StockMedicineDoa {
     @Query("SELECT * FROM doctor_med_stocks WHERE medicineName LIKE :name || '%'")
     List<StockMedicine> getStockMedicine(String name);
 
-    @Query("UPDATE doctor_med_stocks SET quantity = :medicine_quantity, quantity = :total WHERE id =:stock_medicine_medicineId")
+    @Query("UPDATE doctor_med_stocks SET quantity = :medicine_quantity, total = :total WHERE id =:stock_medicine_medicineId")
     void update(int medicine_quantity, int total, int stock_medicine_medicineId);
 
     @Query("DELETE FROM doctor_med_stocks")

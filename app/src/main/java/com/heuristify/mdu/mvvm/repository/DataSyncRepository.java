@@ -36,21 +36,24 @@ import retrofit2.Response;
 
 public class DataSyncRepository {
     MutableLiveData<List<Patient>> patientListMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<String> patientImageSynFailMutableLiveData = new MutableLiveData<>();
     MutableLiveData<Response<SyncApiResponse>> syncRecordMutableLiveData = new MutableLiveData<>();
-    MutableLiveData<String> patientListMutableLiveDataError = new MutableLiveData<>();
+    MutableLiveData<String> patientImageListMutableLiveDataError = new MutableLiveData<>();
     MutableLiveData<String> syncMutableLiveDataError = new MutableLiveData<>();
     List<Patient> patientList = new ArrayList<>();
     List<String> attendanceList = new ArrayList<>();
     List<DiagnosisAndMedicine> diagnosisAndMedicineList = new ArrayList<>();
     List<PrescribedMedicine> prescribedMedicineList = new ArrayList<>();
+
+
     int count = -1;
 
     public MutableLiveData<List<Patient>> getAllPatientMutableLiveData() {
         return patientListMutableLiveData;
     }
 
-    public MutableLiveData<String> getPatientListMutableLiveDataError() {
-        return patientListMutableLiveDataError;
+    public MutableLiveData<String> getPatientImageListMutableLiveDataError() {
+        return patientImageListMutableLiveDataError;
     }
 
     public MutableLiveData<Response<SyncApiResponse>> getSyncRecordMutableLiveData() {
@@ -61,6 +64,10 @@ public class DataSyncRepository {
         return syncMutableLiveDataError;
     }
 
+    public MutableLiveData<String> getPatientImageSynFailMutableLiveData() {
+        return patientImageSynFailMutableLiveData;
+    }
+
     public void getPatientList(int sync) {
         new Thread(() -> {
             List<Patient> patientList2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatientWithImages(sync);
@@ -68,11 +75,13 @@ public class DataSyncRepository {
                 for (int i = 0; i < patientList2.size(); i++) {
                     if (patientList2.get(i).getImage_path() != null) {
 
-                        if (!IsValidUrl(patientList2.get(i).getImage_path())) {
-                            File file = new File(patientList2.get(i).getImage_path());
-                            if (file.exists()) {
-                                patientList.add(patientList2.get(i));
-                            }
+                        File file = new File(patientList2.get(i).getImage_path());
+                        if (file.exists()) {
+                            patientList.add(patientList2.get(i));
+                        }else{
+                            //remove image path update sync to 0
+                            MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().updatePatient(patientList2.get(i).getId(),
+                                    "",sync);
                         }
                     }
                 }
@@ -105,7 +114,7 @@ public class DataSyncRepository {
         patientList.clear();
         new Thread(() -> {
             attendanceList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().doctorAttendanceDao().getDoctorAttendance();
-            patientList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatients(patient_sync);
+            patientList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatients();
             diagnosisAndMedicineList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getDiagnosis(consultation_sync);
             prescribedMedicineList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().prescribedMedicineDao().getPrescribed(prescribed_medicine_syn);
 
@@ -234,9 +243,9 @@ public class DataSyncRepository {
     private void uploadImagesToServer() {
         count++;
         File file = new File(patientList.get(count).getImage_path());
-        RequestBody mFile = RequestBody.create(MediaType.parse("image/*"), file);
+        RequestBody mFile = RequestBody.create(file,MediaType.parse("image/*"));
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("image", file.getName(), mFile);
-        RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
+        RequestBody filename = RequestBody.create(file.getName(),MediaType.parse("text/plain"));
         Call<ResponseBody> call = MyApplication.getInstance().getRetrofitServicesWithToken().uploadImages(fileToUpload, filename);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -249,40 +258,41 @@ public class DataSyncRepository {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         if (jsonObject.optBoolean("success")) {
                             updatePatientImageLink(patientList.get(count).getId(), jsonObject.optString("imageUrl"), Constant.patient_sync_one);
+
+                            if (count < patientList.size() - 1) {
+                                uploadImagesToServer();
+                            } else {
+
+                                clearCountAndImageList();
+                                patientListMutableLiveData.setValue(patientList);
+                            }
+
                         }else{
-                            //temporary
-                            updatePatientImageLink(patientList.get(count).getId(), "", Constant.patient_sync_one);
+
+                            //image upload fail
+                            clearCountAndImageList();
+                            patientImageListMutableLiveDataError.setValue(response.message());
                         }
 
-                        if (count < patientList.size() - 1) {
-                            uploadImagesToServer();
-                        } else {
-                            clearCountAndImageList();
-                            patientListMutableLiveData.setValue(patientList);
-                        }
                     } else {
-                        if (count < patientList.size() - 1) {
-                            uploadImagesToServer();
-                        } else {
-                            clearCountAndImageList();
-                            patientListMutableLiveDataError.setValue(response.message());
-                        }
+
+                        clearCountAndImageList();
+                        patientImageListMutableLiveDataError.setValue(response.message());
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    patientListMutableLiveDataError.setValue(response.message());
+                    clearCountAndImageList();
+                    patientImageListMutableLiveDataError.setValue(response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 DisplayLog.showLog("upload_image", "response222 " + t.getMessage());
-                if (count < patientList.size() - 1) {
-                    uploadImagesToServer();
-                } else {
-                    clearCountAndImageList();
-                    patientListMutableLiveDataError.setValue(t.getMessage());
-                }
+                clearCountAndImageList();
+                patientImageListMutableLiveDataError.setValue(t.getMessage());
+
             }
         });
     }

@@ -58,7 +58,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     public void OnCreateView(LayoutInflater inflater, @Nullable Bundle savedInstanceState) {
 
         getDataBinding().buttonAttending22.setOnClickListener(v -> {
-            showProgressDialog();
+            showProgressDialogWithText("Uploading Images");
             getAllPatients();
         });
         getDataBinding().buttonAttending2.setOnClickListener(v -> startActivity(new Intent(getActivity(), ConsultationHistoryActivity.class)));
@@ -71,7 +71,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         observeGetPatientList();
-        observerErrorMsg();
+        observerErrorMsgPatientImages();
         observerSyncDataResponse();
         observerSyncDataErrorResponse();
         observeTotalConsultation();
@@ -113,16 +113,20 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     private void observeGetPatientList() {
         dataSyncViewModel.getPatientList().observe(getViewLifecycleOwner(), patientList -> {
             DisplayLog.showLog(TAG,"imageResponse "+patientList);
-            dataSyncViewModel.uploadRecords(Constant.patient_sync_one,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
+            dismissProgressDialog();
+            showProgressDialogWithText("Upload Records");
+            dataSyncViewModel.uploadRecords(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
 
         });
 
     }
 
-    private void observerErrorMsg() {
-        dataSyncViewModel.errorMsg().observe(getViewLifecycleOwner(),String ->{
+    private void observerErrorMsgPatientImages() {
+        dataSyncViewModel.errorMsgPatientImages().observe(getViewLifecycleOwner(), String ->{
+            dismissProgressDialog();
             DisplayLog.showLog(TAG,"imageError "+String);
-            dataSyncViewModel.uploadRecords(Constant.patient_sync_one,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
+            Toast.makeText(mContext, "Image Uploading Fail Try Again", Toast.LENGTH_SHORT).show();
+//            dataSyncViewModel.uploadRecords(Constant.patient_sync_one,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
         });
     }
 
