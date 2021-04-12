@@ -15,5 +15,6 @@
     <string name="frequency">Frequency</string>
     <string name="days">Days</string>
     <string name="consultation_desc">Please review the details for the</string>
+    <string name="deive_list">Paired Devices</string>
 
 </resources>

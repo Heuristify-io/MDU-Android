@@ -170,9 +170,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         textViewName.setText(medicineName);
         textViewQuantity.setText("Medicine Quantity " + quantity);
         Button btnRetry = mDialog.findViewById(R.id.buttonRetry);
-
         btnRetry.setOnClickListener(v -> mDialog.dismiss());
-
 
     }
 
