@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,10 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     private final List<WidgetList> widgetLists;
     private final Context context;
     private final List<StoreClickWidget> storeClickWidgetList;
-    private final String[] frequencies = {"T.D.S", "T.D.F", "T.D.E", "T.D.A"};
+    private final String[] frequencies = {"0+0+1", "0+1+0", "0+1+1", "1+0+0","1+0+1","1+1+0","1+1+1",
+            "0+0+2","0+2+0","0+2+2","2+0+0","2+0+2","2+2+0","2+2+2",
+            "0+0+3","0+3+0","0+3+3","3+0+0","3+0+3","3+3+0","3+3+3","0+0+4","0+4+0","0+4+4","4+0+0","4+0+4","4+4+0","4+4+4",
+            "0+0+5","0+5+0","0+5+5","5+0+0","5+0+5","5+5+0","5+5+5"};
     ArrayAdapter frequency_adapter;
     //    AutoCompleteTextViewAdapter aAdapter;
     List<StockMedicine> stockMedicineList;
@@ -80,7 +84,9 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
 
             @Override
             public void onItemSelected(@NonNull MaterialSpinner materialSpinner, View view, int i, long l) {
-                storeClickWidgetList.get(position).setEditTextFrequency(String.valueOf(materialSpinner.getEditText().getText()));
+                String[] freq  = materialSpinner.getEditText().getText().toString().split("\\+");
+                int add_freq = Integer.parseInt(freq[0])+Integer.parseInt(freq[1])+Integer.parseInt(freq[2]);
+                storeClickWidgetList.get(position).setEditTextFrequency(String.valueOf(add_freq));
             }
 
         });
@@ -170,7 +176,6 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
 //            storeClickWidgetList.get(position).setStockMedicine(stockMedicine);
 //
 //        });
-
 
     }
 

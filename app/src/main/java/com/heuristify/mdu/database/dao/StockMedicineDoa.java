@@ -29,6 +29,9 @@ public interface StockMedicineDoa {
     @Query("UPDATE doctor_med_stocks SET quantity = :medicine_quantity, total = :total WHERE id =:stock_medicine_medicineId")
     void update(int medicine_quantity, int total, int stock_medicine_medicineId);
 
+    @Query("UPDATE doctor_med_stocks SET quantity = :medicine_quantity WHERE id =:stock_medicine_medicineId")
+    void updateQuantity(int medicine_quantity, int stock_medicine_medicineId);
+
     @Query("DELETE FROM doctor_med_stocks")
     void deleteStockMedicines();
 

@@ -180,24 +180,28 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
             for (int i = 0; i < storeClickWidgetList.size(); i++) {
                 if (storeClickWidgetList.get(i).getStockMedicine() != null && storeClickWidgetList.get(i).getEditTextFrequency() != null && storeClickWidgetList.get(i).getEditTextDays() != null) {
-                    int mul = 0;
-
-                    if (storeClickWidgetList.get(i).getEditTextFrequency().equals("T.D.S")) {
-                        mul = 2 * Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays());
-
-                    } else {
-                        mul = 3 * Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays());
-                    }
-
+                    int frequency = Integer.parseInt(storeClickWidgetList.get(i).getEditTextFrequency());
+                    int days = Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays());
+                    int med_quantity = frequency*days;
 
                     //check medicine quantity available
-                    String quantity = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicinesQuantity(storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
-                    if (Integer.parseInt(quantity) < mul) {
+                    String quantity = MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().stockMedicineDoa().getStockMedicinesQuantity(storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
+                    if (Integer.parseInt(quantity) < med_quantity) {
                         int finalI = i;
                         runOnUiThread(() -> showMedicineDialog(storeClickWidgetList.get(finalI).getStockMedicine().getStock_medicine_name(), quantity));
                         break;
 
+                    }else{
+                        if(days > 0){
+
+                            //update medicine remaining quantity
+                            int sub_med_quantity = Integer.parseInt(quantity)-med_quantity;
+                            MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().stockMedicineDoa().updateQuantity(sub_med_quantity,storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
+
+                        }
                     }
+
+
                     if (i == storeClickWidgetList.size() - 1) {
                         addDiagnosisAndPrescribedMedicine();
                         break;
