@@ -1,5 +1,6 @@
 package com.heuristify.mdu.view.activities;
 
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -17,8 +18,11 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,6 +40,7 @@ import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.databinding.ActivityConsultationSummaryBinding;
 import com.heuristify.mdu.helper.DisplayLog;
+import com.heuristify.mdu.helper.PrintPic;
 import com.heuristify.mdu.helper.UnicodeFormatter;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.interfaces.OnItemClickPosition;
@@ -271,7 +276,6 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                     OutputStream os = mBluetoothSocket.getOutputStream();
 
                     String BILL = "";
-
                     BILL =  "Patient Name: "+getDataBinding().editTextTextFullName.getText().toString()+"\n"
                             +"Age: " +getDataBinding().editTextTextAge.getText().toString()+
                             " \t" +"Gender: "+getDataBinding().editTextGender.getText().toString()+
@@ -308,8 +312,22 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                     BILL = BILL + "--------------------------------\n";
                     BILL = BILL + "\n\n ";
 
+//                    Bitmap bitmap=BitmapFactory.decodeResource(getResources(), R.drawable.assignment_dark_24px);
+//                    ByteArrayOutputStream stream=new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+//                    byte[] image=stream.toByteArray();
+//                    os.write(image);
+
+
+//                    Drawable d = ContextCompat.getDrawable(mContext, R.drawable.add_circle);
+//                    Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    PrintPic printPic = PrintPic.getInstance();
+//                    printPic.init(bitmap);
+//                    byte[] bitmapdata = printPic.printDraw();
+//                    os.write(bitmapdata);
+
                     os.write(BILL.getBytes());
-                    //This is printer specific code you can comment ==== > Start
 
                     // Setting height
                     int gs = 29;
@@ -337,6 +355,8 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
         t.start();
 
     }
+
+
 
     @Override
     public void onRecyclerViewItemClick(int position) {
