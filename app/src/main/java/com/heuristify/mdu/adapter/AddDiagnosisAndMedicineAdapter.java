@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,24 +77,21 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         //initialize recycleView
         initializeRecycleView(holder);
 
-        if(widgetLists.get(position).getStockMedicine() != null){
+        if (widgetLists.get(position).getStockMedicine() != null) {
             showList = "notShowList";
             holder.editTextCustomSearch.setText(storeClickWidgetList.get(position).getStockMedicine().getStock_medicine_name());
             storeClickWidgetList.get(position).setStockMedicine(widgetLists.get(position).getStockMedicine());
         }
 
-        if(!widgetLists.get(position).getFrequencySpinner().equalsIgnoreCase("")){
+        if (!widgetLists.get(position).getFrequencySpinner().equalsIgnoreCase("")) {
             holder.materialSpinner.getEditText().setText(storeClickWidgetList.get(position).getEditTextFrequency());
             storeClickWidgetList.get(position).setEditTextFrequency(widgetLists.get(position).getFrequencySpinner());
         }
 
-        if(!widgetLists.get(position).getEditTextDays().equalsIgnoreCase("")){
+        if (!widgetLists.get(position).getEditTextDays().equalsIgnoreCase("")) {
             holder.editTextDays.setText(storeClickWidgetList.get(position).getEditTextDays());
             storeClickWidgetList.get(position).setEditTextDays(storeClickWidgetList.get(position).getEditTextDays());
         }
-
-
-
 
 
         holder.materialSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
@@ -269,6 +267,26 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     @Override
     public void onRecyclerViewItemClick(StockMedicine stockMedicine) {
         //holders.editTextCustomSearch.setText("");
+        boolean isMedExist =false;
+        for(int i = 0; i<storeClickWidgetList.size(); i++){
+            if(storeClickWidgetList.get(i).getStockMedicine() != null){
+                if(storeClickWidgetList.get(i).getStockMedicine().getMedicineId() == stockMedicine.getMedicineId()){
+                    isMedExist = true;
+                    break;
+                }
+            }
+        }
+
+        if(isMedExist){
+            Toast.makeText(context, "" + stockMedicine.getStock_medicine_name() + " already selected", Toast.LENGTH_SHORT).show();
+        }else{
+            prescribedMedicine(stockMedicine);
+        }
+
+    }
+
+    private void prescribedMedicine(StockMedicine stockMedicine) {
+
         holders.editTextCustomSearch.setText(stockMedicine.getStock_medicine_name());
         holders.editTextCustomSearch.setSelection(holders.editTextCustomSearch.length());
         storeClickWidgetList.get(positions).setStockMedicine(stockMedicine);
@@ -281,7 +299,6 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
             });
 
         }, 300);
-
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
