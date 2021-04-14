@@ -8,7 +8,8 @@ public class StoreClickWidget {
     String editTextFrequency;
     String editTextDays;
 
-
+    public StoreClickWidget() {
+    }
 
     public StockMedicine getStockMedicine() {
         return stockMedicine;

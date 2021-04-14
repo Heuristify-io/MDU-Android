@@ -6,12 +6,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +25,7 @@ import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.interfaces.OnItemClick;
+import com.heuristify.mdu.interfaces.OnItemClickPosition;
 import com.tiper.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -36,16 +37,17 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     private final List<WidgetList> widgetLists;
     private final Context context;
     private final List<StoreClickWidget> storeClickWidgetList;
-    private final String[] frequencies = {"0+0+1", "0+1+0", "0+1+1", "1+0+0","1+0+1","1+1+0","1+1+1",
-            "0+0+2","0+2+0","0+2+2","2+0+0","2+0+2","2+2+0","2+2+2",
-            "0+0+3","0+3+0","0+3+3","3+0+0","3+0+3","3+3+0","3+3+3","0+0+4","0+4+0","0+4+4","4+0+0","4+0+4","4+4+0","4+4+4",
-            "0+0+5","0+5+0","0+5+5","5+0+0","5+0+5","5+5+0","5+5+5"};
+    private final String[] frequencies = {"0+0+1", "0+1+0", "0+1+1", "1+0+0", "1+0+1", "1+1+0", "1+1+1",
+            "0+0+2", "0+2+0", "0+2+2", "2+0+0", "2+0+2", "2+2+0", "2+2+2",
+            "0+0+3", "0+3+0", "0+3+3", "3+0+0", "3+0+3", "3+3+0", "3+3+3", "0+0+4", "0+4+0", "0+4+4", "4+0+0", "4+0+4", "4+4+0", "4+4+4",
+            "0+0+5", "0+5+0", "0+5+5", "5+0+0", "5+0+5", "5+5+0", "5+5+5"};
     ArrayAdapter frequency_adapter;
-    //    AutoCompleteTextViewAdapter aAdapter;
     List<StockMedicine> stockMedicineList;
     SearchMedicineAdapter searchMedicineAdapter;
     ViewHolder holders;
     int positions;
+    OnItemClickPosition onItemClickPosition;
+    private String showList = "showList";
 
 
     public AddDiagnosisAndMedicineAdapter(List<WidgetList> widgetLists, Context context, List<StoreClickWidget> storeClickWidgetList) {
@@ -62,10 +64,11 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         return new ViewHolder(listItem);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-
+        holder.setIsRecyclable(false);
         frequency_adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, frequencies);
         frequency_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.materialSpinner.setAdapter(frequency_adapter);
@@ -73,7 +76,25 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         //initialize recycleView
         initializeRecycleView(holder);
 
-//        holder.materialSpinner.getEditText().setText(frequencies[0]);
+        if(widgetLists.get(position).getStockMedicine() != null){
+            showList = "notShowList";
+            holder.editTextCustomSearch.setText(storeClickWidgetList.get(position).getStockMedicine().getStock_medicine_name());
+            storeClickWidgetList.get(position).setStockMedicine(widgetLists.get(position).getStockMedicine());
+        }
+
+        if(!widgetLists.get(position).getFrequencySpinner().equalsIgnoreCase("")){
+            holder.materialSpinner.getEditText().setText(storeClickWidgetList.get(position).getEditTextFrequency());
+            storeClickWidgetList.get(position).setEditTextFrequency(widgetLists.get(position).getFrequencySpinner());
+        }
+
+        if(!widgetLists.get(position).getEditTextDays().equalsIgnoreCase("")){
+            holder.editTextDays.setText(storeClickWidgetList.get(position).getEditTextDays());
+            storeClickWidgetList.get(position).setEditTextDays(storeClickWidgetList.get(position).getEditTextDays());
+        }
+
+
+
+
 
         holder.materialSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
 
@@ -84,9 +105,9 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
 
             @Override
             public void onItemSelected(@NonNull MaterialSpinner materialSpinner, View view, int i, long l) {
-                String[] freq  = materialSpinner.getEditText().getText().toString().split("\\+");
-                int add_freq = Integer.parseInt(freq[0])+Integer.parseInt(freq[1])+Integer.parseInt(freq[2]);
-                storeClickWidgetList.get(position).setEditTextFrequency(String.valueOf(add_freq));
+                storeClickWidgetList.get(position).setEditTextFrequency(materialSpinner.getEditText().getText().toString());
+                widgetLists.get(position).setFrequencySpinner(materialSpinner.getEditText().getText().toString());
+
             }
 
         });
@@ -97,8 +118,10 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
             @Override
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-
-                storeClickWidgetList.get(position).setEditTextDays(s.toString());
+                if (position < storeClickWidgetList.size()) {
+                    storeClickWidgetList.get(position).setEditTextDays(s.toString());
+                    widgetLists.get(position).setEditTextDays(s.toString());
+                }
             }
 
             @Override
@@ -113,6 +136,11 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
             }
         });
 
+        holder.editTextCustomSearch.setOnTouchListener((view, motionEvent) -> {
+            showList = "showList";
+            return false;
+        });
+
         holder.editTextCustomSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -125,58 +153,37 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
             @SuppressLint("SetTextI18n")
             @Override
             public void afterTextChanged(Editable s) {
+                if (!showList.equals("notShowList")) {
+                    if (s.length() > 0) {
+                        if (s.toString().equals("")) {
+                            goneRecycleViewAndOtherViews(holder);
 
-                if (s.length() > 0) {
-                    if (s.toString().equals("")) {
-                        goneRecycleViewAndOtherViews(holder);
-
-                    } else {
-                        if (countNumChars(s.toString()) == 0) {
-                            // qet list from local db
-                            getDataFromDb(s.toString(), holder, position);
+                        } else {
+                            if (countNumChars(s.toString()) == 0) {
+                                // qet list from local db
+                                getDataFromDb(s.toString(), holder, position);
+                            }
                         }
-                    }
-                } else {
-                    stockMedicineList.clear();
-                    searchMedicineAdapter.notifyDataSetChanged();
-                    goneRecycleViewAndOtherViews(holder);
-                    if (storeClickWidgetList.get(position).getStockMedicine() != null) {
-                        StockMedicine stockMedicine = storeClickWidgetList.get(position).getStockMedicine();
-                        storeClickWidgetList.remove(stockMedicine);
+                    } else {
+                        stockMedicineList.clear();
+                        searchMedicineAdapter.notifyDataSetChanged();
+                        goneRecycleViewAndOtherViews(holder);
+                        if (storeClickWidgetList.get(position).getStockMedicine() != null) {
+                            StockMedicine stockMedicine = storeClickWidgetList.get(position).getStockMedicine();
+                            storeClickWidgetList.remove(stockMedicine);
+                        }
                     }
                 }
             }
 
         });
 
+        holder.btnDelete.setOnClickListener(v -> onItemClickPosition.onRecyclerViewItemClick(position));
 
-//        holder.autoCompleteTextView.addTextChangedListener(new TextWatcher() {
-//
-//            public void afterTextChanged(Editable editable) {
-//
-//            }
-//
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                if (s.toString().length() > 0) {
-//                    // qet list from local db
-//                    getDataFromDb(s.toString(), holder);
-//                }
-//            }
-//
-//        });
+    }
 
-//        holder.autoCompleteTextView.setOnItemClickListener((parent, view, position1, l) -> {
-//            StockMedicine stockMedicine = (StockMedicine) parent.getItemAtPosition(position1);
-//            holder.autoCompleteTextView.setText(stockMedicine.getStock_medicine_name());
-//            storeClickWidgetList.get(position).setStockMedicine(stockMedicine);
-//
-//        });
-
+    public void setOnItemClickPosition(OnItemClickPosition onItemClickPosition) {
+        this.onItemClickPosition = onItemClickPosition;
     }
 
     private int countNumChars(String s) {
@@ -211,7 +218,6 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     }
 
     private void getDataFromDb(String toString, ViewHolder holder, int position) {
-
         new Thread(() -> {
             List<StockMedicine> stockMedicineList1 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicine(toString);
             if (stockMedicineList1 != null) {
@@ -266,6 +272,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         holders.editTextCustomSearch.setText(stockMedicine.getStock_medicine_name());
         holders.editTextCustomSearch.setSelection(holders.editTextCustomSearch.length());
         storeClickWidgetList.get(positions).setStockMedicine(stockMedicine);
+        widgetLists.get(positions).setStockMedicine(stockMedicine);
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             ((AppCompatActivity) context).runOnUiThread(() -> {
@@ -283,6 +290,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         EditText editTextCustomSearch;
         //        AutoCompleteTextView autoCompleteTextView;
         RecyclerView recyclerView;
+        ImageView btnDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -291,6 +299,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
             materialSpinner = itemView.findViewById(R.id.material_spinner_frequencies);
 //            autoCompleteTextView = itemView.findViewById(R.id.autoCompleteTextView);
             recyclerView = itemView.findViewById(R.id.recyclerViewMedicineSearch);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }

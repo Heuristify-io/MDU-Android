@@ -32,6 +32,7 @@ import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.helper.WidgetList;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.database.entity.Patient;
+import com.heuristify.mdu.interfaces.OnItemClickPosition;
 import com.heuristify.mdu.mvvm.viewmodel.PatientViewModel;
 import com.heuristify.mdu.pojo.PatientHistory;
 import com.heuristify.mdu.pojo.PatientHistoryList;
@@ -41,7 +42,7 @@ import java.util.List;
 
 import retrofit2.Response;
 
-public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<ActivityAddDiagnosisAndMedicineBinding> implements OnClickHandlerInterface {
+public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<ActivityAddDiagnosisAndMedicineBinding> implements OnClickHandlerInterface, OnItemClickPosition {
     private List<WidgetList> widgetLists;
     private List<StoreClickWidget> storeClickWidgetList;
     private List<PatientHistory> patientHistoryList;
@@ -62,7 +63,6 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         }
 
 
-
         initializeRecycleView();
         PatientViewModel patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
 
@@ -80,11 +80,11 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
         patientViewModel.getError_msg().observe(this, s -> dismissProgressDialog());
 
-        Log.e("patient_id",""+patient.getId());
+        Log.e("patient_id", "" + patient.getId());
 
-        patientViewModel.checkPatient().observe(this,integer -> {
-            Log.e("patient_id2",""+integer);
-            if(integer > 0){
+        patientViewModel.checkPatient().observe(this, integer -> {
+            Log.e("patient_id2", "" + integer);
+            if (integer > 0) {
                 showProgressDialog();
                 patientViewModel.getPatientResponseMutableLiveData(patient.getId()).observe(this, observer);
             }
@@ -108,11 +108,9 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         addDiagnosisAndMedicineAdapter = new AddDiagnosisAndMedicineAdapter(widgetLists, this, storeClickWidgetList);
         getDataBinding().recyclerViewPrescribedMedicine.setAdapter(addDiagnosisAndMedicineAdapter);
         getDataBinding().recyclerViewPrescribedMedicine.setItemAnimator(null);
+        addDiagnosisAndMedicineAdapter.setOnItemClickPosition(this);
+        addAnotherItem();
 
-        storeClickWidgetList.add(new StoreClickWidget());
-        widgetLists.add(new WidgetList());
-        addDiagnosisAndMedicineAdapter.notifyItemInserted(widgetLists.size());
-        getDataBinding().recyclerViewPrescribedMedicine.scrollToPosition(widgetLists.size());
 
         patientHistoryList = new ArrayList<>();
         getDataBinding().recyclerViewPatientHistory.setHasFixedSize(true);
@@ -180,9 +178,12 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
             for (int i = 0; i < storeClickWidgetList.size(); i++) {
                 if (storeClickWidgetList.get(i).getStockMedicine() != null && storeClickWidgetList.get(i).getEditTextFrequency() != null && storeClickWidgetList.get(i).getEditTextDays() != null) {
-                    int frequency = Integer.parseInt(storeClickWidgetList.get(i).getEditTextFrequency());
+
+                    String[] freq = storeClickWidgetList.get(i).getEditTextFrequency().split("\\+");
+                    int add_freq = Integer.parseInt(freq[0]) + Integer.parseInt(freq[1]) + Integer.parseInt(freq[2]);
                     int days = Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays());
-                    int med_quantity = frequency*days;
+                    int med_quantity = add_freq * days;
+
 
                     //check medicine quantity available
                     String quantity = MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().stockMedicineDoa().getStockMedicinesQuantity(storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
@@ -191,13 +192,16 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                         runOnUiThread(() -> showMedicineDialog(storeClickWidgetList.get(finalI).getStockMedicine().getStock_medicine_name(), quantity));
                         break;
 
-                    }else{
-                        if(days > 0){
+                    } else {
+                        if (days > 0) {
 
                             //update medicine remaining quantity
-                            int sub_med_quantity = Integer.parseInt(quantity)-med_quantity;
-                            MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().stockMedicineDoa().updateQuantity(sub_med_quantity,storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
+                            int sub_med_quantity = Integer.parseInt(quantity) - med_quantity;
+                            MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().stockMedicineDoa().updateQuantity(sub_med_quantity, storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
 
+                        } else {
+                            runOnUiThread(() -> Toast.makeText(mContext, "Days should be greater then 0", Toast.LENGTH_SHORT).show());
+                            break;
                         }
                     }
 
@@ -244,8 +248,8 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                 if (ids.length > 0) {
                     runOnUiThread(() -> Toast.makeText(mContext, "Consultation Added Successfully", Toast.LENGTH_SHORT).show());
                     Intent intent = new Intent(AddDiagnosisAndMedicineActivity.this, ConsultationSummaryActivity.class);
-                    intent.putExtra("patient",patient);
-                    intent.putExtra("consultation_id",id);
+                    intent.putExtra("patient", patient);
+                    intent.putExtra("consultation_id", id);
                     startActivity(intent);
                     finish();
                 }
@@ -262,6 +266,16 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         addDiagnosisAndMedicineAdapter.notifyItemInserted(widgetLists.size());
         getDataBinding().recyclerViewPrescribedMedicine.scrollToPosition(widgetLists.size());
 
-//        addDiagnosisAndMedicineAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRecyclerViewItemClick(int position) {
+
+        storeClickWidgetList.remove(position);
+        widgetLists.remove(position);
+        addDiagnosisAndMedicineAdapter.notifyDataSetChanged();
+        Log.e("both_list2", " " + widgetLists.size() + "  " + storeClickWidgetList.size());
+
+
     }
 }

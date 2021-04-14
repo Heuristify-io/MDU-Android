@@ -8,6 +8,7 @@ public class WidgetList {
     String frequencySpinner = "";
     String editTextDays = "";
 
+
     public StockMedicine getStockMedicine() {
         return stockMedicine;
     }
