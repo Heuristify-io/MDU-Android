@@ -20,6 +20,8 @@ import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -76,6 +78,68 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                 finish();
             } else {
                 Toast.makeText(mContext, "Unable to create patient", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        getDataBinding().editConsCnicFirstTwoDigit.addTextChangedListener(new TextWatcher() {
+            boolean isEdiging;
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isEdiging) return;
+                isEdiging = true;
+                // removing old dashes
+                StringBuilder sb = new StringBuilder();
+                sb.append(s.toString().replace("-", ""));
+
+                if (sb.length() > 1)
+                    sb.insert(1, "-");
+                if (sb.length() > 3)
+                    sb.delete(3, sb.length());
+                s.replace(0, s.length(), sb.toString());
+                isEdiging = false;
+            }
+        });
+
+        getDataBinding().editConsCnicLastFourDigit.addTextChangedListener(new TextWatcher() {
+            boolean isEdiging;
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isEdiging) return;
+                isEdiging = true;
+                // removing old dashes
+                StringBuilder sb = new StringBuilder();
+                sb.append(s.toString().replace("-", ""));
+
+                if (sb.length() > 1)
+                    sb.insert(1, "-");
+                if (sb.length() > 3)
+                    sb.insert(3, "-");
+                if (sb.length() > 5)
+                    sb.insert(5, "-");
+                if (sb.length() > 7)
+                    sb.delete(7, sb.length());
+                s.replace(0, s.length(), sb.toString());
+                isEdiging = false;
             }
         });
 
@@ -139,7 +203,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
                     if (!getDataBinding().materialSpinnerGender.getEditText().getText().toString().isEmpty()) {
 
-                        if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 1 && getDataBinding().editConsCnicLastFourDigit.getText().toString().length() > 3) {
+                        if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 2 && getDataBinding().editConsCnicLastFourDigit.getText().toString().length() > 6) {
                             //create patient with all fields
                             patientViewModel.createPatientWithImageAndCnicDetails(getDataBinding().editConsName.getText().toString(),
                                     Integer.parseInt(getDataBinding().editConsCnicFirstTwoDigit.getText().toString()),
@@ -165,7 +229,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
             } else {
 
-                if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 1 && getDataBinding().editConsCnicLastFourDigit.getText().toString().length() > 3) {
+                if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 2 && getDataBinding().editConsCnicLastFourDigit.getText().toString().length() > 6) {
 
                     if (!getDataBinding().editConsAge.getText().toString().isEmpty()) {
 
@@ -435,8 +499,10 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                         path = getRealPathFromURI(imageToUploadUri);
                         try {
                             compressedImageFile = new Compressor(getApplicationContext()).compressToFile(new File(compressImage(path)));
+                            Bitmap myBitmap = BitmapFactory.decodeFile(compressedImageFile.getAbsolutePath());
+                            getDataBinding().imageView3.setClipToOutline(true);
+                            getDataBinding().imageView3.setImageBitmap(myBitmap);
                             Toast.makeText(mContext, "Image is successfully saved", Toast.LENGTH_SHORT).show();
-                            //  profileImage.setImageBitmap(Bitmap.createScaledBitmap(compressedImageBitmap, (int) (compressedImageBitmap.getWidth() * 0.5), (int) (compressedImageBitmap.getHeight() * 0.5), true));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

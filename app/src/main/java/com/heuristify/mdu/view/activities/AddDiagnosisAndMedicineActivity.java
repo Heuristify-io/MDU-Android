@@ -184,7 +184,6 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                     int days = Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays());
                     int med_quantity = add_freq * days;
 
-
                     //check medicine quantity available
                     String quantity = MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().stockMedicineDoa().getStockMedicinesQuantity(storeClickWidgetList.get(i).getStockMedicine().getStock_medicine_medicineId());
                     if (Integer.parseInt(quantity) < med_quantity) {
@@ -239,7 +238,9 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                     prescribedMedicine.setActualMedicineId(storeClickWidgetList.get(i).getStockMedicine().getMedicineId());
                     prescribedMedicine.setDays(Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays()));
                     prescribedMedicine.setFrequency(storeClickWidgetList.get(i).getEditTextFrequency());
-                    prescribedMedicine.setFrequencyNum(1);
+                    String[] frequencyNumber = storeClickWidgetList.get(i).getEditTextFrequency().split("\\+");
+                    int freqNum = Integer.parseInt(frequencyNumber[0])+Integer.parseInt(frequencyNumber[1])+Integer.parseInt(frequencyNumber[2]);
+                    prescribedMedicine.setFrequencyNum(freqNum);
                     prescribedMedicineList.add(prescribedMedicine);
                 }
 
