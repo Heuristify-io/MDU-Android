@@ -11,6 +11,10 @@ public class MedicineName extends BaseObservable {
 
     @ColumnInfo(name = "medicineName")
     private String medicine_name;
+    @ColumnInfo(name = "frequency")
+    private String frequency;
+    @ColumnInfo(name = "days")
+    private String days;
 
     @Bindable
     public String getMedicine_name() {
@@ -20,5 +24,25 @@ public class MedicineName extends BaseObservable {
     public void setMedicine_name(String medicine_name) {
         this.medicine_name = medicine_name;
         notifyPropertyChanged(BR.medicine_name);
+    }
+
+    @Bindable
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+        notifyPropertyChanged(BR.frequency);
+    }
+
+    @Bindable
+    public String getDays() {
+        return days;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
+        notifyPropertyChanged(BR.days);
     }
 }

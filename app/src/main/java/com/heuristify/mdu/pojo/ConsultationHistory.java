@@ -10,6 +10,8 @@ public class ConsultationHistory extends BaseObservable {
     private String patientDiagnosis;
     private String fullName;
     private String createdAt;
+    private String gender;
+    private int age;
 
     @Bindable
     public int getId() {
@@ -49,5 +51,25 @@ public class ConsultationHistory extends BaseObservable {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
         notifyPropertyChanged(BR.createdAt);
+    }
+
+    @Bindable
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+        notifyPropertyChanged(BR.gender);
+    }
+
+    @Bindable
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+        notifyPropertyChanged(BR.age);
     }
 }

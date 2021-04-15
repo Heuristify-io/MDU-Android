@@ -15,7 +15,6 @@ import com.heuristify.mdu.R;
 import com.heuristify.mdu.adapter.ConsultationHistoryAdapter;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.databinding.ActivityConsultationHistoryBinding;
-import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.interfaces.OnItemClickId;
 import com.heuristify.mdu.mvvm.viewmodel.ConsultationViewModel;
