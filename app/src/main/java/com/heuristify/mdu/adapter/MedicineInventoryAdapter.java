@@ -35,6 +35,13 @@ public class MedicineInventoryAdapter  extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         InventoryViewHolder inventoryViewHolder = (InventoryViewHolder) holder;
         inventoryViewHolder.adapterInventoryMedicineBinding.setMedicine(medicineList.get(position));
+        if(Integer.parseInt(medicineList.get(position).getStock_medicine_quantity()) < 20){
+            inventoryViewHolder.adapterInventoryMedicineBinding.textViewMedQuantAdapter.setTextColor(context.getResources().getColor(R.color.red));
+            inventoryViewHolder.adapterInventoryMedicineBinding.textViewTotalAdapter.setTextColor(context.getResources().getColor(R.color.red));
+        }else{
+            inventoryViewHolder.adapterInventoryMedicineBinding.textViewMedQuantAdapter.setTextColor(context.getResources().getColor(R.color.dark2));
+            inventoryViewHolder.adapterInventoryMedicineBinding.textViewTotalAdapter.setTextColor(context.getResources().getColor(R.color.dark2));
+        }
     }
 
     @Override

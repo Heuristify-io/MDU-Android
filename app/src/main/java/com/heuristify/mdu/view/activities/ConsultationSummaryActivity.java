@@ -133,15 +133,14 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                 break;
             case R.id.textViewBack:
                 finish();
+                break;
             case R.id.buttonPrint:
-
                 mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 if (!mBluetoothAdapter.isEnabled()) {
                     Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
                 } else {
                     listPairedDevices();
-
                 }
 
                 break;
@@ -389,14 +388,18 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 
     @Override
     public void onBackPressed() {
+        closeSocketConnection();
+        finish();
+    }
+
+    private void closeSocketConnection() {
+
         try {
             if (mBluetoothSocket != null)
                 mBluetoothSocket.close();
         } catch (Exception e) {
             Log.e("Tag", "Exe ", e);
         }
-        setResult(RESULT_CANCELED);
-        finish();
     }
 
     public void onActivityResult(int mRequestCode, int mResultCode,

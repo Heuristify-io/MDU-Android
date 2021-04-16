@@ -17,12 +17,12 @@
         >
 
         <TextView
-            android:id="@+id/textViewMedicineNameAdapter"
+            android:id="@+id/textViewMedQuantAdapter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/textViewRemainAdapter"
+            android:layout_toLeftOf="@id/textViewMedNameAdapter"
             android:text="@{medicine.medicine_name}"
             android:textColor="@color/dark2"
             android:textSize="@dimen/_10sdp"
@@ -32,7 +32,7 @@
             />
 
         <TextView
-            android:id="@+id/textViewRemainAdapter"
+            android:id="@+id/textViewMedNameAdapter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -50,7 +50,7 @@
             android:id="@+id/divider4"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/textViewMedicineNameAdapter"
+            android:layout_below="@+id/textViewMedQuantAdapter"
             android:background="@color/light2"
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"

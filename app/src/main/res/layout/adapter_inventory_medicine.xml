@@ -17,7 +17,7 @@
 
 
         <TextView
-            android:id="@+id/textViewMedicineNameAdapter"
+            android:id="@+id/textViewMedQuantAdapter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
@@ -30,11 +30,11 @@
             app:layout_constraintEnd_toStartOf="@+id/textViewTotalAdapter"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1.5"
-            app:layout_constraintStart_toEndOf="@+id/textViewRemainAdapter"
+            app:layout_constraintStart_toEndOf="@+id/textViewMedNameAdapter"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewRemainAdapter"
+            android:id="@+id/textViewMedNameAdapter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
@@ -45,7 +45,7 @@
             android:textColor="@color/dark"
             android:textSize="@dimen/_10sdp"
             android:textStyle="italic"
-            app:layout_constraintEnd_toStartOf="@+id/textViewMedicineNameAdapter"
+            app:layout_constraintEnd_toStartOf="@+id/textViewMedQuantAdapter"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/textViewMedicineNameAdapter"
+            app:layout_constraintStart_toEndOf="@+id/textViewMedQuantAdapter"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="textViewRemainAdapter,textViewMedicineNameAdapter,textViewTotalAdapter"
+            app:constraint_referenced_ids="textViewMedNameAdapter,textViewMedQuantAdapter,textViewTotalAdapter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="35dp" />
