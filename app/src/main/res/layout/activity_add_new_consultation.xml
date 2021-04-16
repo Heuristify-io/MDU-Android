@@ -116,7 +116,7 @@
             android:gravity="start"
             android:text="First Name"
             android:textColor="@color/light1"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/_10sdp"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@+id/textViewConsultationDescription"
             app:layout_constraintTop_toBottomOf="@+id/textViewConsultationDescription" />
@@ -126,15 +126,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewConsultationName"
-            android:backgroundTint="@color/dark2"
-            android:hint="@string/name"
             android:layout_marginEnd="@dimen/_25sdp"
             android:layout_marginRight="@dimen/_25sdp"
+            android:backgroundTint="@color/dark2"
+            android:nextFocusForward="@+id/editConsCnicFirstTwoDigit"
+            android:hint="@string/name"
             android:imeOptions="actionNext"
-            android:inputType="textPersonName"
+            android:inputType="text"
             android:maxLength="100"
             android:textColor="@color/dark"
-            android:textColorHint="@color/dark"
+            android:textColorHint="@color/light1"
             app:layout_constraintEnd_toStartOf="@+id/cardView5"
             app:layout_constraintStart_toStartOf="@+id/textViewConsultationName"
             app:layout_constraintTop_toBottomOf="@+id/textViewConsultationName" />
@@ -146,8 +147,8 @@
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_20sdp"
             android:layout_marginRight="@dimen/_30sdp"
-            app:cardCornerRadius="@dimen/_12sdp"
             app:cardBackgroundColor="@color/light1"
+            app:cardCornerRadius="@dimen/_12sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewConsultationDescription">
 
@@ -196,7 +197,7 @@
             android:layout_marginRight="8dp"
             android:fontFamily="@font/archivo_regular"
             android:gravity="start"
-            android:text="CNIC First 2 Digit"
+            android:text="CNIC First 2 no"
             android:textColor="@color/light1"
             android:textSize="@dimen/_10sdp"
             android:textStyle="normal"
@@ -217,7 +218,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/archivo_regular"
             android:gravity="start"
-            android:text="CNIC Last 4 Digit"
+            android:text="CNIC Last 4 no"
             android:textColor="@color/light1"
             android:textSize="@dimen/_10sdp"
             android:textStyle="normal"
@@ -234,7 +235,8 @@
             android:layout_alignParentLeft="true"
             android:autofillHints="@string/name"
             android:backgroundTint="@color/dark2"
-            android:hint="12"
+            android:nextFocusForward="@+id/editConsCnicLastFourDigit"
+            android:hint="1-2"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLength="3"
@@ -251,7 +253,7 @@
             android:layout_alignParentRight="true"
             android:autofillHints="@string/name"
             android:backgroundTint="@color/dark2"
-            android:hint="4567"
+            android:hint="4-5-6-7"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLength="7"
@@ -265,8 +267,6 @@
             android:id="@+id/textViewConsultationAge"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editConsCnicFirstTwoDigit"
-            android:layout_alignParentLeft="true"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
@@ -276,7 +276,7 @@
             android:textColor="@color/light1"
             android:textSize="@dimen/_10sdp"
             android:textStyle="normal"
-            app:layout_constraintEnd_toStartOf="@+id/material_spinner_gender"
+            app:layout_constraintEnd_toStartOf="@+id/textView21"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="0.5"
             app:layout_constraintStart_toStartOf="@+id/editConsCnicFirstTwoDigit"
@@ -300,25 +300,6 @@
             app:layout_constraintStart_toStartOf="@+id/textViewConsultationAge"
             app:layout_constraintTop_toBottomOf="@+id/textViewConsultationAge" />
 
-        <com.tiper.MaterialSpinner
-            android:id="@+id/material_spinner_gender"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:hint="Gender"
-            android:textColor="@color/dark2"
-            android:textColorHint="@color/light1"
-            android:textSize="@dimen/_6sdp"
-            app:backgroundTint="@color/dark2"
-            app:layout_constraintBottom_toBottomOf="@+id/editConsAge"
-            app:layout_constraintEnd_toEndOf="@+id/editConsCnicLastFourDigit"
-            app:layout_constraintHorizontal_weight="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textViewConsultationAge"
-            app:layout_constraintTop_toBottomOf="@+id/editConsCnicLastFourDigit"
-            app:spinnerMode="dialog" />
-
         <Button
             android:id="@+id/buttonNextConsultation"
             android:layout_width="0dp"
@@ -336,6 +317,35 @@
             app:layout_constraintHorizontal_bias="0.509"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editConsAge" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/archivo_regular"
+            android:gravity="start"
+            android:text="Gender"
+            android:textColor="@color/light1"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="@+id/editConsCnicLastFourDigit"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textViewConsultationAge"
+            app:layout_constraintTop_toBottomOf="@+id/editConsCnicLastFourDigit" />
+
+        <Spinner
+            android:id="@+id/materialSpinnerGender"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:backgroundTint="@color/dark2"
+            style="@style/underLineSpinner"
+            app:layout_constraintBottom_toBottomOf="@+id/editConsAge"
+            app:layout_constraintEnd_toEndOf="@+id/textView21"
+            app:layout_constraintStart_toStartOf="@+id/textView21"
+            app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

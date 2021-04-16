@@ -24,7 +24,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -56,6 +59,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
     private File compressedImageFile;
     PatientViewModel patientViewModel;
     private String TAG = "AddNewConsultationActivity";
+    private String gender = "";
 
 
     @Override
@@ -64,11 +68,8 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
         getDataBinding().setClickHandler(this);
 
 
-        gender_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Gender);
-        gender_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        getDataBinding().materialSpinnerGender.setAdapter(gender_adapter);
+        genderSpinner();
 
-        getDataBinding().materialSpinnerGender.getEditText().setText(Gender[0]);
         patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
 
         patientViewModel.getPatient().observe(this, patient -> {
@@ -145,6 +146,33 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
     }
 
+    private void genderSpinner() {
+        gender_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Gender) {
+            @Override
+            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                tv.setTextColor(mContext.getResources().getColor(R.color.dark2));
+                return view;
+            }
+        };
+        gender_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        getDataBinding().materialSpinnerGender.setAdapter(gender_adapter);
+
+        getDataBinding().materialSpinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View view,
+                                       int pos, long arg3) {
+                TextView tv = (TextView) view;
+                tv.setTextColor(mContext.getResources().getColor(R.color.dark2));
+                gender = tv.getText().toString();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+    }
+
     private void checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
@@ -201,7 +229,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
                 if (!getDataBinding().editConsAge.getText().toString().isEmpty()) {
 
-                    if (!getDataBinding().materialSpinnerGender.getEditText().getText().toString().isEmpty()) {
+                    if (!gender.isEmpty() || gender.equalsIgnoreCase("")) {
 
                         if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 2 && getDataBinding().editConsCnicLastFourDigit.getText().toString().length() > 6) {
                             //create patient with all fields
@@ -213,13 +241,13 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                             patientViewModel.createPatientWithImageAndCnicDetails(getDataBinding().editConsName.getText().toString(),
                                     Integer.parseInt(cnicFirstDigit),
                                     Integer.parseInt(cnicLastDigit),
-                                    Integer.parseInt(getDataBinding().editConsAge.getText().toString()), getDataBinding().materialSpinnerGender.getEditText().getText().toString(),
+                                    Integer.parseInt(getDataBinding().editConsAge.getText().toString()), gender,
                                     compressedImageFile.getPath());
 
                         } else {
                             //create patient with image only
                             patientViewModel.createPatientWithImage(getDataBinding().editConsName.getText().toString(),
-                                    Integer.parseInt(getDataBinding().editConsAge.getText().toString()), getDataBinding().materialSpinnerGender.getEditText().getText().toString(),
+                                    Integer.parseInt(getDataBinding().editConsAge.getText().toString()), gender,
                                     compressedImageFile.getPath());
                         }
 
@@ -239,18 +267,18 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                     String[] firstTwoDigit = getDataBinding().editConsCnicFirstTwoDigit.getText().toString().split("-");
                     String[] lastFourDigit = getDataBinding().editConsCnicLastFourDigit.getText().toString().split("-");
                     String cnicFirstDigit = firstTwoDigit[0]+firstTwoDigit[1];
-                    String cnicLastDigit = lastFourDigit[0]+lastFourDigit[1]+lastFourDigit[3]+lastFourDigit[4];
+                    String cnicLastDigit = lastFourDigit[0]+lastFourDigit[1]+lastFourDigit[2]+lastFourDigit[3];
 
                     if (!getDataBinding().editConsAge.getText().toString().isEmpty()) {
 
-                        if (!getDataBinding().materialSpinnerGender.getEditText().getText().toString().isEmpty()) {
+                        if (!gender.isEmpty() || gender.equalsIgnoreCase("")) {
 
                             //create patient without image
                             patientViewModel.createPatientWithOutImage(getDataBinding().editConsName.getText().toString(),
                                     Integer.parseInt(cnicFirstDigit),
                                     Integer.parseInt(cnicLastDigit),
                                     Integer.parseInt(getDataBinding().editConsAge.getText().toString()),
-                                    getDataBinding().materialSpinnerGender.getEditText().getText().toString());
+                                    gender);
 
                         } else {
                             Toast.makeText(mContext, "Gender is required", Toast.LENGTH_SHORT).show();
@@ -529,7 +557,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_CAMERA: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

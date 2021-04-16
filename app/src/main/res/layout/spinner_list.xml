@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textViewConsultationAge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/archivo_regular"
+        android:gravity="start"
+        android:text="Age"
+        android:textColor="@color/dark2"
+        android:textSize="@dimen/_10sdp"
+        android:textStyle="normal" />
+
+
+</LinearLayout>

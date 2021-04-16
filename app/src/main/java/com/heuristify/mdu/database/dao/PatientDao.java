@@ -29,6 +29,9 @@ public interface PatientDao {
     @Query("SELECT * FROM patients WHERE fullName =:name AND age =:age AND gender =:gen AND imageUrl =:image")
     Patient getPatientWithImage(String name, int age,String gen,String image);
 
+    @Query("SELECT imageUrl FROM patients WHERE id =:patient_id")
+    String getPatientImage(int patient_id);
+
     @Query("UPDATE patients SET imageURL = :imageUrl,isSync =:sync  WHERE id =:id")
     void updatePatient(int id, String imageUrl, int sync);
 

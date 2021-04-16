@@ -1,6 +1,5 @@
 package com.heuristify.mdu.view.activities;
 
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -18,11 +17,8 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,6 +29,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.adapter.BluetoothDeviceAdapter;
 import com.heuristify.mdu.adapter.ConsultationSummaryAdapter;
@@ -40,7 +37,6 @@ import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.databinding.ActivityConsultationSummaryBinding;
 import com.heuristify.mdu.helper.DisplayLog;
-import com.heuristify.mdu.helper.PrintPic;
 import com.heuristify.mdu.helper.UnicodeFormatter;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.interfaces.OnItemClickPosition;
@@ -54,7 +50,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -84,17 +79,17 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
         getDataBinding().setClickHandler(this);
         initializeRecycleView();
 
+        ConsultationViewModel consultationViewModel = ViewModelProviders.of(this).get(ConsultationViewModel.class);
 
         if (getIntent().getExtras() != null) {
             Patient patient = (Patient) getIntent().getSerializableExtra("patient");
+            consultationViewModel.getPatientImagePath(patient.getId());
             DisplayLog.showLog(TAG, " patientID " + patient.getId());
             getDataBinding().editTextTextFullName.setText(patient.getFullName());
             getDataBinding().editTextTextAge.setText(String.valueOf(patient.getAge()));
             getDataBinding().editTextGender.setText(patient.getGender());
             consultation_id = getIntent().getExtras().getInt("consultation_id");
         }
-
-        ConsultationViewModel consultationViewModel = ViewModelProviders.of(this).get(ConsultationViewModel.class);
 
         observer = (Observer<PatientPrescribedMedicineAndDiagnosis>) patientPrescribedMedicineAndDiagnosis -> {
 
@@ -112,6 +107,15 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
         };
 
         consultationViewModel.getPatientPrescribedMedicineList(consultation_id).observe(lifecycleOwner, observer);
+
+        consultationViewModel.patientImageMutableLiveDate().observe(this, s -> {
+            Log.e("image",""+s);
+            if(s != null){
+                Glide.with(this)
+                        .load(s)
+                        .into(getDataBinding().imageView3);
+            }
+        });
 
     }
 
@@ -142,7 +146,9 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 
                 break;
             case R.id.buttonDone:
-                gotoDashBoard();
+                Intent intent = new Intent(ConsultationSummaryActivity.this, AddNewConsultationActivity.class);
+                startActivity(intent);
+                finish();
                 break;
         }
 

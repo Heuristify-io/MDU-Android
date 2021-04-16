@@ -22,10 +22,12 @@
             android:layout_height="0dp"
             android:layout_marginBottom="16dp"
             android:fillViewport="true"
-            app:layout_constraintBottom_toTopOf="@+id/buttonDone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -124,73 +126,107 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewConsultation" />
 
-                <TextView
-                    android:id="@+id/textViewConsultationDescription2"
+
+                <Button
+                    android:id="@+id/buttonPrint"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:fontFamily="@font/archivo_regular"
-                    android:gravity="start"
-                    android:text="consultation."
-                    android:textColor="@color/light1"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/rounded_shape"
+                    android:onClick="@{clickHandler::onClick}"
+                    android:text="Print"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toStartOf="@+id/buttonDone"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_weight="1.5"
+                    app:layout_constraintStart_toStartOf="@+id/textViewConsultationDescription"
                     app:layout_constraintTop_toBottomOf="@+id/textViewConsultationDescription" />
 
+
+                <Button
+                    android:id="@+id/buttonDone"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@drawable/rounded_shape_white_color"
+                    android:onClick="@{clickHandler::onClick}"
+                    android:text="Next Patient"
+                    android:textColor="@color/dark2"
+                    app:layout_constraintEnd_toEndOf="@+id/textViewConsultationDescription"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@+id/buttonPrint"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewConsultationDescription" />
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView5"
+                    android:layout_width="@dimen/_85sdp"
+                    android:layout_height="@dimen/_85sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    app:cardBackgroundColor="@color/light1"
+                    app:cardCornerRadius="@dimen/_12sdp"
+                    app:layout_constraintEnd_toEndOf="@+id/buttonDone"
+                    app:layout_constraintStart_toStartOf="@+id/buttonDone"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonDone">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="@dimen/_85sdp"
+                        android:layout_height="@dimen/_85sdp">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:scaleType="fitXY"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/textViewPatientFullName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="start"
                     android:text="Patient Full Name"
                     android:textColor="@color/light1"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewConsultationDescription2" />
-
+                    app:layout_constraintEnd_toEndOf="@+id/buttonPrint"
+                    app:layout_constraintStart_toStartOf="@+id/buttonPrint"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonPrint" />
 
                 <EditText
                     android:id="@+id/editTextTextFullName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
                     android:backgroundTint="@color/dark2"
-                    android:textColor="@color/dark"
                     android:ems="10"
                     android:enabled="false"
                     android:imeOptions="actionDone"
                     android:inputType="textPersonName"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/dark"
+                    app:layout_constraintEnd_toEndOf="@+id/textViewPatientFullName"
+                    app:layout_constraintStart_toStartOf="@+id/textViewPatientFullName"
                     app:layout_constraintTop_toBottomOf="@+id/textViewPatientFullName" />
 
                 <TextView
                     android:id="@+id/textViewConsultationName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewConsultationDescription2"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="start"
                     android:text="Age"
@@ -199,26 +235,26 @@
                     android:textStyle="normal"
                     app:layout_constraintEnd_toStartOf="@+id/textViewConsultationGender"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="@+id/editTextTextFullName"
                     app:layout_constraintTop_toBottomOf="@+id/editTextTextFullName" />
 
                 <TextView
                     android:id="@+id/textViewConsultationGender"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="start"
                     android:text="Gender"
                     android:textColor="@color/light1"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="normal"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/editTextTextFullName"
                     app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toEndOf="@+id/textViewConsultationName"
                     app:layout_constraintTop_toBottomOf="@+id/editTextTextFullName" />
 
@@ -226,38 +262,28 @@
                     android:id="@+id/editTextTextAge"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:backgroundTint="@color/dark2"
-                    android:textColor="@color/dark"
                     android:ems="10"
                     android:enabled="false"
                     android:imeOptions="actionDone"
                     android:inputType="textPersonName"
-                    app:layout_constraintEnd_toStartOf="@+id/editTextGender"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="@color/dark"
+                    app:layout_constraintEnd_toEndOf="@+id/textViewConsultationName"
+                    app:layout_constraintStart_toStartOf="@+id/textViewConsultationName"
                     app:layout_constraintTop_toBottomOf="@+id/textViewConsultationName" />
 
                 <EditText
                     android:id="@+id/editTextGender"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
                     android:backgroundTint="@color/dark2"
-                    android:textColor="@color/dark"
                     android:ems="10"
                     android:enabled="false"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/editTextTextAge"
+                    android:textColor="@color/dark"
+                    app:layout_constraintEnd_toEndOf="@+id/textViewConsultationGender"
+                    app:layout_constraintStart_toStartOf="@+id/textViewConsultationGender"
                     app:layout_constraintTop_toBottomOf="@+id/textViewConsultationGender" />
 
                 <androidx.constraintlayout.widget.Barrier
@@ -298,11 +324,11 @@
                     android:layout_marginEnd="@dimen/_20sdp"
                     android:layout_marginRight="@dimen/_20sdp"
                     android:backgroundTint="@color/dark2"
-                    android:textColor="@color/dark"
                     android:ems="10"
                     android:enabled="false"
                     android:imeOptions="actionDone"
                     android:inputType="textPersonName"
+                    android:textColor="@color/dark"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewPatientDiagnosis" />
@@ -337,11 +363,11 @@
                     android:layout_marginEnd="@dimen/_20sdp"
                     android:layout_marginRight="@dimen/_20sdp"
                     android:backgroundTint="@color/dark2"
-                    android:textColor="@color/dark"
                     android:ems="10"
                     android:enabled="false"
                     android:imeOptions="actionDone"
                     android:inputType="textPersonName"
+                    android:textColor="@color/dark"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewPatientDescription" />
@@ -365,41 +391,6 @@
 
         </androidx.core.widget.NestedScrollView>
 
-        <Button
-            android:id="@+id/buttonDone"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginLeft="@dimen/_20sdp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/rounded_shape_white_color"
-            android:text="Done"
-            android:onClick="@{clickHandler::onClick}"
-            android:textColor="@color/dark2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/buttonPrint"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="0.7"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/buttonPrint"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_30sdp"
-            android:layout_marginRight="@dimen/_30sdp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/rounded_shape"
-            android:text="Print"
-            android:onClick="@{clickHandler::onClick}"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/buttonDone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

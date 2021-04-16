@@ -20,6 +20,7 @@ public class ConsultationRepository {
     MutableLiveData<Integer> totalConsultationMutableLiveDate = new MutableLiveData<>();
     MutableLiveData<Integer> updatedConsultationMutableLiveDate = new MutableLiveData<>();
     MutableLiveData<Integer> pendingConsultationMutableLiveDate = new MutableLiveData<>();
+    MutableLiveData<String> patientImageMutableLiveDate = new MutableLiveData<>();
 
     public MutableLiveData<PatientPrescribedMedicineAndDiagnosis> getPatientPrescribedMedicineList(int consultation_id) {
         getPatientPrescribedMedicine(consultation_id);
@@ -84,6 +85,10 @@ public class ConsultationRepository {
         return pendingConsultationMutableLiveDate;
     }
 
+    public MutableLiveData<String> getPatientImageMutableLiveDate() {
+        return patientImageMutableLiveDate;
+    }
+
     public void getTotalConsultation() {
         new Thread(() -> {
             int count = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getTotalCount();
@@ -102,6 +107,13 @@ public class ConsultationRepository {
         new Thread(() -> {
             int count = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getPendingCount();
             pendingConsultationMutableLiveDate.postValue(count);
+        }).start();
+    }
+
+    public void getPatientImage(int patient_id){
+        new Thread(() -> {
+            String image = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatientImage(patient_id);
+            patientImageMutableLiveDate.postValue(image);
         }).start();
     }
 }

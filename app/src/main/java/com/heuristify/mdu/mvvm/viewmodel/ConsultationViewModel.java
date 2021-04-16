@@ -54,6 +54,10 @@ public class ConsultationViewModel extends AndroidViewModel {
         return consultationRepository.getPendingConsultationMutableLiveDate();
     }
 
+    public MutableLiveData<String> patientImageMutableLiveDate(){
+        return consultationRepository.getPatientImageMutableLiveDate();
+    }
+
     public void getAllTotalConsultation() {
         consultationRepository.getTotalConsultation();
     }
@@ -64,5 +68,9 @@ public class ConsultationViewModel extends AndroidViewModel {
 
     public void getAllPendingConsultation() {
         consultationRepository.getPendingConsultation();
+    }
+
+    public void getPatientImagePath(int patient_id){
+        consultationRepository.getPatientImage(patient_id);
     }
 }

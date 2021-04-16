@@ -17,4 +17,9 @@
     <string name="consultation_desc">Please review the details for the</string>
     <string name="deive_list">Paired Devices</string>
 
+    <string-array name="array_gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
 </resources>
