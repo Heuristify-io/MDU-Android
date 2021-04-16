@@ -205,9 +205,14 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
                         if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 2 && getDataBinding().editConsCnicLastFourDigit.getText().toString().length() > 6) {
                             //create patient with all fields
+                            String[] firstTwoDigit = getDataBinding().editConsCnicFirstTwoDigit.getText().toString().split("-");
+                            String[] lastFourDigit = getDataBinding().editConsCnicLastFourDigit.getText().toString().split("-");
+                            String cnicFirstDigit = firstTwoDigit[0]+firstTwoDigit[1];
+                            String cnicLastDigit = lastFourDigit[0]+lastFourDigit[1]+lastFourDigit[2]+lastFourDigit[3];
+
                             patientViewModel.createPatientWithImageAndCnicDetails(getDataBinding().editConsName.getText().toString(),
-                                    Integer.parseInt(getDataBinding().editConsCnicFirstTwoDigit.getText().toString()),
-                                    Integer.parseInt(getDataBinding().editConsCnicLastFourDigit.getText().toString()),
+                                    Integer.parseInt(cnicFirstDigit),
+                                    Integer.parseInt(cnicLastDigit),
                                     Integer.parseInt(getDataBinding().editConsAge.getText().toString()), getDataBinding().materialSpinnerGender.getEditText().getText().toString(),
                                     compressedImageFile.getPath());
 
@@ -231,14 +236,19 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
                 if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() > 2 && getDataBinding().editConsCnicLastFourDigit.getText().toString().length() > 6) {
 
+                    String[] firstTwoDigit = getDataBinding().editConsCnicFirstTwoDigit.getText().toString().split("-");
+                    String[] lastFourDigit = getDataBinding().editConsCnicLastFourDigit.getText().toString().split("-");
+                    String cnicFirstDigit = firstTwoDigit[0]+firstTwoDigit[1];
+                    String cnicLastDigit = lastFourDigit[0]+lastFourDigit[1]+lastFourDigit[3]+lastFourDigit[4];
+
                     if (!getDataBinding().editConsAge.getText().toString().isEmpty()) {
 
                         if (!getDataBinding().materialSpinnerGender.getEditText().getText().toString().isEmpty()) {
 
                             //create patient without image
                             patientViewModel.createPatientWithOutImage(getDataBinding().editConsName.getText().toString(),
-                                    Integer.parseInt(getDataBinding().editConsCnicFirstTwoDigit.getText().toString()),
-                                    Integer.parseInt(getDataBinding().editConsCnicLastFourDigit.getText().toString()),
+                                    Integer.parseInt(cnicFirstDigit),
+                                    Integer.parseInt(cnicLastDigit),
                                     Integer.parseInt(getDataBinding().editConsAge.getText().toString()),
                                     getDataBinding().materialSpinnerGender.getEditText().getText().toString());
 
@@ -500,7 +510,6 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                         try {
                             compressedImageFile = new Compressor(getApplicationContext()).compressToFile(new File(compressImage(path)));
                             Bitmap myBitmap = BitmapFactory.decodeFile(compressedImageFile.getAbsolutePath());
-                            getDataBinding().imageView3.setClipToOutline(true);
                             getDataBinding().imageView3.setImageBitmap(myBitmap);
                             Toast.makeText(mContext, "Image is successfully saved", Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
