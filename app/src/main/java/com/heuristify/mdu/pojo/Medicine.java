@@ -22,6 +22,8 @@ public class Medicine extends BaseObservable {
     private String medicine_CreatedAt;
     @SerializedName("updatedAt")
     private String medicine_updatedAt;
+    @SerializedName("quantity")
+    private String medicine_quantity;
 
     @Bindable
     public int getMedicine_id() {
@@ -91,5 +93,15 @@ public class Medicine extends BaseObservable {
     public void setMedicine_updatedAt(String medicine_updatedAt) {
         this.medicine_updatedAt = medicine_updatedAt;
         notifyPropertyChanged(BR.medicine_updatedAt);
+    }
+
+    @Bindable
+    public String getMedicine_quantity() {
+        return medicine_quantity;
+    }
+
+    public void setMedicine_quantity(String medicine_quantity) {
+        this.medicine_quantity = medicine_quantity;
+        notifyPropertyChanged(BR.medicine_quantity);
     }
 }

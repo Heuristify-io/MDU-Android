@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -28,9 +29,9 @@ import java.util.Objects;
 import retrofit2.Response;
 
 public class AddNewInventoryDetailsActivity extends BindingBaseActivity<ActivityAddNewInventoryDetailsBinding> implements OnClickHandlerInterface {
-    String[] From = {"none","Syrup", "Tablet","Capsules","Drops","Topical","Inhalers","Injections","Implants or patches","others"};
-    String[] Strength = {"none","500", "600", "700", "800", "800", "900"};
-    String[] Unit = {"none","kg","g","mg","mcg","L"};
+    String[] From = {"none", "Syrup", "Tablet", "Capsules", "Drops", "Topical", "Inhalers", "Injections", "Implants or patches", "others"};
+    String[] Strength = {"none", "500", "600", "700", "800", "800", "900"};
+    String[] Unit = {"none", "kg", "g", "mg", "mcg", "L"};
     ArrayAdapter<String> from_adapter, strength_adapter, unit_adapter;
     MedicineViewModel medicineViewModel;
     private Observer observer;
@@ -61,9 +62,22 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
         if (getIntent().getExtras() != null) {
             String medicine_name = getIntent().getExtras().getString("medicine_name");
             getDataBinding().editTextSearch.setText(medicine_name);
-            Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(getIntent().getExtras().getString("from"));
-            Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(getIntent().getExtras().getString("strength"));
-            Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(getIntent().getExtras().getString("unit"));
+
+            if (getIntent().getExtras().getString("from") != null || getIntent().getExtras().getString("from") != "") {
+                Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(getIntent().getExtras().getString("from"));
+            } else {
+                Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(From[0]);
+            }
+            if (getIntent().getExtras().getString("strength") != null || getIntent().getExtras().getString("strength") != "") {
+                Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(getIntent().getExtras().getString("strength"));
+            } else {
+                Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(Strength[0]);
+            }
+            if (getIntent().getExtras().getString("unit") != null || getIntent().getExtras().getString("unit") != "") {
+                Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(getIntent().getExtras().getString("unit"));
+            } else {
+                Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(Unit[0]);
+            }
 
         } else {
 
@@ -77,6 +91,12 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
         } else {
             disableButton();
         }
+
+        int quantity = Integer.parseInt(getDataBinding().textViewNumber.getText().toString());
+        int boxes = Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString());
+        getDataBinding().textViewBoxesNumber.setText(String.valueOf(boxes));
+        getDataBinding().textViewQuantBoxNumber.setText(String.valueOf(quantity));
+        getDataBinding().textViewQuantityAndBoxesTotal.setText(String.valueOf(quantity * boxes));
 
 
         getDataBinding().editTextSearch.addTextChangedListener(new TextWatcher() {
@@ -107,6 +127,8 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
+            }else{
+                Toast.makeText(context, "Medicine Not Buy", Toast.LENGTH_SHORT).show();
             }
             DisplayLog.showLog(TAG, "success " + responseBodyResponse.code());
 
@@ -116,6 +138,7 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
         medicineViewModel.getError_msg().observe(this, s -> {
             dismissProgressDialog();
             DisplayLog.showLog(TAG, "getError " + s);
+            Toast.makeText(context, "Medicine Not Buy", Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -151,20 +174,60 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
                     number = number - 1;
                     getDataBinding().textViewNumber.setText(String.valueOf(number));
 
+                    multiplyBoxesAndQuantity(number, Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()));
+
+
                 }
                 break;
             case R.id.textViewAdd:
                 int number = Integer.parseInt(getDataBinding().textViewNumber.getText().toString());
                 number = number + 1;
                 getDataBinding().textViewNumber.setText(String.valueOf(number));
+
+                multiplyBoxesAndQuantity(number, Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()));
+
+                break;
+
+            case R.id.textViewBoxSub:
+                if (Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()) > 1) {
+                    int number2 = Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString());
+                    number2 = number2 - 1;
+                    getDataBinding().textViewBoxNumber.setText(String.valueOf(number2));
+
+                    multiplyBoxesAndQuantity(Integer.parseInt(getDataBinding().textViewNumber.getText().toString()), number2);
+
+
+                }
+                break;
+            case R.id.textViewBoxAdd:
+                int number3 = Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString());
+                number3 = number3 + 1;
+                getDataBinding().textViewBoxNumber.setText(String.valueOf(number3));
+
+                multiplyBoxesAndQuantity(Integer.parseInt(getDataBinding().textViewNumber.getText().toString()), number3);
+
                 break;
             case R.id.buttonNextInventoryDetais:
-                showProgressDialog();
-                createMedicine(getDataBinding().editTextSearch.getText().toString(), Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).getText().toString(), getDataBinding().materialSpinnerStrength.getEditText().getText().toString(), getDataBinding().materialSpinnerUnit.getEditText().getText().toString(), Integer.parseInt(getDataBinding().textViewNumber.getText().toString()));
+                if (getDataBinding().materialSpinnerForm.getEditText().getText().toString().equals("none") || getDataBinding().materialSpinnerStrength.getEditText().getText().toString().equals("none")
+                        || getDataBinding().materialSpinnerUnit.getEditText().getText().toString().equals("none")) {
+                    Toast.makeText(context, "Please select valid option", Toast.LENGTH_SHORT).show();
+                } else {
+                    showProgressDialog();
+                    createMedicine(getDataBinding().editTextSearch.getText().toString(), Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).getText().toString(), getDataBinding().materialSpinnerStrength.getEditText().getText().toString(), getDataBinding().materialSpinnerUnit.getEditText().getText().toString(), Integer.parseInt(getDataBinding().textViewQuantityAndBoxesTotal.getText().toString()));
+                }
                 break;
         }
 
     }
+
+    private void multiplyBoxesAndQuantity(int quantityNumber, int boxesNumber) {
+
+        getDataBinding().textViewBoxesNumber.setText(String.valueOf(boxesNumber));
+        getDataBinding().textViewQuantBoxNumber.setText(String.valueOf(quantityNumber));
+        getDataBinding().textViewQuantityAndBoxesTotal.setText(String.valueOf(quantityNumber * boxesNumber));
+
+    }
+
 
     private void createMedicine(String medicine_name, String from, String strength, String unit, int quantity) {
         medicineViewModel.createMedicine(medicine_name, from, strength, unit, quantity).observe((AppCompatActivity) context, observer);
