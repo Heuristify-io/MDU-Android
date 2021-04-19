@@ -244,13 +244,13 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                             String[] lastFourDigit = getDataBinding().editConsCnicLastFourDigit.getText().toString().split("-");
 
                             if(!(Character.isDigit(firstTwoDigit[0].charAt(0)) && Character.isDigit(firstTwoDigit[0].charAt(0)))){
-                                Toast.makeText(mContext, "Type digit in cnic field", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
                             if(!(Character.isDigit(lastFourDigit[0].charAt(0)) && Character.isDigit(lastFourDigit[1].charAt(0)) &&
                                     Character.isDigit(lastFourDigit[2].charAt(0)) && Character.isDigit(lastFourDigit[3].charAt(0)))){
-                                Toast.makeText(mContext, "Type digit in cnic field", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
@@ -298,13 +298,13 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                     String[] lastFourDigit = getDataBinding().editConsCnicLastFourDigit.getText().toString().split("-");
 
                     if(!(Character.isDigit(firstTwoDigit[0].charAt(0)) && Character.isDigit(firstTwoDigit[0].charAt(0)))){
-                        Toast.makeText(mContext, "Type digit in cnic field", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     if(!(Character.isDigit(lastFourDigit[0].charAt(0)) && Character.isDigit(lastFourDigit[1].charAt(0)) &&
                             Character.isDigit(lastFourDigit[2].charAt(0)) && Character.isDigit(lastFourDigit[3].charAt(0)))){
-                        Toast.makeText(mContext, "Type digit in cnic field", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
