@@ -41,12 +41,12 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     private final String[] frequencies = {"0+0+1", "0+1+0", "0+1+1", "1+0+0", "1+0+1", "1+1+0", "1+1+1",
             "0+0+2", "0+2+0", "0+2+2", "2+0+0", "2+0+2", "2+2+0", "2+2+2", "0+0+3", "0+3+0", "0+3+3", "3+0+0", "3+0+3", "3+3+0", "3+3+3",
             "0+0+4", "0+4+0", "0+4+4", "4+0+0", "4+0+4", "4+4+0", "4+4+4", "0+0+5", "0+5+0", "0+5+5", "5+0+0", "5+0+5", "5+5+0", "5+5+5"};
-    ArrayAdapter frequency_adapter;
-    List<StockMedicine> stockMedicineList;
-    SearchMedicineAdapter searchMedicineAdapter;
-    ViewHolder holders;
-    int positions;
-    OnItemClickPosition onItemClickPosition;
+    private ArrayAdapter frequency_adapter;
+    private List<StockMedicine> stockMedicineList;
+    private SearchMedicineAdapter searchMedicineAdapter;
+    private ViewHolder holders;
+    private int positions;
+    private OnItemClickPosition onItemClickPosition;
     private String showList = "showList";
 
 
@@ -220,7 +220,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
             if (stockMedicineList1 != null) {
 //                stockMedicineList = new ArrayList<>();
 
-                ((AppCompatActivity) context).runOnUiThread(() -> {
+                new Handler(MyApplication.getInstance().getMainLooper()).post(() -> {
 
                     if (!stockMedicineList.isEmpty()) {
                         stockMedicineList.clear();
@@ -235,28 +235,32 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
                         positions = position;
                     }
 
-//                    setListToAdapter(holder);
                 });
+
+//                MyApplication.getInstance().getActivity().runOnUiThread(() -> {
+//
+//
+//
+////                    setListToAdapter(holder);
+//                });
             } else {
-                ((AppCompatActivity) context).runOnUiThread(() -> {
+
+                new Handler(MyApplication.getInstance().getMainLooper()).post(() -> {
                     stockMedicineList.clear();
                     searchMedicineAdapter.notifyDataSetChanged();
                     goneRecycleViewAndOtherViews(holder);
                 });
+
+//                ((AppCompatActivity) context).runOnUiThread(() -> {
+//                    stockMedicineList.clear();
+//                    searchMedicineAdapter.notifyDataSetChanged();
+//                    goneRecycleViewAndOtherViews(holder);
+//                });
             }
 
         }).start();
     }
 
-    private void visibleRecycleViewAndOtherViews(ViewHolder holder) {
-        holder.recyclerView.setVisibility(View.VISIBLE);
-    }
-
-    private void setListToAdapter(ViewHolder holder) {
-//        aAdapter = new AutoCompleteTextViewAdapter(context, R.layout.custom_symbol_list_item, stockMedicineList);
-//        holder.autoCompleteTextView.setAdapter(aAdapter);
-//        aAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public int getItemCount() {
@@ -291,11 +295,13 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         storeClickWidgetList.get(positions).setStockMedicine(stockMedicine);
         widgetLists.get(positions).setStockMedicine(stockMedicine);
 
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            ((AppCompatActivity) context).runOnUiThread(() -> {
-                stockMedicineList.clear();
-                searchMedicineAdapter.notifyDataSetChanged();
-            });
+        new Handler(MyApplication.getInstance().getMainLooper()).postDelayed(() -> {
+//            ((AppCompatActivity) context).runOnUiThread(() -> {
+//
+//            });
+
+            stockMedicineList.clear();
+            searchMedicineAdapter.notifyDataSetChanged();
 
         }, 300);
     }

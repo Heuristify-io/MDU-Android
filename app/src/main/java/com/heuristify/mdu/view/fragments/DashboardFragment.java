@@ -59,7 +59,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
 
         getDataBinding().buttonAttending22.setOnClickListener(v -> {
             showProgressDialogWithText("Uploading Images");
-            getAllPatients();
+            getAllPatientImages();
         });
         getDataBinding().buttonAttending2.setOnClickListener(v -> startActivity(new Intent(getActivity(), ConsultationHistoryActivity.class)));
         getDataBinding().textViewDate.setText(Utilities.currentDate());
@@ -70,7 +70,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        observeGetPatientList();
+        observeGetPatientImages();
         observerErrorMsgPatientImages();
         observerSyncDataResponse();
         observerSyncDataErrorResponse();
@@ -105,13 +105,13 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
                 getDataBinding().textViewTotal.setText(String.valueOf(integer)));
     }
 
-    private void getAllPatients() {
+    private void getAllPatientImages() {
         //sync field value
-        dataSyncViewModel.callGetAllPatientMethod(Constant.patient_sync_zero);
+        dataSyncViewModel.callGetAllPatientImagesMethod(Constant.patient_sync_zero);
     }
 
-    private void observeGetPatientList() {
-        dataSyncViewModel.getPatientList().observe(getViewLifecycleOwner(), patientList -> {
+    private void observeGetPatientImages() {
+        dataSyncViewModel.getPatientImagesList().observe(getViewLifecycleOwner(), patientList -> {
             DisplayLog.showLog(TAG,"imageResponse "+patientList);
             dismissProgressDialog();
             showProgressDialogWithText("Upload Records");

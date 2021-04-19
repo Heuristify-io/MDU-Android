@@ -64,7 +64,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
     BluetoothAdapter mBluetoothAdapter;
     private ProgressDialog mBluetoothConnectProgressDialog;
     private BluetoothSocket mBluetoothSocket;
-    BluetoothDevice mBluetoothDevice;
+    private BluetoothDevice mBluetoothDevice;
     private final UUID applicationUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private Dialog mDialog;
     private BluetoothDeviceAdapter bluetoothDeviceAdapter;
@@ -106,7 +106,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 
         };
 
-        consultationViewModel.getPatientPrescribedMedicineList(consultation_id).observe(lifecycleOwner, observer);
+        consultationViewModel.getPatientPrescribedMedicineList(consultation_id).observe(this, observer);
 
         consultationViewModel.patientImageMutableLiveDate().observe(this, s -> {
             Log.e("image",""+s);

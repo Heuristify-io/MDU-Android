@@ -57,6 +57,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Observer observer;
+        MyApplication.getInstance().setCurrentActivity(this);
         getDataBinding().setClickHandler(this);
         if (getIntent().getExtras() != null) {
             patient = (Patient) getIntent().getSerializableExtra("patient");

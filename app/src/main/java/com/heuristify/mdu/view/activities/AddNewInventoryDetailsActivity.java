@@ -29,7 +29,7 @@ import java.util.Objects;
 import retrofit2.Response;
 
 public class AddNewInventoryDetailsActivity extends BindingBaseActivity<ActivityAddNewInventoryDetailsBinding> implements OnClickHandlerInterface {
-    String[] From = {"none", "Syrup", "Tablet", "Capsules", "Drops", "Topical", "Inhalers", "Injections", "Implants or patches", "others"};
+    String[] From = {"none", "Syrup", "Tablet", "Capsules", "Drops", "Topical", "Inhalers", "Injections", "Implants or patches"};
     String[] Strength = {"none", "500", "600", "700", "800", "800", "900"};
     String[] Unit = {"none", "kg", "g", "mg", "mcg", "L"};
     ArrayAdapter<String> from_adapter, strength_adapter, unit_adapter;
@@ -121,7 +121,7 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
         observer = (Observer<Response<StockMedicineList>>) responseBodyResponse -> {
             dismissProgressDialog();
             if (responseBodyResponse.isSuccessful()) {
-                Toast.makeText(context, "Medicine Buy Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Medicine Added Successfully", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AddNewInventoryDetailsActivity.this, DashboardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -138,7 +138,7 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
         medicineViewModel.getError_msg().observe(this, s -> {
             dismissProgressDialog();
             DisplayLog.showLog(TAG, "getError " + s);
-            Toast.makeText(context, "Medicine Not Buy", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Medicine Not Added", Toast.LENGTH_SHORT).show();
         });
 
     }

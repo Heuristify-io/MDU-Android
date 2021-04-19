@@ -35,7 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DataSyncRepository {
-    MutableLiveData<List<Patient>> patientListMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<List<Patient>> patientImageListMutableLiveData = new MutableLiveData<>();
     MutableLiveData<String> patientImageSynFailMutableLiveData = new MutableLiveData<>();
     MutableLiveData<Response<SyncApiResponse>> syncRecordMutableLiveData = new MutableLiveData<>();
     MutableLiveData<String> patientImageListMutableLiveDataError = new MutableLiveData<>();
@@ -49,7 +49,7 @@ public class DataSyncRepository {
     int count = -1;
 
     public MutableLiveData<List<Patient>> getAllPatientMutableLiveData() {
-        return patientListMutableLiveData;
+        return patientImageListMutableLiveData;
     }
 
     public MutableLiveData<String> getPatientImageListMutableLiveDataError() {
@@ -68,7 +68,7 @@ public class DataSyncRepository {
         return patientImageSynFailMutableLiveData;
     }
 
-    public void getPatientList(int sync) {
+    public void getPatientImageList(int sync) {
         new Thread(() -> {
             List<Patient> patientList2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatientWithImages(sync);
             if (patientList2.size() > 0) {
@@ -90,12 +90,12 @@ public class DataSyncRepository {
                     uploadImagesToServer();
                 } else {
                     DisplayLog.showLog("DataSyncRepository ", "localDbEmpty");
-                    patientListMutableLiveData.postValue(patientList2);
+                    patientImageListMutableLiveData.postValue(patientList2);
                 }
 
             } else {
                 DisplayLog.showLog("DataSyncRepository ", "localDbEmpty2");
-                patientListMutableLiveData.postValue(patientList2);
+                patientImageListMutableLiveData.postValue(patientList2);
             }
 
         }).start();
@@ -135,7 +135,7 @@ public class DataSyncRepository {
         patientList.clear();
         new Thread(() -> {
             attendanceList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().doctorAttendanceDao().getDoctorAttendance();
-            patientList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatients();
+            patientList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getAllPatients(patient_sync);
             diagnosisAndMedicineList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getDiagnosis(consultation_sync);
             prescribedMedicineList = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().prescribedMedicineDao().getPrescribed(prescribed_medicine_syn);
 
@@ -174,7 +174,9 @@ public class DataSyncRepository {
 //                            .put("actualMedicineId", prescribedMedicineList.get(l).getActualMedicineId())
                             .put("consultationId", prescribedMedicineList.get(l).getConsultationId())
                             .put("days", prescribedMedicineList.get(l).getDays())
+                            .put("frequencyNum", prescribedMedicineList.get(l).getFrequencyNum())
                             .put("frequency", prescribedMedicineList.get(l).getFrequency()));
+
                 }
 
                 jsonObject = new JSONObject();
@@ -285,7 +287,7 @@ public class DataSyncRepository {
                             } else {
 
                                 clearCountAndImageList();
-                                patientListMutableLiveData.setValue(patientList);
+                                patientImageListMutableLiveData.setValue(patientList);
                             }
 
                         }else{

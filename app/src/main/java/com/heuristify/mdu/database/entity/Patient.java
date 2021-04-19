@@ -47,6 +47,10 @@ public class Patient extends BaseObservable implements Serializable {
     @SerializedName("isSync")
     private int image_sync = 0;
 
+    @ColumnInfo(name = "isDataSync")
+    @SerializedName("isDataSync")
+    private int isDataSync = 0;
+
     public Patient() {
     }
 
@@ -128,5 +132,15 @@ public class Patient extends BaseObservable implements Serializable {
     public void setImage_sync(int image_sync) {
         this.image_sync = image_sync;
         notifyPropertyChanged(BR.image_sync);
+    }
+
+    @Bindable
+    public int getIsDataSync() {
+        return isDataSync;
+    }
+
+    public void setIsDataSync(int isDataSync) {
+        this.isDataSync = isDataSync;
+        notifyPropertyChanged(BR.isDataSync);
     }
 }

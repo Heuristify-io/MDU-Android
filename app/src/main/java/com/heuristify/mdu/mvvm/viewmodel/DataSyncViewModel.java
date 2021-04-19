@@ -22,7 +22,7 @@ public class DataSyncViewModel extends AndroidViewModel {
         dataSyncRepository = new DataSyncRepository();
     }
 
-    public MutableLiveData<List<Patient>> getPatientList(){
+    public MutableLiveData<List<Patient>> getPatientImagesList(){
         return dataSyncRepository.getAllPatientMutableLiveData();
     }
 
@@ -30,8 +30,8 @@ public class DataSyncViewModel extends AndroidViewModel {
         return dataSyncRepository.getPatientImageListMutableLiveDataError();
     }
 
-    public void callGetAllPatientMethod(int sync){
-        dataSyncRepository.getPatientList(sync);
+    public void callGetAllPatientImagesMethod(int sync){
+        dataSyncRepository.getPatientImageList(sync);
     }
 
     public void getAllRecords(){
