@@ -49,4 +49,7 @@ public interface RetrofitServices {
 
     @POST("doctors/uploadrecords")
     Call<SyncApiResponse> uploadSyncData(@Body JsonObject jsonObject);
+
+    @GET("doctors/getrecords")
+    Call<SyncApiResponse> getRecords();
 }

@@ -34,6 +34,10 @@ public class DataSyncViewModel extends AndroidViewModel {
         dataSyncRepository.getPatientList(sync);
     }
 
+    public void getAllRecords(){
+        dataSyncRepository.getRecords();
+    }
+
     public void uploadRecords(int patient_sync, int consultation_sync, int prescribed_medicine_syn){
         dataSyncRepository.uploadRecord(patient_sync,consultation_sync,prescribed_medicine_syn);
     }
@@ -45,6 +49,7 @@ public class DataSyncViewModel extends AndroidViewModel {
     public MutableLiveData<String> getSyncMutableLiveDataErrorResponse(){
         return dataSyncRepository.getSyncMutableLiveDataError();
     }
+
 
 
 

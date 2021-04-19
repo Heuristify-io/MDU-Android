@@ -101,6 +101,27 @@ public class DataSyncRepository {
         }).start();
     }
 
+    public void getRecords(){
+
+        Call<SyncApiResponse> apiResponseCall = MyApplication.getInstance().getRetrofitServicesWithToken().getRecords();
+        apiResponseCall.enqueue(new Callback<SyncApiResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SyncApiResponse> call, @NonNull Response<SyncApiResponse> response) {
+                if (response.code() == 200) {
+                    //delete table anc recreate table with new receive data
+                    deleteAndRecreateTableAgain(response);
+                } else {
+                    syncRecordMutableLiveData.setValue(response);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SyncApiResponse> call, @NonNull Throwable t) {
+                syncMutableLiveDataError.setValue(t.getMessage() + " " + t.getStackTrace() + " " + call.toString() + " " + t.toString());
+            }
+        });
+    }
+
     private boolean IsValidUrl(String urlString) {
         try {
             URL url = new URL(urlString);

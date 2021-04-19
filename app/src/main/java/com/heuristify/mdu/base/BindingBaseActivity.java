@@ -41,9 +41,17 @@ public abstract class BindingBaseActivity<DB extends ViewDataBinding> extends Ap
 
     }
 
+    public void showProgressDialogWithCustomText(String msg) {
+        customProgressDialog.showProgressWithCustomText(msg);
+
+
+    }
+
     public void dismissProgressDialog() {
         customProgressDialog.dismiss();
     }
+
+
 
     public void logOut(){
         SharedHelper.deleteAllSharedPrefs(mContext);

@@ -9,6 +9,7 @@
     <string name="back">Back</string>
     <string name="string_back">Back</string>
     <string name="not_get_medicine_list">Unable To Get Medicine List</string>
+    <string name="not_get_records">Unable To Import Doctors Data</string>
     <string name="inventory_desc4">Please enter diagnosis and the </string>
     <string name="inventory_desc5">prescribed medicine. </string>
     <string name="prescribed_medicine">Prescribed Medicine</string>

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +23,10 @@ import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.ActivityPinViewBinding;
+import com.heuristify.mdu.helper.Constant;
+import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.Helper;
+import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.LoginViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
 import com.heuristify.mdu.pojo.StockMedicineList;
@@ -38,6 +42,7 @@ import retrofit2.Response;
 
 public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding> implements View.OnClickListener {
     LoginViewModel loginViewModel;
+    DataSyncViewModel dataSyncViewModel;
     private final String TAG = "PinViewActivity";
     private Observer<Response<ResponseBody>> observer;
     private Observer<Response<StockMedicineList>> medicine_observer;
@@ -63,6 +68,9 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
 
 
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        dataSyncViewModel = ViewModelProviders.of(this).get(DataSyncViewModel.class);
+        observerSyncDataResponse();
+        observerSyncDataErrorResponse();
 
         observer = responseBodyResponse -> {
             if (responseBodyResponse.isSuccessful()) {
@@ -93,10 +101,9 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
         medicine_observer = responseBodyResponse -> {
            dismissProgressDialog();
             if (responseBodyResponse.isSuccessful()) {
-                startActivity(new Intent(PinViewActivity.this, AttendingActivity.class));
-                finish();
+                getRecords();
             } else {
-                showMedicineDialog();
+                showMedicineDialog(Constant.get_medicine,getResources().getString(R.string.not_get_medicine_list));
             }
         };
 
@@ -115,7 +122,7 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
 
         medicineViewModel.get_medicine_error_msg().observe(this, s -> {
             dismissProgressDialog();
-            showMedicineDialog();
+            showMedicineDialog(Constant.get_medicine,this.getResources().getString(R.string.not_get_medicine_list));
         });
 
 
@@ -220,7 +227,36 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
 
     }
 
-    private void showMedicineDialog() {
+    private void getRecords() {
+        showProgressDialogWithCustomText("Getting Records");
+        dataSyncViewModel.getAllRecords();
+    }
+
+    private void observerSyncDataResponse() {
+        dataSyncViewModel.observeUploadRecordMutableResponsive().observe(this, syncApiResponse -> {
+            dismissProgressDialog();
+            if(syncApiResponse.code() == 200){
+                startActivity(new Intent(PinViewActivity.this, AttendingActivity.class));
+                finish();
+
+            }else{
+                Toast.makeText(mContext, "Unable to import doctor's data", Toast.LENGTH_SHORT).show();
+                showMedicineDialog(Constant.get_record,this.getResources().getString(R.string.not_get_records));
+            }
+        });
+    }
+
+    private void observerSyncDataErrorResponse() {
+        dataSyncViewModel.getSyncMutableLiveDataErrorResponse().observe(this,String ->{
+            dismissProgressDialog();
+            DisplayLog.showLog(TAG,"syncErrorResponse "+String);
+            Toast.makeText(mContext, "Unable to import doctor's data", Toast.LENGTH_SHORT).show();
+            showMedicineDialog(Constant.get_record,this.getResources().getString(R.string.not_get_records));
+        });
+
+    }
+
+    private void showMedicineDialog(String msg,String textViewText) {
         mDialog = new Dialog(mContext);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.custom_medicine_dialog_view);
@@ -229,10 +265,16 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
         mDialog.show();
         Button btnRetry = mDialog.findViewById(R.id.buttonRetry);
         Button btnCancel = mDialog.findViewById(R.id.buttonCancel);
+        TextView textView = mDialog.findViewById(R.id.textView5);
+        textView.setText(textViewText);
 
         btnRetry.setOnClickListener(v -> {
             mDialog.dismiss();
-            callGetMedicineApi();
+            if(msg.equals("records")){
+                getRecords();
+            }else{
+                callGetMedicineApi();
+            }
         });
 
         btnCancel.setOnClickListener(v -> {

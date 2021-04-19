@@ -13,5 +13,8 @@ public class Constant {
 
     public static final String patient_image_sync = "Image sync is failed";
 
+    public static final String get_medicine = "medicines";
+    public static final String get_record = "records";
+
 
 }
