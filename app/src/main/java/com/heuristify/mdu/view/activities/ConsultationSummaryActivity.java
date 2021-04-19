@@ -129,10 +129,10 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imageViewBack:
-                finish();
+                gotoDashBoard();
                 break;
             case R.id.textViewBack:
-                finish();
+                gotoDashBoard();
                 break;
             case R.id.buttonPrint:
                 mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

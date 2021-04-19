@@ -14,6 +14,8 @@ public class PatientHistory extends BaseObservable {
     private String patient_history_medicine_name;
     @SerializedName("date")
     private String patient_history_medicine_date;
+    @SerializedName("quantity")
+    private String patient_history_medicine_quantity;
 
     @Bindable
     public int getPatient_history_id() {
@@ -43,5 +45,15 @@ public class PatientHistory extends BaseObservable {
     public void setPatient_history_medicine_date(String patient_history_medicine_date) {
         this.patient_history_medicine_date = patient_history_medicine_date;
         notifyPropertyChanged(BR.patient_history_medicine_date);
+    }
+
+    @Bindable
+    public String getPatient_history_medicine_quantity() {
+        return patient_history_medicine_quantity;
+    }
+
+    public void setPatient_history_medicine_quantity(String patient_history_medicine_quantity) {
+        this.patient_history_medicine_quantity = patient_history_medicine_quantity;
+        notifyPropertyChanged(BR.patient_history_medicine_quantity);
     }
 }
