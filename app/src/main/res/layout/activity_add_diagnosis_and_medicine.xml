@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,8 +11,7 @@
             type="com.heuristify.mdu.interfaces.OnClickHandlerInterface" />
     </data>
 
-    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/light"
@@ -78,7 +78,7 @@
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="start"
                     android:text="Add Diagnosis"
-                    android:textColor="@color/dark2"
+                    android:textColor="@color/dark"
                     android:textSize="@dimen/_20sdp"
                     android:textStyle="normal" />
 
@@ -92,7 +92,7 @@
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="left"
                     android:text="and Medicine"
-                    android:textColor="@color/dark2"
+                    android:textColor="@color/dark"
                     android:textSize="@dimen/_20sdp"
                     android:textStyle="bold" />
 
@@ -108,36 +108,23 @@
                     android:gravity="start"
                     android:text="@string/inventory_desc4"
                     android:textColor="@color/light1"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:textStyle="normal" />
 
-                <TextView
-                    android:id="@+id/textViewConsultationDescription2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewConsultationDescription"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:fontFamily="@font/archivo_regular"
-                    android:gravity="start"
-                    android:text="@string/inventory_desc5"
-                    android:textColor="@color/light1"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/textViewConsultationName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewConsultationDescription2"
+                    android:layout_below="@id/textViewConsultationDescription"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="17dp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="start"
-                    android:text="Patient Diagnosis"
+                    android:text="Diagnosis"
                     android:textColor="@color/light1"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:textStyle="normal" />
 
                 <EditText
@@ -165,7 +152,7 @@
                     android:gravity="start"
                     android:text="Description"
                     android:textColor="@color/light1"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:textStyle="normal" />
 
                 <EditText
@@ -180,6 +167,7 @@
                     android:inputType="textPersonName"
                     android:textColor="@color/dark"
                     android:textColorHint="@color/dark" />
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewPrescribedMedicine"
@@ -245,17 +233,6 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="normal" />
-
-                    <ImageView
-                        android:id="@+id/imageViewUp"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:onClick="@{clickHandler::onClick}"
-                        android:src="@drawable/chevron_up_24px" />
-
 
 
                 </LinearLayout>

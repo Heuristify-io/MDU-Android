@@ -78,8 +78,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="left"
-                    android:text="Add"
-                    android:textColor="@color/dark2"
+                    android:text="Add New"
+                    android:textColor="@color/dark"
                     android:textSize="@dimen/_20sdp"
                     android:textStyle="normal" />
 
@@ -88,8 +88,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="left"
-                    android:text="New Inventory Item"
-                    android:textColor="@color/dark2"
+                    android:text="Inventory Item"
+                    android:textColor="@color/dark"
                     android:textSize="@dimen/_20sdp"
                     android:textStyle="bold" />
 

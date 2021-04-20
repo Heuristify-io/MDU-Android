@@ -69,7 +69,7 @@
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="left"
                     android:text="Enter"
-                    android:textColor="@color/dark2"
+                    android:textColor="@color/dark"
                     android:textSize="@dimen/_20sdp"
                     android:textStyle="normal" />
 
@@ -79,7 +79,7 @@
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="left"
                     android:text="Security Code"
-                    android:textColor="@color/dark2"
+                    android:textColor="@color/dark"
                     android:textSize="@dimen/_20sdp"
                     android:textStyle="bold" />
 

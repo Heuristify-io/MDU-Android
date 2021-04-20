@@ -139,13 +139,6 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             case R.id.imageViewAdd:
                 addAnotherItem();
                 break;
-            case R.id.imageViewUp:
-                if (getDataBinding().recyclerViewPatientHistory.getVisibility() == View.VISIBLE) {
-                    getDataBinding().recyclerViewPatientHistory.setVisibility(View.GONE);
-                } else {
-                    getDataBinding().recyclerViewPatientHistory.setVisibility(View.VISIBLE);
-                }
-                break;
             case R.id.buttonNextConsultation:
                 if (dataBinding.editTextPatientDiagnosis.getText().toString().isEmpty() || dataBinding.editTextPatientDiagnosisDes.getText().toString().isEmpty()) {
                     Toast.makeText(mContext, "Patient Diagnosis and Description  Required", Toast.LENGTH_SHORT).show();
@@ -166,8 +159,8 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         mDialog.show();
         TextView textViewName = mDialog.findViewById(R.id.textViewTotal);
         TextView textViewQuantity = mDialog.findViewById(R.id.textViewMedicineQuantity);
-        textViewName.setText(medicineName);
-        textViewQuantity.setText("Medicine Quantity " + quantity);
+        textViewName.setText(medicineName+" is on low stock");
+        textViewQuantity.setText("Remaining Quantity " + quantity);
         Button btnRetry = mDialog.findViewById(R.id.buttonRetry);
         btnRetry.setOnClickListener(v -> mDialog.dismiss());
 
