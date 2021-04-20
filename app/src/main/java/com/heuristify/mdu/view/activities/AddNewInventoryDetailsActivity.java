@@ -29,9 +29,9 @@ import java.util.Objects;
 import retrofit2.Response;
 
 public class AddNewInventoryDetailsActivity extends BindingBaseActivity<ActivityAddNewInventoryDetailsBinding> implements OnClickHandlerInterface {
-    String[] From = {"none", "Syrup", "Tablet", "Capsules", "Drops", "Topical", "Inhalers", "Injections", "Implants or patches"};
-    String[] Strength = {"none", "500", "600", "700", "800", "800", "900"};
-    String[] Unit = {"none", "kg", "g", "mg", "mcg", "L"};
+    String[] From = {"None", "Syrup", "Tablet", "Capsules", "Drops", "Topical", "Inhalers", "Injections", "Implants or patches"};
+    String[] Strength = {"None", "500", "600", "700", "800", "800", "900"};
+    String[] Unit = {"None", "kg", "g", "mg", "mcg", "L"};
     ArrayAdapter<String> from_adapter, strength_adapter, unit_adapter;
     MedicineViewModel medicineViewModel;
     private Observer observer;
@@ -65,18 +65,12 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
 
             if (getIntent().getExtras().getString("from") != null || getIntent().getExtras().getString("from") != "") {
                 Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(getIntent().getExtras().getString("from"));
-            } else {
-                Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(From[0]);
             }
             if (getIntent().getExtras().getString("strength") != null || getIntent().getExtras().getString("strength") != "") {
                 Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(getIntent().getExtras().getString("strength"));
-            } else {
-                Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(Strength[0]);
             }
             if (getIntent().getExtras().getString("unit") != null || getIntent().getExtras().getString("unit") != "") {
                 Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(getIntent().getExtras().getString("unit"));
-            } else {
-                Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(Unit[0]);
             }
 
         } else {
@@ -127,8 +121,8 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
-            }else{
-                Toast.makeText(context, "Medicine Not Buy", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Medicine Not Added", Toast.LENGTH_SHORT).show();
             }
             DisplayLog.showLog(TAG, "success " + responseBodyResponse.code());
 
@@ -208,13 +202,24 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
 
                 break;
             case R.id.buttonNextInventoryDetais:
-                if (getDataBinding().materialSpinnerForm.getEditText().getText().toString().equals("none") || getDataBinding().materialSpinnerStrength.getEditText().getText().toString().equals("none")
-                        || getDataBinding().materialSpinnerUnit.getEditText().getText().toString().equals("none")) {
-                    Toast.makeText(context, "Please select valid option", Toast.LENGTH_SHORT).show();
-                } else {
-                    showProgressDialog();
-                    createMedicine(getDataBinding().editTextSearch.getText().toString(), Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).getText().toString(), getDataBinding().materialSpinnerStrength.getEditText().getText().toString(), getDataBinding().materialSpinnerUnit.getEditText().getText().toString(), Integer.parseInt(getDataBinding().textViewQuantityAndBoxesTotal.getText().toString()));
+                showProgressDialog();
+                String from = "", strength = "", unit = "";
+
+
+                if (!getDataBinding().materialSpinnerForm.getEditText().getText().toString().equals("None")) {
+                    from = getDataBinding().materialSpinnerForm.getEditText().getText().toString();
                 }
+
+                if (!getDataBinding().materialSpinnerStrength.getEditText().getText().toString().equals("None")) {
+                    strength = getDataBinding().materialSpinnerStrength.getEditText().getText().toString();
+
+                }
+                if (!getDataBinding().materialSpinnerUnit.getEditText().getText().toString().equals("None")) {
+                    unit = getDataBinding().materialSpinnerUnit.getEditText().getText().toString();
+
+                }
+                createMedicine(getDataBinding().editTextSearch.getText().toString(), from, strength, unit, Integer.parseInt(getDataBinding().textViewQuantityAndBoxesTotal.getText().toString()));
+
                 break;
         }
 

@@ -32,6 +32,19 @@
             app:layout_constraintStart_toStartOf="@+id/recyclerViewMedicine"
             app:layout_constraintTop_toBottomOf="@+id/recyclerViewMedicine" />
 
+        <View
+            android:id="@+id/viewForRemainingMedQuantity"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bottom_corner_round_white"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/imageViewAdd"
+            app:layout_constraintEnd_toEndOf="@+id/recyclerViewForRemainingMedQuantityt"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/recyclerViewForRemainingMedQuantityt"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewForRemainingMedQuantityt" />
+
         <ImageView
             android:id="@+id/imageViewBack"
             android:layout_width="@dimen/_20sdp"
@@ -234,6 +247,45 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewForRemainingMedQuantityt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_25sdp"
+            android:layout_marginLeft="@dimen/_25sdp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/viewForRemainingMedQuantity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewLowStockMed"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/textViewLowStockMed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_25sdp"
+            android:layout_marginLeft="@dimen/_25sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:fontFamily="@font/archivo_regular"
+            android:gravity="left"
+            android:text="Suggested (Low on Stock)"
+            android:textColor="@color/light1"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="normal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view4"
+            app:layout_constraintTop_toBottomOf="@+id/editTextSearch" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

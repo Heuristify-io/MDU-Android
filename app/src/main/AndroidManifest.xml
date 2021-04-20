@@ -23,6 +23,7 @@
         android:theme="@style/Theme.MDU"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
+        android:hardwareAccelerated="false"
         >
         <activity android:name=".view.activities.ConsultationHistoryActivity"></activity>
         <activity

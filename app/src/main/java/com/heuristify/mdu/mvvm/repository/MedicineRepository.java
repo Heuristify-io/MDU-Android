@@ -4,6 +4,7 @@ package com.heuristify.mdu.mvvm.repository;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -26,6 +27,7 @@ public class MedicineRepository {
     MutableLiveData<Response<MedicineList>> searchMedicineResponse = new MutableLiveData<>();
     MutableLiveData<Response<StockMedicineList>> createMedicineResponse = new MutableLiveData<>();
     MutableLiveData<Response<StockMedicineList>> getMedicineList = new MutableLiveData<>();
+    MutableLiveData<List<StockMedicine>> getRemainingStockMedicineList = new MutableLiveData<>();
     MutableLiveData<String> error_msg = new MutableLiveData<>();
     MutableLiveData<String> get_medicine_error_msg = new MutableLiveData<>();
     MutableLiveData<Boolean> isSuggestion = new MutableLiveData<>();
@@ -95,6 +97,21 @@ public class MedicineRepository {
                 error_msg.setValue(t.getMessage());
             }
         });
+    }
+
+    public MutableLiveData<List<StockMedicine>> getGetRemainingStockMedicineList() {
+        return getRemainingStockMedicineList;
+    }
+
+    public void getRemainingStockMedicineList(){
+
+        new Thread(() -> {
+            List<StockMedicine> stockMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getRemainingStockMedicine();
+            getRemainingStockMedicineList.postValue(stockMedicine);
+
+
+        }).start();
+
     }
 
     public MutableLiveData<Response<StockMedicineList>> createMedicineInventory(String medicineName, String from, String strength, String units, int quantity) {

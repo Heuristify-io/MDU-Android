@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.adapter.MedicineSearchAdapter;
+import com.heuristify.mdu.adapter.RemainingMedicineQuantityAdapter;
 import com.heuristify.mdu.base.BindingBaseActivity;
+import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.databinding.ActivityAddNewInventoryBinding;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
@@ -28,7 +30,9 @@ import java.util.List;
 public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewInventoryBinding> implements OnClickHandlerInterface {
     MedicineViewModel medicineViewModel;
     MedicineSearchAdapter medicineSearchAdapter;
+    RemainingMedicineQuantityAdapter remainingMedicineQuantityAdapter;
     private List<Medicine> medicineList;
+    private List<StockMedicine> stockMedicineList;
     boolean isShowSuggestion = false;
 
     @Override
@@ -36,6 +40,7 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
         super.onCreate(savedInstanceState);
         getDataBinding().setClickHandler(this);
         medicineList = new ArrayList<>();
+        stockMedicineList = new ArrayList<>();
         initializeRecycleView();
         goneRecycleViewAndOtherViews();
 
@@ -68,6 +73,7 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
                     medicineList.clear();
                     medicineSearchAdapter.notifyDataSetChanged();
                     goneRecycleViewAndOtherViews();
+                    visibleRemainingMEdQuantityRecycleViewAndOtherViews();
                 }
             }
 
@@ -79,23 +85,45 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
 
         medicineViewModel.getBooleanMutableLiveData().observe(this, aBoolean -> isShowSuggestion = aBoolean);
 
+        medicineViewModel.getRemainingStockMedicine();
+        medicineViewModel.getRemainingStockMedicineLists().observe(this, stockMedicines -> {
+            if(!stockMedicines.isEmpty()){
+                visibleRemainingMEdQuantityRecycleViewAndOtherViews();
+                stockMedicineList.addAll(stockMedicines);
+                remainingMedicineQuantityAdapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+
+
+    private void goneRemainingMEdQuantityRecycleViewAndOtherViews() {
+        getDataBinding().viewForRemainingMedQuantity.setVisibility(View.GONE);
+        getDataBinding().recyclerViewForRemainingMedQuantityt.setVisibility(View.GONE);
+        getDataBinding().viewForRemainingMedQuantity.setVisibility(View.GONE);
+
+
+    }
+
+    private void visibleRemainingMEdQuantityRecycleViewAndOtherViews() {
+        getDataBinding().textViewLowStockMed.setVisibility(View.VISIBLE);
+        getDataBinding().recyclerViewForRemainingMedQuantityt.setVisibility(View.VISIBLE);
+        getDataBinding().viewForRemainingMedQuantity.setVisibility(View.VISIBLE);
+
     }
 
     private void goneRecycleViewAndOtherViews() {
         getDataBinding().recyclerViewMedicine.setVisibility(View.GONE);
         getDataBinding().view4.setVisibility(View.GONE);
-//        getDataBinding().imageViewAdd.setVisibility(View.GONE);
-//        getDataBinding().textViewAddAnotherMedicine.setVisibility(View.GONE);
 
     }
 
     private void visibleRecycleViewAndOtherViews() {
         getDataBinding().recyclerViewMedicine.setVisibility(View.VISIBLE);
         getDataBinding().view4.setVisibility(View.VISIBLE);
-//        getDataBinding().imageViewAdd.setVisibility(View.VISIBLE);
-//        getDataBinding().textViewAddAnotherMedicine.setVisibility(View.VISIBLE);
 
     }
+
 
     private void getSuggestion(String toUpperCase) {
 
@@ -111,6 +139,7 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
                             medicineSearchAdapter.notifyDataSetChanged();
                         }
                         if(getDataBinding().editTextSearch.length()> 0){
+                            goneRemainingMEdQuantityRecycleViewAndOtherViews();
                             visibleRecycleViewAndOtherViews();
                             medicineList.addAll(medicineListResponse.body().getMedicineList());
                             medicineSearchAdapter.notifyDataSetChanged();
@@ -120,6 +149,8 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
                         medicineList.clear();
                         medicineSearchAdapter.notifyDataSetChanged();
                         goneRecycleViewAndOtherViews();
+//                        visibleRemainingMEdQuantityRecycleViewAndOtherViews();
+//                        remainingMedicineQuantityAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -152,6 +183,13 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
         medicineSearchAdapter = new MedicineSearchAdapter(medicineList, this);
         getDataBinding().recyclerViewMedicine.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         getDataBinding().recyclerViewMedicine.setAdapter(medicineSearchAdapter);
+        getDataBinding().recyclerViewMedicine.setItemAnimator(null);
+
+        getDataBinding().recyclerViewForRemainingMedQuantityt.setHasFixedSize(true);
+        getDataBinding().recyclerViewForRemainingMedQuantityt.setItemAnimator(new DefaultItemAnimator());
+        remainingMedicineQuantityAdapter = new RemainingMedicineQuantityAdapter(stockMedicineList, this);
+        getDataBinding().recyclerViewForRemainingMedQuantityt.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        getDataBinding().recyclerViewForRemainingMedQuantityt.setAdapter(remainingMedicineQuantityAdapter);
         getDataBinding().recyclerViewMedicine.setItemAnimator(null);
     }
 

@@ -6,10 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.mvvm.repository.MedicineRepository;
 import com.heuristify.mdu.pojo.MedicineList;
 import com.heuristify.mdu.pojo.StockMedicineList;
 
+
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -62,6 +65,14 @@ public class MedicineViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> getBooleanMutableLiveData() {
         this.isSuggestion = medicineRepository.getBooleanMutableLiveData();
         return isSuggestion;
+    }
+
+    public MutableLiveData<List<StockMedicine>> getRemainingStockMedicineLists(){
+        return medicineRepository.getGetRemainingStockMedicineList();
+    }
+
+    public void getRemainingStockMedicine(){
+        medicineRepository.getRemainingStockMedicineList();
     }
 
 

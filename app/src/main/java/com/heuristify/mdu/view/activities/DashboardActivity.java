@@ -31,8 +31,8 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDataBinding().textViewName.setText("Dr. " + SharedHelper.getKey(this, Helper.NAME));
 
+        getDataBinding().textViewName.setText("Dr. " + SharedHelper.getKey(this, Helper.NAME));
         doctorViewModel = ViewModelProviders.of(this).get(DoctorViewModel.class);
 
         observeAttendance();

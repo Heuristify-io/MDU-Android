@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.heuristify.mdu.database.entity.StockMedicine;
+import com.heuristify.mdu.pojo.Medicine;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ public interface StockMedicineDoa {
 
     @Query("SELECT * FROM doctor_med_stocks")
     List<StockMedicine> getStockMedicines();
+
+    @Query("SELECT * FROM doctor_med_stocks WHERE CAST(quantity AS INT) < 20 LIMIT 25")
+    List<StockMedicine> getRemainingStockMedicine();
 
     @Query("SELECT quantity FROM doctor_med_stocks WHERE " + "id =:id")
     String getStockMedicinesQuantity(int id);
