@@ -46,6 +46,7 @@ import com.heuristify.mdu.pojo.PatientPrescribedMedicine;
 import com.heuristify.mdu.pojo.PatientPrescribedMedicineAndDiagnosis;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -109,11 +110,21 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
         consultationViewModel.getPatientPrescribedMedicineList(consultation_id).observe(this, observer);
 
         consultationViewModel.patientImageMutableLiveDate().observe(this, s -> {
-            Log.e("image",""+s);
-            if(s != null){
-                Glide.with(this)
-                        .load(s)
-                        .into(getDataBinding().imageView3);
+            Log.e("image", "" + s);
+            if (s != null) {
+                if (s.contains("http") || s.contains("https")) {
+
+                    Glide.with(this)
+                            .load(s)
+                            .into(getDataBinding().imageView3);
+
+                } else {
+                    File file = new File(s);
+                    String filePath = file.getPath();
+                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+                    getDataBinding().imageView3.setImageBitmap(bitmap);
+                }
+
             }
         });
 
@@ -182,7 +193,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        bluetoothDeviceAdapter = new BluetoothDeviceAdapter(bluetoothList,mContext);
+        bluetoothDeviceAdapter = new BluetoothDeviceAdapter(bluetoothList, mContext);
         recyclerView.setAdapter(bluetoothDeviceAdapter);
         recyclerView.setItemAnimator(null);
         bluetoothDeviceAdapter.setOnItemClickPosition(this);
@@ -193,17 +204,17 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
     }
 
     private void listPairedDevices() {
-        if(bluetoothList != null){
+        if (bluetoothList != null) {
             bluetoothList.clear();
         }
         Set<BluetoothDevice> mPairedDevices = mBluetoothAdapter.getBondedDevices();
         if (mPairedDevices.size() > 0) {
             for (BluetoothDevice mDevice : mPairedDevices) {
-                Log.e(TAG, "PairedDevices: " +" Name "+ mDevice.getName() + " Address " + mDevice.getAddress());
+                Log.e(TAG, "PairedDevices: " + " Name " + mDevice.getName() + " Address " + mDevice.getAddress());
                 bluetoothList.add(new Bluetooth(mDevice.getName(), mDevice.getAddress()));
 
             }
-            if(bluetoothList != null){
+            if (bluetoothList != null) {
                 showDevicesDialog();
             }
         }
@@ -233,12 +244,12 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
         try {
             Bitmap bmp = BitmapFactory.decodeResource(getResources(),
                     R.drawable.assignment_dark_24px);
-            if(bmp!=null){
+            if (bmp != null) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] command = stream.toByteArray();
                 return command;
-            }else{
+            } else {
                 Log.e("Print Photo error", "the file isn't exists");
             }
         } catch (Exception e) {
@@ -273,7 +284,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 
     }
 
-    public void print(){
+    public void print() {
 
         Thread t = new Thread() {
             public void run() {
@@ -281,15 +292,15 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                     OutputStream os = mBluetoothSocket.getOutputStream();
 
                     String BILL = "";
-                    BILL =  "Patient Name: "+getDataBinding().editTextTextFullName.getText().toString()+"\n"
-                            +"Age: " +getDataBinding().editTextTextAge.getText().toString()+
-                            " \t" +"Gender: "+getDataBinding().editTextGender.getText().toString()+
-                            "\n--------------------------------\n" + "Patient Diagnosis \n"+getDataBinding().editTextTextPatientDiagnosis.getText().toString()
-                            +"\n"+
-                            "Patient Description \n"+getDataBinding().editTextTextPatientDescription.getText().toString()+"\n--------------------------------\n";
+                    BILL = "Patient Name: " + getDataBinding().editTextTextFullName.getText().toString() + "\n"
+                            + "Age: " + getDataBinding().editTextTextAge.getText().toString() +
+                            " \t" + "Gender: " + getDataBinding().editTextGender.getText().toString() +
+                            "\n--------------------------------\n" + "Patient Diagnosis \n" + getDataBinding().editTextTextPatientDiagnosis.getText().toString()
+                            + "\n" +
+                            "Patient Description \n" + getDataBinding().editTextTextPatientDescription.getText().toString() + "\n--------------------------------\n";
 
 
-                    BILL = BILL+"\nPrescribed Medicine\n";
+                    BILL = BILL + "\nPrescribed Medicine\n";
 
                     BILL = BILL + "--------------------------------\n" +
                             "Med Name            Freq" +
@@ -297,21 +308,21 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                             "Days\n";
                     BILL = BILL + "--------------------------------\n";
 
-                    for(int i =0; i<patientPrescribedMedicinesList.size(); i++){
+                    for (int i = 0; i < patientPrescribedMedicinesList.size(); i++) {
                         String medNmae = patientPrescribedMedicinesList.get(i).getMedicineName();
 
-                        if(medNmae.length() > 15){
-                            medNmae = medNmae.substring(0,15)+"...";
+                        if (medNmae.length() > 15) {
+                            medNmae = medNmae.substring(0, 15) + "...";
                         }
 
-                        int spaces = 20-medNmae.length();
+                        int spaces = 20 - medNmae.length();
                         String sp = "";
-                        for(int j=0;j<spaces;j++){
-                            sp = sp+" ";
+                        for (int j = 0; j < spaces; j++) {
+                            sp = sp + " ";
                         }
 
-                        BILL = BILL +""+medNmae+sp+
-                                ""+patientPrescribedMedicinesList.get(i).getFrequency()+"    "+patientPrescribedMedicinesList.get(i).getDays()+"\n";
+                        BILL = BILL + "" + medNmae + sp +
+                                "" + patientPrescribedMedicinesList.get(i).getFrequency() + "    " + patientPrescribedMedicinesList.get(i).getDays() + "\n";
                     }
 
                     BILL = BILL + "--------------------------------\n";
@@ -362,14 +373,13 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
     }
 
 
-
     @Override
     public void onRecyclerViewItemClick(int position) {
         mDialog.dismiss();
         String mDeviceAddress = bluetoothList.get(position).getDevice_address();
         Log.e(TAG, "Coming incoming address " + mDeviceAddress);
         mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
-        mBluetoothConnectProgressDialog = ProgressDialog.show(this,  "",mBluetoothDevice.getName() + " : " + mBluetoothDevice.getAddress(), true, false);
+        mBluetoothConnectProgressDialog = ProgressDialog.show(this, "", mBluetoothDevice.getName() + " : " + mBluetoothDevice.getAddress(), true, false);
         Thread mBlutoothConnectThread = new Thread(this::run);
         mBlutoothConnectThread.start();
 
@@ -389,6 +399,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
     @Override
     public void onBackPressed() {
         closeSocketConnection();
+        gotoDashBoard();
         finish();
     }
 

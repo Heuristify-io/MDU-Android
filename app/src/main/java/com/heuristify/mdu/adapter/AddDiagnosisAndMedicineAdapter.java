@@ -6,12 +6,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,7 +42,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     private final List<WidgetList> widgetLists;
     private final Context context;
     private final List<StoreClickWidget> storeClickWidgetList;
-    private final String[] frequencies = {"0+0+1", "0+1+0", "0+1+1", "1+0+0", "1+0+1", "1+1+0", "1+1+1",
+    private final String[] frequencies = new String[]{"0+0+1", "0+1+0", "0+1+1", "1+0+0", "1+0+1", "1+1+0", "1+1+1",
             "0+0+2", "0+2+0", "0+2+2", "2+0+0", "2+0+2", "2+2+0", "2+2+2", "0+0+3", "0+3+0", "0+3+3", "3+0+0", "3+0+3", "3+3+0", "3+3+3",
             "0+0+4", "0+4+0", "0+4+4", "4+0+0", "4+0+4", "4+4+0", "4+4+4", "0+0+5", "0+5+0", "0+5+5", "5+0+0", "5+0+5", "5+5+0", "5+5+5"};
     private ArrayAdapter frequency_adapter;
@@ -48,6 +52,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     private int positions;
     private OnItemClickPosition onItemClickPosition;
     private String showList = "showList";
+    ArrayAdapter<String> gender_adapter;
 
 
     public AddDiagnosisAndMedicineAdapter(List<WidgetList> widgetLists, Context context, List<StoreClickWidget> storeClickWidgetList) {
@@ -73,6 +78,18 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         frequency_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.materialSpinner.setAdapter(frequency_adapter);
 
+        gender_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, frequencies) {
+            @Override
+            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                tv.setTextColor(context.getResources().getColor(R.color.dark2));
+                return view;
+            }
+        };
+        gender_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holder.materialSpinner.setAdapter(gender_adapter);
+
         //initialize recycleView
         initializeRecycleView(holder);
 
@@ -83,7 +100,16 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         }
 
         if (!widgetLists.get(position).getFrequencySpinner().equalsIgnoreCase("")) {
-            holder.materialSpinner.getEditText().setText(storeClickWidgetList.get(position).getEditTextFrequency());
+//            holder.materialSpinner.setT().setText(storeClickWidgetList.get(position).getEditTextFrequency());
+            int pos = 0;
+            String text = storeClickWidgetList.get(position).getEditTextFrequency();
+            for (int i = 0; i < frequencies.length; i++) {
+                if (text.equals(frequencies[i])) {
+                    pos = i;
+                    break;
+                }
+            }
+            holder.materialSpinner.setSelection(pos);
             storeClickWidgetList.get(position).setEditTextFrequency(widgetLists.get(position).getFrequencySpinner());
         }
 
@@ -93,20 +119,36 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         }
 
 
-        holder.materialSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+//        holder.materialSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+//
+//            @Override
+//            public void onNothingSelected(@NonNull MaterialSpinner materialSpinner) {
+//
+//            }
+//
+//            @Override
+//            public void onItemSelected(@NonNull MaterialSpinner materialSpinner, View view, int i, long l) {
+//                storeClickWidgetList.get(position).setEditTextFrequency(materialSpinner.getEditText().getText().toString());
+//                widgetLists.get(position).setFrequencySpinner(materialSpinner.getEditText().getText().toString());
+//
+//            }
+//
+//        });
 
+        holder.materialSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onNothingSelected(@NonNull MaterialSpinner materialSpinner) {
-
+            public void onItemSelected(AdapterView<?> arg0, View view,
+                                       int pos, long arg3) {
+                TextView tv = (TextView) view;
+                tv.setPadding(0,0,0,20);
+                tv.setTextColor(context.getResources().getColor(R.color.dark2));
+                storeClickWidgetList.get(position).setEditTextFrequency(tv.getText().toString());
+                widgetLists.get(position).setFrequencySpinner(tv.getText().toString());
             }
 
             @Override
-            public void onItemSelected(@NonNull MaterialSpinner materialSpinner, View view, int i, long l) {
-                storeClickWidgetList.get(position).setEditTextFrequency(materialSpinner.getEditText().getText().toString());
-                widgetLists.get(position).setFrequencySpinner(materialSpinner.getEditText().getText().toString());
-
+            public void onNothingSelected(AdapterView<?> arg0) {
             }
-
         });
 
 
@@ -270,19 +312,19 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     @Override
     public void onRecyclerViewItemClick(StockMedicine stockMedicine) {
         //holders.editTextCustomSearch.setText("");
-        boolean isMedExist =false;
-        for(int i = 0; i<storeClickWidgetList.size(); i++){
-            if(storeClickWidgetList.get(i).getStockMedicine() != null){
-                if(storeClickWidgetList.get(i).getStockMedicine().getMedicineId() == stockMedicine.getMedicineId()){
+        boolean isMedExist = false;
+        for (int i = 0; i < storeClickWidgetList.size(); i++) {
+            if (storeClickWidgetList.get(i).getStockMedicine() != null) {
+                if (storeClickWidgetList.get(i).getStockMedicine().getMedicineId() == stockMedicine.getMedicineId()) {
                     isMedExist = true;
                     break;
                 }
             }
         }
 
-        if(isMedExist){
+        if (isMedExist) {
             Toast.makeText(context, "" + stockMedicine.getStock_medicine_name() + " already selected", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             prescribedMedicine(stockMedicine);
         }
 
@@ -307,7 +349,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        MaterialSpinner materialSpinner;
+        Spinner materialSpinner;
         EditText editTextDays;
         EditText editTextCustomSearch;
         //        AutoCompleteTextView autoCompleteTextView;

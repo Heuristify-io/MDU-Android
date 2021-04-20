@@ -333,7 +333,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
 
                 } else {
-                    Toast.makeText(mContext, "To register patient image or CNIC is required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                 }
             }
 
