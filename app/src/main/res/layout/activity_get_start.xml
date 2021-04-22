@@ -96,7 +96,7 @@
                 android:background="@drawable/rounded_shape"
                 android:gravity="center"
                 android:text="Get Started"
-                android:textSize="@dimen/_16sdp"
+                android:textSize="@dimen/button_text_size"
                 android:textColor="@color/white" />
 
         </LinearLayout>

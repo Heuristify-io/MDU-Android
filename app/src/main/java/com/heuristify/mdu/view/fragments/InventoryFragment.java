@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -19,6 +21,7 @@ import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.databinding.FragmentInventoryBinding;
 import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.helper.Utilities;
+import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
 import com.heuristify.mdu.view.activities.AddNewInventoryActivity;
 
 import java.util.ArrayList;
@@ -64,18 +67,13 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
         initialRecycleView();
         MyApplication.getInstance().setCurrentActivity(getActivity());
         getDataBinding().textViewDate.setText(Utilities.currentDate());
-
-        new Thread(() -> {
-
-            List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicines();
-            if (stockMedicines != null) {
-                medicineList.addAll(stockMedicines);
-                getActivity().runOnUiThread(() -> {
-                    medicineInventoryAdapter.notifyDataSetChanged();
-                });
+        MedicineViewModel medicineViewModel = ViewModelProviders.of(this).get(MedicineViewModel.class);
+        medicineViewModel.getMedicineList().observe(getViewLifecycleOwner(), stockMedicineList -> {
+            if (stockMedicineList != null) {
+                medicineList.addAll(stockMedicineList);
+                medicineInventoryAdapter.notifyDataSetChanged();
             }
-
-        }).start();
+        });
 
         getDataBinding().buttonAddInventory.setOnClickListener(v -> startActivity(new Intent(getActivity(), AddNewInventoryActivity.class)));
 

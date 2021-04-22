@@ -311,7 +311,7 @@
                 android:onClick="@{clickHandler::onClick}"
                 android:text="Next"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_16sdp" />
+                android:textSize="@dimen/button_text_size" />
 
         </LinearLayout>
 

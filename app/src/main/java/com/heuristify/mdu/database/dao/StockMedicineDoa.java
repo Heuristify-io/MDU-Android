@@ -1,5 +1,6 @@
 package com.heuristify.mdu.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -20,6 +21,9 @@ public interface StockMedicineDoa {
 
     @Query("SELECT * FROM doctor_med_stocks")
     List<StockMedicine> getStockMedicines();
+
+    @Query("SELECT * FROM doctor_med_stocks")
+    LiveData<List<StockMedicine>> getStockMedicinesUsingLiveData();
 
     @Query("SELECT * FROM doctor_med_stocks WHERE CAST(quantity AS INT) < 20 LIMIT 25")
     List<StockMedicine> getRemainingStockMedicine();

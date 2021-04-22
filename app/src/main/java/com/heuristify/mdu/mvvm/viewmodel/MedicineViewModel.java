@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.database.entity.StockMedicine;
@@ -29,10 +30,6 @@ public class MedicineViewModel extends AndroidViewModel {
     public MedicineViewModel(@NonNull Application application) {
         super(application);
         medicineRepository = new MedicineRepository();
-    }
-
-    public void getMedicineList(){
-        medicineRepository.getMedicine();
     }
 
     public MutableLiveData<Response<StockMedicineList>> getStockMedicineList(){
@@ -73,6 +70,10 @@ public class MedicineViewModel extends AndroidViewModel {
 
     public void getRemainingStockMedicine(){
         medicineRepository.getRemainingStockMedicineList();
+    }
+
+    public LiveData<List<StockMedicine>> getMedicineList(){
+        return medicineRepository.getAllMedicinesForInventoryFragment();
     }
 
 
