@@ -1,5 +1,6 @@
 package com.heuristify.mdu.mvvm.repository;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
@@ -17,9 +18,6 @@ public class ConsultationRepository {
     MutableLiveData<List<ConsultationHistory>> consultationHistoryMutableLiveData = new MutableLiveData<>();
     MutableLiveData<List<MedicineName>> patientMedicineList = new MutableLiveData<>();
 
-    MutableLiveData<Integer> totalConsultationMutableLiveDate = new MutableLiveData<>();
-    MutableLiveData<Integer> updatedConsultationMutableLiveDate = new MutableLiveData<>();
-    MutableLiveData<Integer> pendingConsultationMutableLiveDate = new MutableLiveData<>();
     MutableLiveData<String> patientImageMutableLiveDate = new MutableLiveData<>();
 
     public MutableLiveData<PatientPrescribedMedicineAndDiagnosis> getPatientPrescribedMedicineList(int consultation_id) {
@@ -73,44 +71,23 @@ public class ConsultationRepository {
     }
 
 
-    public MutableLiveData<Integer> getTotalConsultationMutableLiveDate() {
-        return totalConsultationMutableLiveDate;
-    }
-
-    public MutableLiveData<Integer> getUpdatedConsultationMutableLiveDate() {
-        return updatedConsultationMutableLiveDate;
-    }
-
-    public MutableLiveData<Integer> getPendingConsultationMutableLiveDate() {
-        return pendingConsultationMutableLiveDate;
-    }
-
     public MutableLiveData<String> getPatientImageMutableLiveDate() {
         return patientImageMutableLiveDate;
     }
 
-    public void getTotalConsultation() {
-        new Thread(() -> {
-            int count = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getTotalCount();
-            totalConsultationMutableLiveDate.postValue(count);
-        }).start();
+    public LiveData<Integer> getTotalConsultation() {
+        return MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getTotalCount();
     }
 
-    public void getUpdatedConsultation() {
-        new Thread(() -> {
-            int count = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getUpdateCount();
-            updatedConsultationMutableLiveDate.postValue(count);
-        }).start();
+    public LiveData<Integer> getUpdatedConsultation() {
+        return MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getUpdateCount();
     }
 
-    public void getPendingConsultation() {
-        new Thread(() -> {
-            int count = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getPendingCount();
-            pendingConsultationMutableLiveDate.postValue(count);
-        }).start();
+    public LiveData<Integer> getPendingConsultation() {
+        return MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().getPendingCount();
     }
 
-    public void getPatientImage(int patient_id){
+    public void getPatientImage(int patient_id) {
         new Thread(() -> {
             String image = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatientImage(patient_id);
             patientImageMutableLiveDate.postValue(image);

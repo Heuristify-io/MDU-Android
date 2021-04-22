@@ -27,10 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBinding>implements LifecycleOwner {
+public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBinding> implements LifecycleOwner {
 
 
     public static final String ARG_PARAM2;
+
     static {
         ARG_PARAM2 = "param2";
     }
@@ -78,9 +79,6 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
         observerUpdateConsultation();
         observerPendingConsultation();
 
-        consultationViewModel.getAllTotalConsultation();
-        consultationViewModel.getAllUpdatedConsultation();
-        consultationViewModel.getAllPendingConsultation();
 
     }
 
@@ -91,17 +89,19 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     }
 
     private void observerPendingConsultation() {
-        consultationViewModel.pendingConsultationObserver().observe(getViewLifecycleOwner(),integer ->
+        consultationViewModel.getAllPendingConsultation().observe(getViewLifecycleOwner(), integer ->
                 getDataBinding().textViewPending.setText(String.valueOf(integer)));
     }
 
     private void observerUpdateConsultation() {
-        consultationViewModel.updatedConsultationObserver().observe(getViewLifecycleOwner(),integer ->
+        consultationViewModel.getAllUpdatedConsultation().observe(getViewLifecycleOwner(), integer ->
                 getDataBinding().textViewUpdate.setText(String.valueOf(integer)));
     }
 
     private void observeTotalConsultation() {
-        consultationViewModel.totalConsultationObserver().observe(getViewLifecycleOwner(),integer -> getDataBinding().textViewTotal.setText(String.valueOf(integer)));
+        consultationViewModel.getAllTotalConsultation().observe(getViewLifecycleOwner(), integer ->
+                getDataBinding().textViewTotal.setText(String.valueOf(integer)));
+
     }
 
     private void getAllPatientImages() {
@@ -111,28 +111,27 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
 
     private void observeGetPatientImages() {
         dataSyncViewModel.getPatientImagesList().observe(getViewLifecycleOwner(), patientList -> {
-            DisplayLog.showLog(TAG,"imageResponse "+patientList);
+            DisplayLog.showLog(TAG, "imageResponse " + patientList);
             dismissProgressDialog();
             showProgressDialogWithText("Upload Records");
-            dataSyncViewModel.uploadRecords(Constant.patient_sync_zero,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
+            dataSyncViewModel.uploadRecords(Constant.patient_sync_zero, Constant.diagnosis_sync_zero, Constant.prescribed_medicine_sync_zero);
 
         });
 
     }
 
     private void observerErrorMsgPatientImages() {
-        dataSyncViewModel.errorMsgPatientImages().observe(getViewLifecycleOwner(), String ->{
+        dataSyncViewModel.errorMsgPatientImages().observe(getViewLifecycleOwner(), String -> {
             dismissProgressDialog();
-            DisplayLog.showLog(TAG,"imageError "+String);
+            DisplayLog.showLog(TAG, "imageError " + String);
             Toast.makeText(mContext, "Image Uploading Fail Try Again", Toast.LENGTH_SHORT).show();
-//            dataSyncViewModel.uploadRecords(Constant.patient_sync_one,Constant.diagnosis_sync_zero,Constant.prescribed_medicine_sync_zero);
         });
     }
 
     private void observerSyncDataErrorResponse() {
-        dataSyncViewModel.getSyncMutableLiveDataErrorResponse().observe(getViewLifecycleOwner(),String ->{
+        dataSyncViewModel.getSyncMutableLiveDataErrorResponse().observe(getViewLifecycleOwner(), String -> {
             dismissProgressDialog();
-            DisplayLog.showLog(TAG,"syncErrorResponse "+String);
+            DisplayLog.showLog(TAG, "syncErrorResponse " + String);
             Toast.makeText(mContext, "Unable to upload records", Toast.LENGTH_SHORT).show();
         });
 
@@ -141,13 +140,9 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     private void observerSyncDataResponse() {
         dataSyncViewModel.observeUploadRecordMutableResponsive().observe(getViewLifecycleOwner(), syncApiResponse -> {
             dismissProgressDialog();
-            if(syncApiResponse.code() == 200){
+            if (syncApiResponse.code() == 200) {
                 Toast.makeText(mContext, "Records uploaded", Toast.LENGTH_SHORT).show();
-                consultationViewModel.getAllTotalConsultation();
-                consultationViewModel.getAllUpdatedConsultation();
-                consultationViewModel.getAllPendingConsultation();
-
-            }else{
+            } else {
                 Toast.makeText(mContext, "Unable to upload records", Toast.LENGTH_SHORT).show();
             }
         });

@@ -1,5 +1,6 @@
 package com.heuristify.mdu.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -24,11 +25,11 @@ public interface DiagnosisAndMedicineDao {
     void deleteDiagnosisAndMedicines();
 
     @Query("SELECT COUNT(*) FROM consultations")
-    int getTotalCount();
+    LiveData<Integer> getTotalCount();
 
     @Query("SELECT COUNT(id) FROM consultations WHERE isSync = 1")
-    int getUpdateCount();
+    LiveData<Integer> getUpdateCount();
 
     @Query("SELECT COUNT(id) FROM consultations WHERE isSync = 0")
-    int getPendingCount();
+    LiveData<Integer> getPendingCount();
 }

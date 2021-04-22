@@ -4,9 +4,9 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.mvvm.repository.ConsultationRepository;
 import com.heuristify.mdu.pojo.ConsultationHistory;
 import com.heuristify.mdu.pojo.MedicineName;
@@ -42,35 +42,23 @@ public class ConsultationViewModel extends AndroidViewModel {
         return patientMedicineList;
     }
 
-    public MutableLiveData<Integer> totalConsultationObserver() {
-        return consultationRepository.getTotalConsultationMutableLiveDate();
-    }
-
-    public MutableLiveData<Integer> updatedConsultationObserver() {
-        return consultationRepository.getUpdatedConsultationMutableLiveDate();
-    }
-
-    public MutableLiveData<Integer> pendingConsultationObserver() {
-        return consultationRepository.getPendingConsultationMutableLiveDate();
-    }
-
-    public MutableLiveData<String> patientImageMutableLiveDate(){
+    public MutableLiveData<String> patientImageMutableLiveDate() {
         return consultationRepository.getPatientImageMutableLiveDate();
     }
 
-    public void getAllTotalConsultation() {
-        consultationRepository.getTotalConsultation();
+    public LiveData<Integer> getAllTotalConsultation() {
+        return consultationRepository.getTotalConsultation();
     }
 
-    public void getAllUpdatedConsultation() {
-        consultationRepository.getUpdatedConsultation();
+    public LiveData<Integer> getAllUpdatedConsultation() {
+        return consultationRepository.getUpdatedConsultation();
     }
 
-    public void getAllPendingConsultation() {
-        consultationRepository.getPendingConsultation();
+    public LiveData<Integer> getAllPendingConsultation() {
+        return consultationRepository.getPendingConsultation();
     }
 
-    public void getPatientImagePath(int patient_id){
+    public void getPatientImagePath(int patient_id) {
         consultationRepository.getPatientImage(patient_id);
     }
 }
