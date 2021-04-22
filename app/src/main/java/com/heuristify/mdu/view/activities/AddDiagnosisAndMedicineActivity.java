@@ -51,7 +51,6 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     private Patient patient;
     private final String TAG = "AddDiagnosisAndMedicineActivity";
     private Dialog mDialog;
-    PatientViewModel patientViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +140,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                 break;
             case R.id.buttonNextConsultation:
                 if (dataBinding.editTextPatientDiagnosis.getText().toString().isEmpty() || dataBinding.editTextPatientDiagnosisDes.getText().toString().isEmpty()) {
-                    Toast.makeText(mContext, "Patient Diagnosis and Description  Required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "please enter diagnosis and prescribed medicines", Toast.LENGTH_SHORT).show();
                 } else {
                     addIntoLocalDb();
                 }

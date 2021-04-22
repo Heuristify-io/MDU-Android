@@ -75,7 +75,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
         patientViewModel.getPatient().observe(this, patient -> {
             if (patient != null) {
-                Toast.makeText(mContext, "Patient create", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Patient created", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(AddNewConsultationActivity.this, AddDiagnosisAndMedicineActivity.class).putExtra("patient", patient));
                 finish();
             } else {

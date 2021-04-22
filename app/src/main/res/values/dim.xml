@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="button_text_size">@dimen/_15sdp</dimen>
-    <dimen name="medium_button_text_size">@dimen/_15sdp</dimen>
-    <dimen name="small_button_text_size">@dimen/_15sdp</dimen>
+    <dimen name="medium_button_text_size">@dimen/_12sdp</dimen>
+    <dimen name="small_button_text_size">@dimen/_8sdp</dimen>
 
 </resources>
