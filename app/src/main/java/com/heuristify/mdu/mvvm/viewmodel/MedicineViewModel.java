@@ -19,12 +19,10 @@ import retrofit2.Response;
 
 public class MedicineViewModel extends AndroidViewModel {
     MedicineRepository medicineRepository;
-    MutableLiveData<Response<MedicineList>> responseBodyMutableLiveData = new MutableLiveData<>();
     MutableLiveData<Response<StockMedicineList>> createMedicineResponse = new MutableLiveData<>();
     MutableLiveData<Response<StockMedicineList>> getMedicineList = new MutableLiveData<>();
     MutableLiveData<String> error_msg = new MutableLiveData<>();
     MutableLiveData<String> get_medicine_error_msg = new MutableLiveData<>();
-    MutableLiveData<Boolean> isSuggestion = new MutableLiveData<>();
 
 
     public MedicineViewModel(@NonNull Application application) {
@@ -32,21 +30,19 @@ public class MedicineViewModel extends AndroidViewModel {
         medicineRepository = new MedicineRepository();
     }
 
-    public MutableLiveData<Response<StockMedicineList>> getStockMedicineList(){
+    public MutableLiveData<Response<StockMedicineList>> getStockMedicineList() {
         this.getMedicineList = medicineRepository.getStockMedicineList();
         return getMedicineList;
     }
 
-    public MutableLiveData<Response<MedicineList>> getSearchStockMutableLiveData(String medicine) {
-        this.responseBodyMutableLiveData = medicineRepository.getSearchMedicine(medicine);
-        return responseBodyMutableLiveData;
+    public MutableLiveData<Response<MedicineList>> getSearchStockMutableLiveData() {
+        return medicineRepository.getSearchMedicine();
     }
 
-    public MutableLiveData<Response<StockMedicineList>> createMedicine(String medicineName,String from,String strength,String units,int quantity){
-        this.createMedicineResponse = medicineRepository.createMedicineInventory(medicineName,from,strength,units,quantity);
+    public MutableLiveData<Response<StockMedicineList>> createMedicine(String medicineName, String from, String strength, String units, int quantity) {
+        this.createMedicineResponse = medicineRepository.createMedicineInventory(medicineName, from, strength, units, quantity);
         return createMedicineResponse;
     }
-
 
 
     public MutableLiveData<String> getError_msg() {
@@ -59,24 +55,17 @@ public class MedicineViewModel extends AndroidViewModel {
         return get_medicine_error_msg;
     }
 
-    public MutableLiveData<Boolean> getBooleanMutableLiveData() {
-        this.isSuggestion = medicineRepository.getBooleanMutableLiveData();
-        return isSuggestion;
+    public LiveData<List<StockMedicine>> getRemainingStockMedicine() {
+        return medicineRepository.getRemainingStockMedicineList();
     }
 
-    public MutableLiveData<List<StockMedicine>> getRemainingStockMedicineLists(){
-        return medicineRepository.getGetRemainingStockMedicineList();
-    }
-
-    public void getRemainingStockMedicine(){
-        medicineRepository.getRemainingStockMedicineList();
-    }
-
-    public LiveData<List<StockMedicine>> getMedicineList(){
+    public LiveData<List<StockMedicine>> getMedicineList() {
         return medicineRepository.getAllMedicinesForInventoryFragment();
     }
 
-
+    public void getSuggestion(String suggestion) {
+        medicineRepository.getSuggestionFromServer(suggestion);
+    }
 
 
 }

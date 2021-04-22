@@ -68,6 +68,7 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
         MyApplication.getInstance().setCurrentActivity(getActivity());
         getDataBinding().textViewDate.setText(Utilities.currentDate());
         MedicineViewModel medicineViewModel = ViewModelProviders.of(this).get(MedicineViewModel.class);
+
         medicineViewModel.getMedicineList().observe(getViewLifecycleOwner(), stockMedicineList -> {
             if (stockMedicineList != null) {
                 medicineList.addAll(stockMedicineList);

@@ -26,12 +26,8 @@ public class MedicineRepository {
     MutableLiveData<Response<MedicineList>> searchMedicineResponse = new MutableLiveData<>();
     MutableLiveData<Response<StockMedicineList>> createMedicineResponse = new MutableLiveData<>();
     MutableLiveData<Response<StockMedicineList>> getMedicineList = new MutableLiveData<>();
-    MutableLiveData<List<StockMedicine>> getRemainingStockMedicineList = new MutableLiveData<>();
-    MutableLiveData<LiveData<StockMedicine>> getStockMedicineForInventoryFragment = new MutableLiveData<LiveData<StockMedicine>>();
     MutableLiveData<String> error_msg = new MutableLiveData<>();
     MutableLiveData<String> get_medicine_error_msg = new MutableLiveData<>();
-    MutableLiveData<Boolean> isSuggestion = new MutableLiveData<>();
-
 
 
     private void storeMedicineIntoDb(Response<MedicineList> response) {
@@ -45,34 +41,17 @@ public class MedicineRepository {
 
     }
 
-    public MutableLiveData<Response<MedicineList>> getSearchMedicine(String stock) {
-        isSuggestion.setValue(false);
-        getSearchMedicineList(stock);
+    public MutableLiveData<Response<MedicineList>> getSearchMedicine() {
         return searchMedicineResponse;
     }
 
-
-    public MutableLiveData<List<StockMedicine>> getGetRemainingStockMedicineList() {
-        return getRemainingStockMedicineList;
+    public LiveData<List<StockMedicine>> getRemainingStockMedicineList() {
+        return MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getRemainingStockMedicine();
     }
 
-    public MutableLiveData<LiveData<StockMedicine>> getGetStockMedicineForInventoryFragment() {
-        return getStockMedicineForInventoryFragment;
-    }
+    public LiveData<List<StockMedicine>> getAllMedicinesForInventoryFragment() {
 
-    public void getRemainingStockMedicineList(){
-
-        new Thread(() -> {
-            List<StockMedicine> stockMedicine = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getRemainingStockMedicine();
-            getRemainingStockMedicineList.postValue(stockMedicine);
-
-        }).start();
-
-    }
-
-    public LiveData<List<StockMedicine>> getAllMedicinesForInventoryFragment(){
-
-       return MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicinesUsingLiveData();
+        return MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicinesUsingLiveData();
     }
 
     public MutableLiveData<Response<StockMedicineList>> createMedicineInventory(String medicineName, String from, String strength, String units, int quantity) {
@@ -91,7 +70,7 @@ public class MedicineRepository {
                 String t1 = stockMedicine.getStock_medicine_total();
                 int add_quantity = Integer.parseInt(q1) + quantity;
                 int add_total = Integer.parseInt(t1) + quantity;
-                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().update(add_quantity, add_total,stockMedicine.getStock_medicine_medicineId());
+                MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().update(add_quantity, add_total, stockMedicine.getStock_medicine_medicineId());
             }
 
             MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
@@ -127,9 +106,6 @@ public class MedicineRepository {
         return error_msg;
     }
 
-    public MutableLiveData<Boolean> getBooleanMutableLiveData() {
-        return isSuggestion;
-    }
 
     public MutableLiveData<Response<StockMedicineList>> getStockMedicineList() {
 
@@ -156,6 +132,10 @@ public class MedicineRepository {
                 MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
             }
         }).start();
+    }
+
+    public void getSuggestionFromServer(String suggestion) {
+        getSearchMedicineList(suggestion);
     }
 
     private void callGetMedicineList() {
@@ -195,12 +175,12 @@ public class MedicineRepository {
 
                     if (response.code() == 200) {
                         //update medicine fields
-                        DisplayLog.showLog("medicine_code1",""+response.code());
+                        DisplayLog.showLog("medicine_code1", "" + response.code());
                         updateMedicine(response, medicineName, quantity);
 
                     } else if (response.code() == 201) {
                         //add new medicine
-                        DisplayLog.showLog("medicine_code2",""+response.code());
+                        DisplayLog.showLog("medicine_code2", "" + response.code());
                         addNewMedicine(response, response.body().getMedicine().getMedicine_id(), medicineName, quantity);
                     } else {
                         createMedicineResponse.setValue(response);
@@ -231,13 +211,11 @@ public class MedicineRepository {
             public void onResponse(@NonNull Call<MedicineList> call, @NonNull Response<MedicineList> response) {
                 this.call = call;
                 this.response = response;
-                isSuggestion.setValue(true);
                 searchMedicineResponse.setValue(response);
             }
 
             @Override
             public void onFailure(@NonNull Call<MedicineList> call, @NonNull Throwable t) {
-                isSuggestion.setValue(false);
                 error_msg.setValue(t.getMessage());
             }
         });

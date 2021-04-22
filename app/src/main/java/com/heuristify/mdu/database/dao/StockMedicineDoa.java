@@ -26,7 +26,7 @@ public interface StockMedicineDoa {
     LiveData<List<StockMedicine>> getStockMedicinesUsingLiveData();
 
     @Query("SELECT * FROM doctor_med_stocks WHERE CAST(quantity AS INT) < 20 LIMIT 25")
-    List<StockMedicine> getRemainingStockMedicine();
+    LiveData<List<StockMedicine>> getRemainingStockMedicine();
 
     @Query("SELECT quantity FROM doctor_med_stocks WHERE " + "id =:id")
     String getStockMedicinesQuantity(int id);
