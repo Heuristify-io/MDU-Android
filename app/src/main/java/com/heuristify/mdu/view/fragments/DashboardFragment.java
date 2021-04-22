@@ -101,8 +101,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     }
 
     private void observeTotalConsultation() {
-        consultationViewModel.totalConsultationObserver().observe(getViewLifecycleOwner(),integer ->
-                getDataBinding().textViewTotal.setText(String.valueOf(integer)));
+        consultationViewModel.totalConsultationObserver().observe(getViewLifecycleOwner(),integer -> getDataBinding().textViewTotal.setText(String.valueOf(integer)));
     }
 
     private void getAllPatientImages() {

@@ -172,6 +172,7 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                 tv.setTextColor(mContext.getResources().getColor(R.color.dark2));
                 gender = tv.getText().toString();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
@@ -229,6 +230,11 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
 
         if (!getDataBinding().editConsName.getText().toString().isEmpty()) {
 
+            if (compressedImageFile == null && getDataBinding().editConsCnicFirstTwoDigit.getText().toString().isEmpty() && getDataBinding().editConsCnicLastFourDigit.getText().toString().isEmpty()) {
+                Toast.makeText(mContext, "To register patient image or CNIC is required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (compressedImageFile != null) {
                 //leave cnic
 
@@ -243,20 +249,20 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                             String[] firstTwoDigit = getDataBinding().editConsCnicFirstTwoDigit.getText().toString().split("-");
                             String[] lastFourDigit = getDataBinding().editConsCnicLastFourDigit.getText().toString().split("-");
 
-                            if(!(Character.isDigit(firstTwoDigit[0].charAt(0)) && Character.isDigit(firstTwoDigit[0].charAt(0)))){
+                            if (!(Character.isDigit(firstTwoDigit[0].charAt(0)) && Character.isDigit(firstTwoDigit[0].charAt(0)))) {
                                 Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
-                            if(!(Character.isDigit(lastFourDigit[0].charAt(0)) && Character.isDigit(lastFourDigit[1].charAt(0)) &&
-                                    Character.isDigit(lastFourDigit[2].charAt(0)) && Character.isDigit(lastFourDigit[3].charAt(0)))){
+                            if (!(Character.isDigit(lastFourDigit[0].charAt(0)) && Character.isDigit(lastFourDigit[1].charAt(0)) &&
+                                    Character.isDigit(lastFourDigit[2].charAt(0)) && Character.isDigit(lastFourDigit[3].charAt(0)))) {
                                 Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
 
-                            String cnicFirstDigit = firstTwoDigit[0]+firstTwoDigit[1];
-                            String cnicLastDigit = lastFourDigit[0]+lastFourDigit[1]+lastFourDigit[2]+lastFourDigit[3];
+                            String cnicFirstDigit = firstTwoDigit[0] + firstTwoDigit[1];
+                            String cnicLastDigit = lastFourDigit[0] + lastFourDigit[1] + lastFourDigit[2] + lastFourDigit[3];
 
                             patientViewModel.createPatientWithImageAndCnicDetails(getDataBinding().editConsName.getText().toString(),
                                     Integer.parseInt(cnicFirstDigit),
@@ -264,29 +270,26 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                                     Integer.parseInt(getDataBinding().editConsAge.getText().toString()), gender,
                                     compressedImageFile.getPath());
 
-                        }else{
+                        } else {
                             Toast.makeText(mContext, "Gender is required", Toast.LENGTH_SHORT).show();
                         }
-                    }else{
+                    } else {
                         Toast.makeText(mContext, "Age is required", Toast.LENGTH_SHORT).show();
                     }
 
-                } else  if (TextUtils.isEmpty(getDataBinding().editConsCnicFirstTwoDigit.getText().toString()) && TextUtils.isEmpty(getDataBinding().editConsCnicLastFourDigit.getText().toString())) {
+                } else if (TextUtils.isEmpty(getDataBinding().editConsCnicFirstTwoDigit.getText().toString()) && TextUtils.isEmpty(getDataBinding().editConsCnicLastFourDigit.getText().toString())) {
                     if (!getDataBinding().editConsAge.getText().toString().isEmpty()) {
 
                         //create patient with image only
-                            patientViewModel.createPatientWithImage(getDataBinding().editConsName.getText().toString(),
-                                    Integer.parseInt(getDataBinding().editConsAge.getText().toString()), gender,
-                                    compressedImageFile.getPath());
+                        patientViewModel.createPatientWithImage(getDataBinding().editConsName.getText().toString(),
+                                Integer.parseInt(getDataBinding().editConsAge.getText().toString()), gender,
+                                compressedImageFile.getPath());
 
-                    }else{
+                    } else {
                         Toast.makeText(mContext, "Age is required", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else  if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() < 2 || getDataBinding().editConsCnicLastFourDigit.getText().toString().length() < 6){
-
-                    Toast.makeText(mContext, "To register patient image or CNIC is required", Toast.LENGTH_SHORT).show();
-
+                } else if (getDataBinding().editConsCnicFirstTwoDigit.getText().toString().length() < 2 || getDataBinding().editConsCnicLastFourDigit.getText().toString().length() < 6) {
+                    Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                 }
 
             } else {
@@ -297,19 +300,19 @@ public class AddNewConsultationActivity extends BindingBaseActivity<ActivityAddN
                     String[] firstTwoDigit = getDataBinding().editConsCnicFirstTwoDigit.getText().toString().split("-");
                     String[] lastFourDigit = getDataBinding().editConsCnicLastFourDigit.getText().toString().split("-");
 
-                    if(!(Character.isDigit(firstTwoDigit[0].charAt(0)) && Character.isDigit(firstTwoDigit[0].charAt(0)))){
+                    if (!(Character.isDigit(firstTwoDigit[0].charAt(0)) && Character.isDigit(firstTwoDigit[0].charAt(0)))) {
                         Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    if(!(Character.isDigit(lastFourDigit[0].charAt(0)) && Character.isDigit(lastFourDigit[1].charAt(0)) &&
-                            Character.isDigit(lastFourDigit[2].charAt(0)) && Character.isDigit(lastFourDigit[3].charAt(0)))){
+                    if (!(Character.isDigit(lastFourDigit[0].charAt(0)) && Character.isDigit(lastFourDigit[1].charAt(0)) &&
+                            Character.isDigit(lastFourDigit[2].charAt(0)) && Character.isDigit(lastFourDigit[3].charAt(0)))) {
                         Toast.makeText(mContext, "enter valid CNIC", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    String cnicFirstDigit = firstTwoDigit[0]+firstTwoDigit[1];
-                    String cnicLastDigit = lastFourDigit[0]+lastFourDigit[1]+lastFourDigit[2]+lastFourDigit[3];
+                    String cnicFirstDigit = firstTwoDigit[0] + firstTwoDigit[1];
+                    String cnicLastDigit = lastFourDigit[0] + lastFourDigit[1] + lastFourDigit[2] + lastFourDigit[3];
 
                     if (!getDataBinding().editConsAge.getText().toString().isEmpty()) {
 
