@@ -56,6 +56,7 @@ public class DiagnosisAndMedicine extends BaseObservable {
     private String created_date;
 
 
+
     @Bindable
     public int getId() {
         return id;

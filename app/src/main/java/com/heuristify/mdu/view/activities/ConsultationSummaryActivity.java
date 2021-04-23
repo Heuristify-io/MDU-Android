@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -30,6 +31,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.dantsu.escposprinter.EscPosCharsetEncoding;
+import com.dantsu.escposprinter.EscPosPrinter;
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
+import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
+import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
+import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
+import com.dantsu.escposprinter.exceptions.EscPosParserException;
+import com.dantsu.escposprinter.textparser.PrinterTextParserImg;
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.adapter.BluetoothDeviceAdapter;
 import com.heuristify.mdu.adapter.ConsultationSummaryAdapter;
@@ -233,7 +242,9 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 
     private void closeSocket(BluetoothSocket nOpenSocket) {
         try {
-            nOpenSocket.close();
+            if (nOpenSocket.isConnected()) {
+                nOpenSocket.close();
+            }
             Log.e(TAG, "SocketClosed");
         } catch (IOException ex) {
             Log.d(TAG, "CouldNotCloseSocket");
@@ -274,7 +285,8 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
             mBluetoothAdapter.cancelDiscovery();
             mBluetoothSocket.connect();
             mHandler.sendEmptyMessage(0);
-            print();
+//            print();
+            print2();
 
         } catch (IOException eConnectException) {
             Log.d(TAG, "CouldNotConnectToSocket", eConnectException);
@@ -372,16 +384,64 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 
     }
 
+    public void print2() {
+//        closeSocket(mBluetoothSocket);
+        String BILL = "";
+        EscPosPrinter printer = null;
+        BILL = "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, this.getApplicationContext().getResources().getDrawableForDensity(R.drawable.doctors_pana1, DisplayMetrics.DENSITY_MEDIUM)) + "</img>\n" +
+                "[L]\n" +
+                "[C]<u><font size='big'>Patient Receipt</font></u>\n" +
+                "[C]================================\n" +
+                "[L]<b>Patient Name: </b>" + getDataBinding().editTextTextFullName.getText().toString() + "\n" +
+                "[L]<b>Age:</b>" + getDataBinding().editTextTextAge.getText().toString() + "\n" +
+                "[L]<b>Gender:</b>" + getDataBinding().editTextGender.getText().toString() + "\n" +
+                "[C]--------------------------------\n" +
+                "[L]<b>Patient Diagnosis:</b>" +
+                "[L]" + getDataBinding().editTextTextPatientDiagnosis.getText().toString() + "\n" +
+                "[L]<b>Patient Description:</b>" +
+                "[L]" + getDataBinding().editTextTextPatientDescription.getText().toString() + "\n" +
+                "[C]================================\n" +
+                "[L]<font size='normal'>Prescribed Medicine :</font>" + "\n" +
+                "[C]================================\n" +
+                "[L]Medicine Name[R]Days[R]Freq" + "\n";
+
+        for (int i = 0; i < patientPrescribedMedicinesList.size(); i++) {
+            String medNmae = patientPrescribedMedicinesList.get(i).getMedicineName();
+
+            BILL = BILL + "[L]" + medNmae +
+                    "[R]" + patientPrescribedMedicinesList.get(i).getDays() + "[R]" + patientPrescribedMedicinesList.get(i).getFrequency() + "\n";
+        }
+        BILL = BILL + "[C]================================\n";
+
+        try {
+
+            printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
+            printer.printFormattedText(BILL);
+
+        } catch (EscPosConnectionException e) {
+            e.printStackTrace();
+        } catch (EscPosBarcodeException e) {
+            e.printStackTrace();
+        } catch (EscPosEncodingException e) {
+            e.printStackTrace();
+        } catch (EscPosParserException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     @Override
     public void onRecyclerViewItemClick(int position) {
         mDialog.dismiss();
-        String mDeviceAddress = bluetoothList.get(position).getDevice_address();
-        Log.e(TAG, "Coming incoming address " + mDeviceAddress);
-        mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
-        mBluetoothConnectProgressDialog = ProgressDialog.show(this, "", mBluetoothDevice.getName() + " : " + mBluetoothDevice.getAddress(), true, false);
-        Thread mBlutoothConnectThread = new Thread(this::run);
-        mBlutoothConnectThread.start();
+        print2();
+//        String mDeviceAddress = bluetoothList.get(position).getDevice_address();
+//        Log.e(TAG, "Coming incoming address " + mDeviceAddress);
+//        mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
+//        mBluetoothConnectProgressDialog = ProgressDialog.show(this, "", mBluetoothDevice.getName() + " : " + mBluetoothDevice.getAddress(), true, false);
+//        Thread mBlutoothConnectThread = new Thread(this::run);
+//        mBlutoothConnectThread.start();
 
     }
 

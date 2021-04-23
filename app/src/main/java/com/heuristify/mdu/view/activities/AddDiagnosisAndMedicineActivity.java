@@ -27,6 +27,7 @@ import com.heuristify.mdu.database.entity.DiagnosisAndMedicine;
 import com.heuristify.mdu.database.entity.PrescribedMedicine;
 import com.heuristify.mdu.databinding.ActivityAddDiagnosisAndMedicineBinding;
 import com.heuristify.mdu.helper.Constant;
+import com.heuristify.mdu.helper.LocationLatLng;
 import com.heuristify.mdu.helper.StoreClickWidget;
 import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.helper.WidgetList;
@@ -217,8 +218,8 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             DiagnosisAndMedicine diagnosisAndMedicine = new DiagnosisAndMedicine();
             diagnosisAndMedicine.setPatientDiagnosis(dataBinding.editTextPatientDiagnosis.getText().toString());
             diagnosisAndMedicine.setDescription(dataBinding.editTextPatientDiagnosisDes.getText().toString());
-            diagnosisAndMedicine.setLat(0.0);
-            diagnosisAndMedicine.setLng(0.0);
+            diagnosisAndMedicine.setLat(LocationLatLng.latitude);
+            diagnosisAndMedicine.setLng(LocationLatLng.longitude);
             diagnosisAndMedicine.setCreated_date(Utilities.currentDate());
             diagnosisAndMedicine.setPatientId(patient.getId());
 //            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicine);
