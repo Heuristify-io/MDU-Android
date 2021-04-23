@@ -81,6 +81,7 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
         checkCameraPermission();
 
 
+
         observeAttendance();
 
         dashboardFragment();

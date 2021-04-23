@@ -31,7 +31,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.dantsu.escposprinter.EscPosCharsetEncoding;
 import com.dantsu.escposprinter.EscPosPrinter;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
 import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
@@ -388,35 +387,62 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 //        closeSocket(mBluetoothSocket);
         String BILL = "";
         EscPosPrinter printer = null;
-        BILL = "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, this.getApplicationContext().getResources().getDrawableForDensity(R.drawable.doctors_pana1, DisplayMetrics.DENSITY_MEDIUM)) + "</img>\n" +
-                "[L]\n" +
-                "[C]<u><font size='big'>Patient Receipt</font></u>\n" +
-                "[C]================================\n" +
-                "[L]<b>Patient Name: </b>" + getDataBinding().editTextTextFullName.getText().toString() + "\n" +
-                "[L]<b>Age:</b>" + getDataBinding().editTextTextAge.getText().toString() + "\n" +
-                "[L]<b>Gender:</b>" + getDataBinding().editTextGender.getText().toString() + "\n" +
-                "[C]--------------------------------\n" +
-                "[L]<b>Patient Diagnosis:</b>" +
-                "[L]" + getDataBinding().editTextTextPatientDiagnosis.getText().toString() + "\n" +
-                "[L]<b>Patient Description:</b>" +
-                "[L]" + getDataBinding().editTextTextPatientDescription.getText().toString() + "\n" +
-                "[C]================================\n" +
-                "[L]<font size='normal'>Prescribed Medicine :</font>" + "\n" +
-                "[C]================================\n" +
-                "[L]Medicine Name[R]Days[R]Freq" + "\n";
 
-        for (int i = 0; i < patientPrescribedMedicinesList.size(); i++) {
-            String medNmae = patientPrescribedMedicinesList.get(i).getMedicineName();
-
-            BILL = BILL + "[L]" + medNmae +
-                    "[R]" + patientPrescribedMedicinesList.get(i).getDays() + "[R]" + patientPrescribedMedicinesList.get(i).getFrequency() + "\n";
-        }
-        BILL = BILL + "[C]================================\n";
 
         try {
-
             printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
+            BILL = "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, this.getApplicationContext().getResources().getDrawableForDensity(R.drawable.doctors_pana1, DisplayMetrics.DENSITY_MEDIUM)) + "</img>\n" +
+                    "[L]\n" +
+                    "[C]<u><font size='big'>Patient Receipt</font></u>\n" +
+                    "[C]================================\n" +
+                    "[L]<b>Patient Name: </b>" + getDataBinding().editTextTextFullName.getText().toString() + "\n" +
+                    "[L]<b>Age:</b>" + getDataBinding().editTextTextAge.getText().toString() + "\n" +
+                    "[L]<b>Gender:</b>" + getDataBinding().editTextGender.getText().toString() + "\n" +
+                    "[C]--------------------------------\n" +
+                    "[L]<b>Patient Diagnosis:</b>" +
+                    "\n"+
+                    "[L]" + getDataBinding().editTextTextPatientDiagnosis.getText().toString() + "\n" +
+                    "[L]<b>Patient Description:</b>" +
+                    "\n"+
+                    "[L]" + getDataBinding().editTextTextPatientDescription.getText().toString() + "\n" +
+                    "[C]================================\n" +
+                    "[L]<b><font size='normal'>Prescribed Medicine</font></b>" + "\n" +
+                    "[C]================================\n" +
+                    "[L]<b>Medicine Name[R]Days[R]Freq </b>" + "\n";
+
+            for (int i = 0; i < patientPrescribedMedicinesList.size(); i++) {
+                String medName = patientPrescribedMedicinesList.get(i).getMedicineName();
+                int medNameLength = medName.length();
+                int remainingLength = medNameLength;
+                String medNameToPrint = medName;
+                if (medNameLength > 16) {
+                    medNameToPrint = medName.substring(0, 16);
+                    remainingLength = medNameLength - 16;
+                }
+
+                BILL = BILL + "[L]" + medNameToPrint +
+                        "[R]" + patientPrescribedMedicinesList.get(i).getDays() + "[R]" + patientPrescribedMedicinesList.get(i).getFrequency() + "\n";
+
+                if (medNameLength > 16) {
+                    int length = Integer.parseInt(String.valueOf(medName.length() / 16));
+                    int medNameLengthParts = (int) Math.floor(length);
+                    for (int j=1; j<=medNameLengthParts; j++) {
+                        if (remainingLength > 16) {
+                            BILL = BILL + "[L]" + medName.substring(16 * j, (16 * j)+16) + "\n";
+                            remainingLength -= 16;
+                        }
+                        else {
+                            BILL = BILL + "[L]" + medName.substring(16 * j, (16 * j)+remainingLength) + "\n";
+                            remainingLength -= remainingLength;
+                        }
+                    }
+                }
+                BILL = BILL+"[L]\n";
+            }
+            BILL = BILL + "[C]================================\n";
+
             printer.printFormattedText(BILL);
+            gotoDashBoard();
 
         } catch (EscPosConnectionException e) {
             e.printStackTrace();
