@@ -1,6 +1,9 @@
 package com.heuristify.mdu.view.fragments;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +13,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.heuristify.mdu.R;
@@ -21,6 +26,7 @@ import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.mvvm.viewmodel.ConsultationViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
+import com.heuristify.mdu.mvvm.viewmodel.HelperViewModel;
 import com.heuristify.mdu.view.activities.ConsultationHistoryActivity;
 
 import java.util.ArrayList;
@@ -37,9 +43,11 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     }
 
     public static final String TAG = "DashboardFragment";
+    HelperViewModel helperViewModel;
     DataSyncViewModel dataSyncViewModel;
     ConsultationViewModel consultationViewModel;
     List<Patient> patientListContainingImage;
+    private Dialog mDialog;
 
     public DashboardFragment() {
 
@@ -52,6 +60,7 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
         patientListContainingImage = new ArrayList<>();
         dataSyncViewModel = ViewModelProviders.of(this).get(DataSyncViewModel.class);
         consultationViewModel = ViewModelProviders.of(this).get(ConsultationViewModel.class);
+        helperViewModel = ViewModelProviders.of(this).get(HelperViewModel.class);
 
     }
 
@@ -59,8 +68,8 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     public void OnCreateView(LayoutInflater inflater, @Nullable Bundle savedInstanceState) {
 
         getDataBinding().buttonAttending22.setOnClickListener(v -> {
-            showProgressDialogWithText("Uploading Images");
-            getAllPatientImages();
+            showProgressDialog();
+            helperViewModel.verifyToken();
         });
         getDataBinding().buttonAttending2.setOnClickListener(v -> startActivity(new Intent(getActivity(), ConsultationHistoryActivity.class)));
         getDataBinding().textViewDate.setText(Utilities.currentDate());
@@ -71,6 +80,8 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        observeToken();
+        observeTokenError();
         observeGetPatientImages();
         observerErrorMsgPatientImages();
         observerSyncDataResponse();
@@ -78,14 +89,31 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
         observeTotalConsultation();
         observerUpdateConsultation();
         observerPendingConsultation();
-
-
     }
 
 
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_dashboard;
+    }
+
+    private void observeTokenError() {
+        helperViewModel.getErrorMutableLiveData().observe(getViewLifecycleOwner(), s -> {
+            dismissProgressDialog();
+            showMedicineDialog();
+        });
+    }
+
+    private void observeToken() {
+        helperViewModel.getResponseMutableLiveData().observe(getViewLifecycleOwner(), responseBodyResponse -> {
+            dismissProgressDialog();
+            if (responseBodyResponse.code() == 200) {
+                showProgressDialogWithText("Uploading Images");
+                getAllPatientImages();
+            } else {
+                showMedicineDialog();
+            }
+        });
     }
 
     private void observerPendingConsultation() {
@@ -146,6 +174,25 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
                 Toast.makeText(mContext, "Unable to upload records", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showMedicineDialog() {
+        mDialog = new Dialog(mContext);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.custom_internet_connectivity_dialog_view);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mDialog.setCancelable(false);
+        mDialog.show();
+        Button btnRetry = mDialog.findViewById(R.id.buttonRetry);
+        Button btnCancel = mDialog.findViewById(R.id.buttonCancel);
+
+        btnRetry.setOnClickListener(v -> {
+            mDialog.dismiss();
+            showProgressDialog();
+            helperViewModel.verifyToken();
+        });
+
+        btnCancel.setOnClickListener(v -> mDialog.dismiss());
     }
 
 

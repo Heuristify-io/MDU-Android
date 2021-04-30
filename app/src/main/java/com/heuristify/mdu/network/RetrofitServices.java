@@ -52,4 +52,7 @@ public interface RetrofitServices {
 
     @GET("doctors/getrecords")
     Call<SyncApiResponse> getRecords();
+
+    @POST("doctors/access-token")
+    Call<ResponseBody> verifyToken();
 }

@@ -2,12 +2,17 @@ package com.heuristify.mdu.view.activities;
 
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -20,19 +25,21 @@ import com.heuristify.mdu.base.BindingBaseActivity;
 import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.databinding.ActivityAddNewInventoryBinding;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
+import com.heuristify.mdu.mvvm.viewmodel.HelperViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
 import com.heuristify.mdu.pojo.Medicine;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewInventoryBinding> implements OnClickHandlerInterface {
+    HelperViewModel helperViewModel;
     MedicineViewModel medicineViewModel;
     MedicineSearchAdapter medicineSearchAdapter;
     RemainingMedicineQuantityAdapter remainingMedicineQuantityAdapter;
     private List<Medicine> medicineList;
     private List<StockMedicine> remainingStockMedicineList;
+    private Dialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,10 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
         goneRecycleViewAndOtherViews();
 
         medicineViewModel = ViewModelProviders.of(this).get(MedicineViewModel.class);
+        helperViewModel = ViewModelProviders.of(this).get(HelperViewModel.class);
+
+        observeToken();
+        observeTokenError();
         observeSuggestion();
         observeRemainingQuantityMedicine();
 
@@ -119,6 +130,23 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
 
     }
 
+    private void observeTokenError() {
+        helperViewModel.getErrorMutableLiveData().observe(this, s -> {
+            dismissProgressDialog();
+            showMedicineDialog();
+        });
+    }
+
+    private void observeToken() {
+        helperViewModel.getResponseMutableLiveData().observe(this, responseBodyResponse -> {
+            dismissProgressDialog();
+            if (responseBodyResponse.code() == 200) {
+                gotoNextActivity();
+            } else {
+                showMedicineDialog();
+            }
+        });
+    }
 
     private void observeSuggestion() {
         medicineViewModel.getSearchStockMutableLiveData().observe(this, medicineListResponse -> {
@@ -143,7 +171,6 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
             }
         });
 
-
     }
 
     private void observeRemainingQuantityMedicine() {
@@ -153,6 +180,27 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
                 remainingStockMedicineList.addAll(stockMedicines);
                 remainingMedicineQuantityAdapter.notifyDataSetChanged();
             }
+        });
+    }
+
+    private void showMedicineDialog() {
+        mDialog = new Dialog(mContext);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.custom_internet_connectivity_dialog_view);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mDialog.setCancelable(false);
+        mDialog.show();
+        Button btnRetry = mDialog.findViewById(R.id.buttonRetry);
+        Button btnCancel = mDialog.findViewById(R.id.buttonCancel);
+
+        btnRetry.setOnClickListener(v -> {
+            mDialog.dismiss();
+            helperViewModel.verifyToken();
+        });
+
+        btnCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+            finish();
         });
     }
 
@@ -195,10 +243,12 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
                 finish();
                 break;
             case R.id.imageViewAdd:
-                gotoNextActivity();
+                showProgressDialog();
+                helperViewModel.verifyToken();
                 break;
             case R.id.textViewAddAnotherMedicine:
-                gotoNextActivity();
+                showProgressDialog();
+                helperViewModel.verifyToken();
                 break;
         }
     }

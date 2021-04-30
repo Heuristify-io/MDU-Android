@@ -17,6 +17,8 @@
     <string name="days">Days</string>
     <string name="consultation_desc">Please review the details for the consultation</string>
     <string name="deive_list">Paired Devices</string>
+    <string name="internet_connection">Make sure that Wi-Fi or mobile data is turned on, then try again</string>
+    <string name="title_internet_connection">No Internet Connection</string>
 
     <string-array name="array_gender">
         <item>Male</item>

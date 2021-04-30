@@ -1,18 +1,12 @@
 package com.heuristify.mdu.network;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.heuristify.mdu.BuildConfig;
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.helper.Helper;
 import com.heuristify.mdu.sharedPreferences.SharedHelper;
-
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -34,22 +28,19 @@ public class ApiClientAuthToken {
                     .readTimeout(100, TimeUnit.SECONDS)
                     .retryOnConnectionFailure(true)
                     .build();
-            httpClient.addInterceptor(provideHttpLoggingInterceptor()).addInterceptor(new Interceptor() {
-                @Override
-                public okhttp3.Response intercept(Chain chain) throws IOException {
-                    Request original = chain.request();
+            httpClient.addInterceptor(provideHttpLoggingInterceptor()).addInterceptor(chain -> {
+                Request original = chain.request();
 
-                    Request request = original.newBuilder()
-                            .addHeader("content-type", "application/json")
-                            .addHeader("Device-Type", "android")
-                            .addHeader("Authorization",SharedHelper.getKey(MyApplication.getInstance(), Helper.JWT))
-                            .addHeader("Connection", "close")
+                Request request = original.newBuilder()
+                        .addHeader("content-type", "application/json")
+                        .addHeader("Device-Type", "android")
+                        .addHeader("Authorization",SharedHelper.getKey(MyApplication.getInstance(), Helper.JWT))
+                        .addHeader("Connection", "close")
 
-                            .method(original.method(), original.body())
-                            .build();
+                        .method(original.method(), original.body())
+                        .build();
 
-                    return chain.proceed(request);
-                }
+                return chain.proceed(request);
             });
 
 
