@@ -14,9 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.heuristify.mdu.R;
@@ -29,7 +26,6 @@ import com.heuristify.mdu.helper.Helper;
 import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.LoginViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
-import com.heuristify.mdu.pojo.StockMedicineList;
 import com.heuristify.mdu.sharedPreferences.SharedHelper;
 
 import org.json.JSONException;
@@ -37,15 +33,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
-import retrofit2.Response;
+import static com.heuristify.mdu.R.id.textViewRequestCode;
 
 public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding> implements View.OnClickListener {
     LoginViewModel loginViewModel;
     DataSyncViewModel dataSyncViewModel;
     private final String TAG = "PinViewActivity";
-    private Observer<Response<ResponseBody>> observer;
-    private Observer<Response<StockMedicineList>> medicine_observer;
     private int count;
 
     {
@@ -64,68 +57,27 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
         dataBinding.imageViewBack.setOnClickListener(this);
         dataBinding.buttonSignIn.setOnClickListener(this);
         dataBinding.linearBack.setOnClickListener(this);
+
         medicineViewModel = ViewModelProviders.of(this).get(MedicineViewModel.class);
-
-
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
         dataSyncViewModel = ViewModelProviders.of(this).get(DataSyncViewModel.class);
+
+        observerPinCodeResponse();
+        observerPinCodeErrorResponse();
+        observerMedicineList();
+        observerMedicineListErrorResponse();
         observerSyncDataResponse();
         observerSyncDataErrorResponse();
 
-        observer = responseBodyResponse -> {
-            if (responseBodyResponse.isSuccessful()) {
-                try {
-                    JSONObject jsonObject = new JSONObject(responseBodyResponse.body().string());
-                    if (jsonObject != null) {
-                        SharedHelper.putKey(MyApplication.getInstance(), Helper.NAME, jsonObject.optString("fullName"));
-                        SharedHelper.putKey(MyApplication.getInstance(), Helper.PMDC, jsonObject.optString("pmdcNumber"));
-                        SharedHelper.putKey(MyApplication.getInstance(), Helper.PHONE, jsonObject.optString("phoneNumber"));
-                        SharedHelper.putKey(MyApplication.getInstance(), Helper.EMAIL, jsonObject.optString("email"));
-                        SharedHelper.putKey(MyApplication.getInstance(), Helper.JWT, jsonObject.optString("JWTToken"));
-                    }
-                    callGetMedicineApi();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-
-                Toast.makeText(mContext, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
-            }
+        editTextChaneListPinOne();
+        editTextChaneListPinTwo();
+        editTextChaneListPinThree();
+        editTextChaneListPinFour();
 
 
-        };
+    }
 
-        medicine_observer = responseBodyResponse -> {
-           dismissProgressDialog();
-            if (responseBodyResponse.isSuccessful()) {
-                getRecords();
-            } else {
-                showMedicineDialog(Constant.get_medicine,getResources().getString(R.string.not_get_medicine_list));
-            }
-        };
-
-
-        loginViewModel.getError_msg().observe(this, s -> {
-            Toast.makeText(mContext, "Some thing went wrong", Toast.LENGTH_SHORT).show();
-        });
-
-        loginViewModel.getProgress().observe(this, aBoolean -> {
-            if (aBoolean) {
-                showProgressDialog();
-            } else {
-                dismissProgressDialog();
-            }
-        });
-
-        medicineViewModel.get_medicine_error_msg().observe(this, s -> {
-            dismissProgressDialog();
-            showMedicineDialog(Constant.get_medicine,this.getResources().getString(R.string.not_get_medicine_list));
-        });
-
-
+    private void editTextChaneListPinOne() {
         dataBinding.editTextText1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -143,7 +95,9 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                 }
             }
         });
+    }
 
+    private void editTextChaneListPinTwo() {
         dataBinding.editTextText2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -166,7 +120,9 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
 
             }
         });
+    }
 
+    private void editTextChaneListPinThree() {
         dataBinding.editTextText3.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -189,6 +145,9 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                 }
             }
         });
+    }
+
+    private void editTextChaneListPinFour() {
 
         dataBinding.editTextText4.addTextChangedListener(new TextWatcher() {
             @Override
@@ -223,9 +182,8 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
             }
             return false;
         });
-
-
     }
+
 
     private void getRecords() {
         showProgressDialogWithCustomText("Getting Records");
@@ -235,28 +193,74 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
     private void observerSyncDataResponse() {
         dataSyncViewModel.observeUploadRecordMutableResponsive().observe(this, syncApiResponse -> {
             dismissProgressDialog();
-            if(syncApiResponse.code() == 200){
+            if (syncApiResponse.code() == 200) {
                 startActivity(new Intent(PinViewActivity.this, AttendingActivity.class));
                 finish();
 
-            }else{
+            } else {
                 Toast.makeText(mContext, "Unable to import doctor's data", Toast.LENGTH_SHORT).show();
-                showMedicineDialog(Constant.get_record,this.getResources().getString(R.string.not_get_records));
+                showMedicineDialog(Constant.get_record, this.getResources().getString(R.string.not_get_records));
             }
         });
     }
 
     private void observerSyncDataErrorResponse() {
-        dataSyncViewModel.getSyncMutableLiveDataErrorResponse().observe(this,String ->{
+        dataSyncViewModel.getSyncMutableLiveDataErrorResponse().observe(this, String -> {
             dismissProgressDialog();
-            DisplayLog.showLog(TAG,"syncErrorResponse "+String);
+            DisplayLog.showLog(TAG, "syncErrorResponse " + String);
             Toast.makeText(mContext, "Unable to import doctor's data", Toast.LENGTH_SHORT).show();
-            showMedicineDialog(Constant.get_record,this.getResources().getString(R.string.not_get_records));
+            showMedicineDialog(Constant.get_record, this.getResources().getString(R.string.not_get_records));
         });
 
     }
 
-    private void showMedicineDialog(String msg,String textViewText) {
+    private void observerPinCodeResponse() {
+        loginViewModel.getPinResponse().observe(this, responseBodyResponse -> {
+            dismissProgressDialog();
+            if (responseBodyResponse.isSuccessful()) {
+                try {
+                    assert responseBodyResponse.body() != null;
+                    JSONObject jsonObject = new JSONObject(responseBodyResponse.body().string());
+                    SharedHelper.putKey(MyApplication.getInstance(), Helper.NAME, jsonObject.optString("fullName"));
+                    SharedHelper.putKey(MyApplication.getInstance(), Helper.PMDC, jsonObject.optString("pmdcNumber"));
+                    SharedHelper.putKey(MyApplication.getInstance(), Helper.PHONE, jsonObject.optString("phoneNumber"));
+                    SharedHelper.putKey(MyApplication.getInstance(), Helper.EMAIL, jsonObject.optString("email"));
+                    SharedHelper.putKey(MyApplication.getInstance(), Helper.JWT, jsonObject.optString("JWTToken"));
+                    callGetMedicineApi();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(mContext, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
+
+    private void observerPinCodeErrorResponse() {
+        loginViewModel.getPinCodeError_msg().observe(this, s -> {
+            dismissProgressDialog();
+            Toast.makeText(mContext, "Some thing went wrong", Toast.LENGTH_SHORT).show();
+        });
+
+    }
+
+    private void observerMedicineList() {
+        medicineViewModel.getStockMedicineList().observe(this, stockMedicineListResponse -> {
+            dismissProgressDialog();
+            if (stockMedicineListResponse.isSuccessful()) {
+                getRecords();
+            } else {
+                showMedicineDialog(Constant.get_medicine, getResources().getString(R.string.not_get_medicine_list));
+            }
+
+        });
+    }
+
+    private void showMedicineDialog(String msg, String textViewText) {
         mDialog = new Dialog(mContext);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.custom_medicine_dialog_view);
@@ -270,9 +274,9 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
 
         btnRetry.setOnClickListener(v -> {
             mDialog.dismiss();
-            if(msg.equals("records")){
+            if (msg.equals("records")) {
                 getRecords();
-            }else{
+            } else {
                 callGetMedicineApi();
             }
         });
@@ -285,13 +289,21 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
 
     private void callGetMedicineApi() {
         showProgressDialog();
-        medicineViewModel.getStockMedicineList().observe((AppCompatActivity) mContext, medicine_observer);
+        medicineViewModel.GetMedicineListForPinView();
+
     }
 
     private void sendLoginPinCode(String toStrin1, String toString2, String toString3, String toString4) {
         String pin_code = toStrin1 + toString2 + toString3 + toString4;
-        loginViewModel.getLoginRepository(Integer.parseInt(pin_code)).observe((AppCompatActivity) mContext, observer);
+        showProgressDialog();
+        loginViewModel.sendPins(Integer.parseInt(pin_code));
+    }
 
+    private void observerMedicineListErrorResponse() {
+        medicineViewModel.get_medicine_error_msg().observe(this, s -> {
+            dismissProgressDialog();
+            showMedicineDialog(Constant.get_medicine, mContext.getResources().getString(R.string.not_get_medicine_list));
+        });
     }
 
     @Override
@@ -310,7 +322,7 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
         } else if (v.getId() == R.id.linearBack) {
             count++;
             finishActivity();
-        } else if (v.getId() == R.id.textViewRequestCode) {
+        } else if (v.getId() == textViewRequestCode) {
         } else if (v.getId() == R.id.buttonSignIn) {
             if (dataBinding.editTextText1.getText().toString().length() > 0 && dataBinding.editTextText2.getText().toString().length() > 0 && dataBinding.editTextText3.getText().toString().length() > 0
                     && dataBinding.editTextText4.getText().toString().length() > 0) {

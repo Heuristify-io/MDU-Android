@@ -198,7 +198,6 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                         }
                     }
 
-
                     if (i == storeClickWidgetList.size() - 1) {
                         addDiagnosisAndPrescribedMedicine();
                         break;
@@ -222,7 +221,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             diagnosisAndMedicine.setLng(LocationLatLng.longitude);
             diagnosisAndMedicine.setCreated_date(Utilities.currentDate());
             diagnosisAndMedicine.setPatientId(patient.getId());
-//            PatientWithDiagnosisAndMedicine patientWithDiagnosisAndMedicine = new PatientWithDiagnosisAndMedicine(patient, diagnosisAndMedicine);
+
             int id = (int) MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().diagnosisAndMedicineDao().insertPatientDiagnosis(diagnosisAndMedicine);
             if (id > 0) {
                 for (int i = 0; i < storeClickWidgetList.size(); i++) {
@@ -238,7 +237,6 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                     prescribedMedicineList.add(prescribedMedicine);
                 }
 
-//                PrescribedMedicineWithConsultation prescribedMedicineWithConsultation = new PrescribedMedicineWithConsultation(diagnosisAndMedicine, prescribedMedicineList);
                 long[] ids = MyApplication.getInstance().getLocalDb(mContext).getAppDatabase().prescribedMedicineDao().insertPrescribedMedicine(prescribedMedicineList);
                 if (ids.length > 0) {
                     runOnUiThread(() -> Toast.makeText(mContext, "Consultation Added Successfully", Toast.LENGTH_SHORT).show());

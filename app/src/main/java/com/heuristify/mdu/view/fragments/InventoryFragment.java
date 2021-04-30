@@ -2,18 +2,13 @@ package com.heuristify.mdu.view.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.adapter.MedicineInventoryAdapter;
 import com.heuristify.mdu.base.BindingBaseFragment;
@@ -23,7 +18,6 @@ import com.heuristify.mdu.database.entity.StockMedicine;
 import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
 import com.heuristify.mdu.view.activities.AddNewInventoryActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 

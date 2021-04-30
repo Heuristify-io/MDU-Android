@@ -1,9 +1,6 @@
 package com.heuristify.mdu.mvvm.repository;
 
 
-import android.util.Patterns;
-import android.webkit.URLUtil;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -21,10 +18,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -36,7 +33,6 @@ import retrofit2.Response;
 
 public class DataSyncRepository {
     MutableLiveData<List<Patient>> patientImageListMutableLiveData = new MutableLiveData<>();
-    MutableLiveData<String> patientImageSynFailMutableLiveData = new MutableLiveData<>();
     MutableLiveData<Response<SyncApiResponse>> syncRecordMutableLiveData = new MutableLiveData<>();
     MutableLiveData<String> patientImageListMutableLiveDataError = new MutableLiveData<>();
     MutableLiveData<String> syncMutableLiveDataError = new MutableLiveData<>();
@@ -44,8 +40,6 @@ public class DataSyncRepository {
     List<String> attendanceList = new ArrayList<>();
     List<DiagnosisAndMedicine> diagnosisAndMedicineList = new ArrayList<>();
     List<PrescribedMedicine> prescribedMedicineList = new ArrayList<>();
-
-
     int count = -1;
 
     public MutableLiveData<List<Patient>> getAllPatientMutableLiveData() {
@@ -64,9 +58,6 @@ public class DataSyncRepository {
         return syncMutableLiveDataError;
     }
 
-    public MutableLiveData<String> getPatientImageSynFailMutableLiveData() {
-        return patientImageSynFailMutableLiveData;
-    }
 
     public void getPatientImageList(int sync) {
         new Thread(() -> {
@@ -78,10 +69,10 @@ public class DataSyncRepository {
                         File file = new File(patientList2.get(i).getImage_path());
                         if (file.exists()) {
                             patientList.add(patientList2.get(i));
-                        }else{
+                        } else {
                             //remove image path update sync to 0
                             MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().updatePatient(patientList2.get(i).getId(),
-                                    "",sync);
+                                    "", sync);
                         }
                     }
                 }
@@ -101,7 +92,7 @@ public class DataSyncRepository {
         }).start();
     }
 
-    public void getRecords(){
+    public void getRecords() {
 
         Call<SyncApiResponse> apiResponseCall = MyApplication.getInstance().getRetrofitServicesWithToken().getRecords();
         apiResponseCall.enqueue(new Callback<SyncApiResponse>() {
@@ -117,18 +108,9 @@ public class DataSyncRepository {
 
             @Override
             public void onFailure(@NonNull Call<SyncApiResponse> call, @NonNull Throwable t) {
-                syncMutableLiveDataError.setValue(t.getMessage() + " " + t.getStackTrace() + " " + call.toString() + " " + t.toString());
+                syncMutableLiveDataError.setValue(t.getMessage() + " " + Arrays.toString(t.getStackTrace()) + " " + call.toString() + " " + t.toString());
             }
         });
-    }
-
-    private boolean IsValidUrl(String urlString) {
-        try {
-            URL url = new URL(urlString);
-            return URLUtil.isValidUrl(urlString) && Patterns.WEB_URL.matcher(urlString).matches();
-        } catch (MalformedURLException ignored) {
-        }
-        return false;
     }
 
     public void uploadRecord(int patient_sync, int consultation_sync, int prescribed_medicine_syn) {
@@ -216,24 +198,21 @@ public class DataSyncRepository {
 
             @Override
             public void onFailure(@NonNull Call<SyncApiResponse> call, @NonNull Throwable t) {
-                syncMutableLiveDataError.setValue(t.getMessage() + " " + t.getStackTrace() + " " + call.toString() + " " + t.toString());
+                syncMutableLiveDataError.setValue(t.getMessage() + " " + Arrays.toString(t.getStackTrace()) + " " + call.toString() + " " + t.toString());
             }
         });
     }
 
     private void deleteAndRecreateTableAgain(Response<SyncApiResponse> response) {
-
         try {
-
             new Thread(() -> {
-
                 MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().deleteStockMedicines();
                 MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().doctorAttendanceDao().deleteDoctorAttendance();
                 MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().deletePatients();
                 MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().diagnosisAndMedicineDao().deleteDiagnosisAndMedicines();
                 MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().prescribedMedicineDao().deletePrescribedMedicines();
 
-                for (int i = 0; i < response.body().getStockMedicineList().size(); i++) {
+                for (int i = 0; i < Objects.requireNonNull(response.body()).getStockMedicineList().size(); i++) {
                     MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().insertStockMedicine(response.body().getStockMedicineList().get(i));
                 }
 
@@ -251,8 +230,6 @@ public class DataSyncRepository {
                 List<PrescribedMedicine> prescribedMedicineList = response.body().getPrescribedMedicineList();
                 MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().prescribedMedicineDao().insertPrescribedMedicine(prescribedMedicineList);
                 syncRecordMutableLiveData.postValue(response);
-
-
             }).start();
 
         } catch (Exception e) {
@@ -266,32 +243,29 @@ public class DataSyncRepository {
     private void uploadImagesToServer() {
         count++;
         File file = new File(patientList.get(count).getImage_path());
-        RequestBody mFile = RequestBody.create(file,MediaType.parse("image/*"));
+        RequestBody mFile = RequestBody.create(file, MediaType.parse("image/*"));
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("image", file.getName(), mFile);
-        RequestBody filename = RequestBody.create(file.getName(),MediaType.parse("text/plain"));
+        RequestBody filename = RequestBody.create(file.getName(), MediaType.parse("text/plain"));
         Call<ResponseBody> call = MyApplication.getInstance().getRetrofitServicesWithToken().uploadImages(fileToUpload, filename);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 DisplayLog.showLog("upload_image", "response22 " + response.code());
                 try {
-
                     if (response.code() == 200) {
                         assert response.body() != null;
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         if (jsonObject.optBoolean("success")) {
-                            updatePatientImageLink(patientList.get(count).getId(), jsonObject.optString("imageUrl"), Constant.patient_sync_one);
+                            updatePatientImageLink(patientList.get(count).getId(), jsonObject.optString("imageUrl"));
 
                             if (count < patientList.size() - 1) {
                                 uploadImagesToServer();
                             } else {
-
                                 clearCountAndImageList();
                                 patientImageListMutableLiveData.setValue(patientList);
                             }
 
-                        }else{
-
+                        } else {
                             //image upload fail
                             clearCountAndImageList();
                             patientImageListMutableLiveDataError.setValue(response.message());
@@ -315,14 +289,13 @@ public class DataSyncRepository {
                 DisplayLog.showLog("upload_image", "response222 " + t.getMessage());
                 clearCountAndImageList();
                 patientImageListMutableLiveDataError.setValue(t.getMessage());
-
             }
         });
     }
 
-    private void updatePatientImageLink(int id, String imageUrl, int sync) {
+    private void updatePatientImageLink(int id, String imageUrl) {
         BaseUrl urlHelper = new BaseUrl();
-        new Thread(() -> MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().updatePatient(id, (urlHelper.BASE_URL + imageUrl), sync)).start();
+        new Thread(() -> MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().updatePatient(id, (urlHelper.BASE_URL + imageUrl), Constant.patient_sync_one)).start();
     }
 
 

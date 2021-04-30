@@ -15,29 +15,23 @@ import retrofit2.Response;
 
 public class LoginViewModel extends AndroidViewModel {
     LoginRepository loginRepository;
-    MutableLiveData<Response<ResponseBody>> responseBodyMutableLiveData = new MutableLiveData<>();
-    MutableLiveData<String> error_msg = new MutableLiveData<>();
-    MutableLiveData<Boolean> progress = new MutableLiveData<>();
-
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
         loginRepository = new LoginRepository();
     }
 
-    public MutableLiveData<Response<ResponseBody>> getLoginRepository(int pin_code) {
-        this.responseBodyMutableLiveData = loginRepository.getResponseBodyMutableLiveData(pin_code);
-        return responseBodyMutableLiveData;
+    public MutableLiveData<Response<ResponseBody>> getPinResponse(){
+        return loginRepository.getResponseBodyMutableLiveData();
     }
 
-    public MutableLiveData<String> getError_msg(){
-        this.error_msg = loginRepository.getError_msg();
-        return error_msg;
+    public MutableLiveData<String> getPinCodeError_msg(){
+        return loginRepository.getError_msg();
     }
 
-    public MutableLiveData<Boolean> getProgress(){
-        this.progress = loginRepository.getProgress();
-        return progress;
+
+    public void sendPins(int pin_code){
+        loginRepository.sendUserPinToServer(pin_code);
     }
 
 }

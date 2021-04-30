@@ -173,9 +173,9 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
     }
 
     private void gotoDashBoard() {
-        Intent intent = new Intent(ConsultationSummaryActivity.this, DashboardActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+//        Intent intent = new Intent(ConsultationSummaryActivity.this, DashboardActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
         finish();
     }
 
@@ -257,8 +257,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
             if (bmp != null) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] command = stream.toByteArray();
-                return command;
+                return stream.toByteArray();
             } else {
                 Log.e("Print Photo error", "the file isn't exists");
             }
@@ -302,10 +301,10 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                 try {
                     OutputStream os = mBluetoothSocket.getOutputStream();
 
-                    String BILL = "";
+                    String BILL;
                     BILL = "Patient Name: " + getDataBinding().editTextTextFullName.getText().toString() + "\n"
-                            + "Age: " + getDataBinding().editTextTextAge.getText().toString() +
-                            " \t" + "Gender: " + getDataBinding().editTextGender.getText().toString() +
+                            + "Age:  " + getDataBinding().editTextTextAge.getText().toString() +
+                            " \t" + "Gender:  " + getDataBinding().editTextGender.getText().toString() +
                             "\n--------------------------------\n" + "Patient Diagnosis \n" + getDataBinding().editTextTextPatientDiagnosis.getText().toString()
                             + "\n" +
                             "Patient Description \n" + getDataBinding().editTextTextPatientDescription.getText().toString() + "\n--------------------------------\n";
@@ -327,9 +326,9 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                         }
 
                         int spaces = 20 - medNmae.length();
-                        String sp = "";
+                        StringBuilder sp = new StringBuilder();
                         for (int j = 0; j < spaces; j++) {
-                            sp = sp + " ";
+                            sp.append(" ");
                         }
 
                         BILL = BILL + "" + medNmae + sp +
@@ -385,8 +384,8 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 
     public void print2() {
 //        closeSocket(mBluetoothSocket);
-        String BILL = "";
-        EscPosPrinter printer = null;
+        String BILL;
+        EscPosPrinter printer;
 
 
         try {
@@ -502,12 +501,10 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
     public void onActivityResult(int mRequestCode, int mResultCode,
                                  Intent mDataIntent) {
         super.onActivityResult(mRequestCode, mResultCode, mDataIntent);
-        switch (mRequestCode) {
-            case REQUEST_ENABLE_BT:
-                if (mResultCode == Activity.RESULT_OK) {
-                    listPairedDevices();
-                }
-                break;
+        if (mRequestCode == REQUEST_ENABLE_BT) {
+            if (mResultCode == Activity.RESULT_OK) {
+                listPairedDevices();
+            }
         }
     }
 

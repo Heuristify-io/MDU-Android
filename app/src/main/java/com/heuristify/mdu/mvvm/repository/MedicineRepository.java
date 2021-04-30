@@ -94,9 +94,6 @@ public class MedicineRepository {
         }).start();
     }
 
-    public MutableLiveData<Response<StockMedicineList>> getGetMedicineList() {
-        return getMedicineList;
-    }
 
     public MutableLiveData<String> getGet_medicine_error_msg() {
         return get_medicine_error_msg;
@@ -108,9 +105,7 @@ public class MedicineRepository {
 
 
     public MutableLiveData<Response<StockMedicineList>> getStockMedicineList() {
-
-        new Handler(Looper.getMainLooper()).postDelayed(this::callGetMedicineList, 200);
-
+//        new Handler(Looper.getMainLooper()).postDelayed(this::callGetMedicineList, 200);
         return getMedicineList;
     }
 
@@ -136,6 +131,10 @@ public class MedicineRepository {
 
     public void getSuggestionFromServer(String suggestion) {
         getSearchMedicineList(suggestion);
+    }
+
+    public void getMedicineForPinView(){
+        callGetMedicineList();
     }
 
     private void callGetMedicineList() {

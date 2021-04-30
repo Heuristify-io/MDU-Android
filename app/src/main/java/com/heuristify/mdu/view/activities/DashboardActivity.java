@@ -74,25 +74,16 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getDataBinding().textViewName.setText("Dr. " + SharedHelper.getKey(this, Helper.NAME));
         doctorViewModel = ViewModelProviders.of(this).get(DoctorViewModel.class);
         init();
         checkCameraPermission();
-
-
-
         observeAttendance();
-
         dashboardFragment();
         getDataBinding().textViewDashboard.setOnClickListener(v -> dashboardFragment());
-
         getDataBinding().textViewInventory.setOnClickListener(v -> inventoryFragment());
-
         getDataBinding().imageViewDashboard.setOnClickListener(v -> dashboardFragment());
-
         getDataBinding().imageViewInventory.setOnClickListener(v -> inventoryFragment());
-
         getDataBinding().floatingActionButton.setOnClickListener(v -> doctorViewModel.checkPatientAttendance(Utilities.currentDate()));
 
     }
@@ -213,6 +204,7 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
                                 // result in onActivityResult().
                                 ResolvableApiException rae = (ResolvableApiException) e;
                                 rae.startResolutionForResult(DashboardActivity.this, REQUEST_CHECK_SETTINGS);
+
                             } catch (IntentSender.SendIntentException sie) {
                                 Log.e(TAG, "PendingIntent unable to execute request.");
                             }
@@ -260,14 +252,11 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
         updateLocation();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
 
-        if (requestingLocationUpdates) {
-            // pausing location updates
-            stopLocationUpdates();
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopLocationUpdates();
     }
 
     @Override
@@ -311,8 +300,8 @@ public class DashboardActivity extends BindingBaseActivity<ActivityDashboardBind
         if (myFragment != null && myFragment.isVisible()) {
             finish();
         } else {
-            darkDashboard();
-            fragmentManager.popBackStack();
+            dashboardFragment();
+
         }
     }
 
