@@ -30,7 +30,7 @@ import retrofit2.Response;
 public class AddNewInventoryDetailsActivity extends BindingBaseActivity<ActivityAddNewInventoryDetailsBinding> implements OnClickHandlerInterface {
     String[] From = {"None", "Syrup", "Tablet", "Capsules", "Drops", "Topical", "Inhalers", "Injections", "Implants or patches"};
     String[] Strength = {"None", "500", "600", "700", "800", "800", "900"};
-    String[] Unit = {"None", "kg", "g", "mg", "mcg", "L", "ml", "cc", "mol", "mmol", "", "gm", "mm"};
+    String[] Unit = {"None", "kg", "g", "mg", "mcg", "L", "ml", "cc", "mol", "mmol", "gm", "mm"};
     ArrayAdapter<String> from_adapter, strength_adapter, unit_adapter;
     MedicineViewModel medicineViewModel;
     private Observer observer;
