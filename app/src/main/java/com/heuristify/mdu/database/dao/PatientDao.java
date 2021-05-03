@@ -1,5 +1,6 @@
 package com.heuristify.mdu.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -24,7 +25,7 @@ public interface PatientDao {
     List<Patient> getAllPatients(int sync);
 
     @Query("SELECT id from patients WHERE id =:patient_id AND isSync =:syn")
-    int checkPatient(int patient_id,int syn);
+    LiveData<Integer> checkPatient(int patient_id, int syn);
 
     @Query("SELECT * FROM patients WHERE fullName =:name AND cnicFirst2Digits =:firstTwoDigit AND cnicLast4Digits =:lastFourDigit AND age =:age AND gender =:gen")
     Patient getPatient(String name, int firstTwoDigit, int lastFourDigit, int age,String gen);

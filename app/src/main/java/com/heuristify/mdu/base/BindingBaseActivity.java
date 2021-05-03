@@ -23,7 +23,7 @@ public abstract class BindingBaseActivity<DB extends ViewDataBinding> extends Ap
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        dataBinding = DataBindingUtil.setContentView(this,getLayoutRes());
+        dataBinding = DataBindingUtil.setContentView(this, getLayoutRes());
         customProgressDialog = new CustomProgressDialog(mContext);
         MyApplication.getInstance().setCurrentActivity(this);
     }
@@ -36,15 +36,11 @@ public abstract class BindingBaseActivity<DB extends ViewDataBinding> extends Ap
     }
 
     public void showProgressDialog() {
-            customProgressDialog.showProgress();
-
-
+        customProgressDialog.showProgress();
     }
 
     public void showProgressDialogWithCustomText(String msg) {
         customProgressDialog.showProgressWithCustomText(msg);
-
-
     }
 
     public void dismissProgressDialog() {
@@ -52,8 +48,7 @@ public abstract class BindingBaseActivity<DB extends ViewDataBinding> extends Ap
     }
 
 
-
-    public void logOut(){
+    public void logOut() {
         SharedHelper.deleteAllSharedPrefs(mContext);
     }
 

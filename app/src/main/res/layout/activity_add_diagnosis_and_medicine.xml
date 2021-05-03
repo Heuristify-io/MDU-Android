@@ -136,7 +136,7 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:backgroundTint="@color/dark2"
                     android:imeOptions="actionNext"
-                    android:inputType="textPersonName"
+                    android:inputType="textMultiLine"
                     android:textColor="@color/dark"
                     android:textColorHint="@color/dark" />
 
@@ -164,7 +164,7 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:backgroundTint="@color/dark2"
                     android:imeOptions="actionNext"
-                    android:inputType="textPersonName"
+                    android:inputType="textMultiLine"
                     android:textColor="@color/dark"
                     android:textColorHint="@color/dark" />
 
@@ -257,44 +257,6 @@
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="normal" />
 
-                <LinearLayout
-                    android:id="@+id/linear"
-                    android:layout_below="@+id/textViewAddAnotherMedicine"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:background="@drawable/top_corner_round_dark"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/archivo_regular"
-                        android:gravity="left"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:layout_gravity="center"
-                        android:text="Patient History"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_12sdp"
-                        android:textStyle="normal" />
-
-
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewPatientHistory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/linear"
-                    android:background="@drawable/bottom_corner_round_white"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp" />
-
-
 
             </RelativeLayout>
 
@@ -314,6 +276,44 @@
                 android:text="Next"
                 android:textColor="@color/white"
                 android:textSize="@dimen/button_text_size" />
+
+            <LinearLayout
+                android:id="@+id/linear"
+                android:layout_below="@+id/buttonNextConsultation"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/top_corner_round_dark"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/archivo_regular"
+                    android:gravity="left"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_gravity="center"
+                    android:text="Patient History"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewPatientHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linear"
+                android:background="@drawable/bottom_corner_round_white"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp" />
 
         </LinearLayout>
 

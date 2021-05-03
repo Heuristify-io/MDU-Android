@@ -1,17 +1,14 @@
 package com.heuristify.mdu.mvvm.repository;
 
-import android.content.Intent;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.pojo.PatientHistoryList;
-import com.heuristify.mdu.view.activities.AddDiagnosisAndMedicineActivity;
-import com.heuristify.mdu.view.activities.AddNewConsultationActivity;
 
 
 import retrofit2.Call;
@@ -23,12 +20,10 @@ public class PatientRepository {
 
     MutableLiveData<Response<PatientHistoryList>> responseMutableLiveData = new MutableLiveData<>();
     MutableLiveData<String> error_msg = new MutableLiveData<>();
-    MutableLiveData<Integer> checkPatientMutableLiveData = new MutableLiveData<>();
     MutableLiveData<Patient> patientMutableLiveData = new MutableLiveData<>();
 
 
-    public MutableLiveData<Response<PatientHistoryList>> getPatientHistory(int patient_id) {
-        callPatientHistoryApi(patient_id);
+    public MutableLiveData<Response<PatientHistoryList>> getPatientHistory() {
         return responseMutableLiveData;
     }
 
@@ -36,15 +31,13 @@ public class PatientRepository {
         return error_msg;
     }
 
-    public MutableLiveData<Integer> getCheckPatientMutableLiveData() {
-        return checkPatientMutableLiveData;
-    }
-
     public MutableLiveData<Patient> getPatientMutableLiveData() {
         return patientMutableLiveData;
     }
 
-    private void callPatientHistoryApi(int patient_id) {
+
+
+    public void callPatientHistoryApi(int patient_id) {
         Call<PatientHistoryList> patientHistoryListCall = MyApplication.getInstance().getRetrofitServicesWithToken().getPatientHistory(patient_id);
         patientHistoryListCall.enqueue(new Callback<PatientHistoryList>() {
             @Override
@@ -59,11 +52,8 @@ public class PatientRepository {
         });
     }
 
-    public void checkPatient(int patient_id, int sync) {
-        new Thread(() -> {
-            int id = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().checkPatient(patient_id, sync);
-            checkPatientMutableLiveData.postValue(id);
-        }).start();
+    public LiveData<Integer> checkPatient(int patient_id, int sync) {
+        return MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().checkPatient(patient_id, sync);
     }
 
     public void patientWithOutImage(String name, int cnicFirstTwoDigit, int cnicLastFourDigit, int age, String gender) {
@@ -102,7 +92,7 @@ public class PatientRepository {
             patient.setGender(gender);
             patient.setImage_path(image);
             int insert = (int) MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().insertPatient(patient);
-            Patient patient2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatientWithImage(name, age, gender,image);
+            Patient patient2 = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().patientDao().getPatientWithImage(name, age, gender, image);
             patientMutableLiveData.postValue(patient2);
         }).start();
 

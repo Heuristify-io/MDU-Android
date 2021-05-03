@@ -1,6 +1,6 @@
 package com.heuristify.mdu.view.activities;
 
-import androidx.lifecycle.Observer;
+
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,7 +41,6 @@ import com.heuristify.mdu.pojo.PatientHistoryList;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Response;
 
 public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<ActivityAddDiagnosisAndMedicineBinding> implements OnClickHandlerInterface, OnItemClickPosition {
     private List<WidgetList> widgetLists;
@@ -52,11 +51,11 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
     private Patient patient;
     private final String TAG = "AddDiagnosisAndMedicineActivity";
     private Dialog mDialog;
+    private PatientViewModel patientViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Observer observer;
         MyApplication.getInstance().setCurrentActivity(this);
         getDataBinding().setClickHandler(this);
         if (getIntent().getExtras() != null) {
@@ -65,10 +64,10 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
 
 
         initializeRecycleView();
-        PatientViewModel patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
+        patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
 
+        patientViewModel.getPatientResponseMutableLiveData().observe(this, responseBodyResponse -> {
 
-        observer = (Observer<Response<PatientHistoryList>>) responseBodyResponse -> {
             dismissProgressDialog();
             if (responseBodyResponse.isSuccessful()) {
                 PatientHistoryList patientHistoryList1 = responseBodyResponse.body();
@@ -77,22 +76,28 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                     patientHistoryAdapter.notifyDataSetChanged();
                 }
             }
-        };
+        });
 
         patientViewModel.getError_msg().observe(this, s -> dismissProgressDialog());
 
         Log.e("patient_id", "" + patient.getId());
 
-        patientViewModel.checkPatient().observe(this, integer -> {
+        patientViewModel.checkPatientSync(patient.getId(), Constant.patient_sync_one).observe(this, integer -> {
+
             Log.e("patient_id2", "" + integer);
-            if (integer > 0) {
-                showProgressDialog();
-                patientViewModel.getPatientResponseMutableLiveData(patient.getId()).observe(this, observer);
+            if (integer != null) {
+                if (integer > 0) {
+                    showProgressDialog();
+                    callPatientHistory();
+                }
             }
         });
-        patientViewModel.checkPatientSync(patient.getId(), Constant.patient_sync_one);
 
 
+    }
+
+    private void callPatientHistory() {
+        patientViewModel.callPatientHistoryApi(patient.getId());
     }
 
     @Override
@@ -159,7 +164,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
         mDialog.show();
         TextView textViewName = mDialog.findViewById(R.id.textViewTotal);
         TextView textViewQuantity = mDialog.findViewById(R.id.textViewMedicineQuantity);
-        textViewName.setText(medicineName+" is on low stock");
+        textViewName.setText(medicineName + " is on low stock");
         textViewQuantity.setText("Remaining Quantity " + quantity);
         Button btnRetry = mDialog.findViewById(R.id.buttonRetry);
         btnRetry.setOnClickListener(v -> mDialog.dismiss());
@@ -232,7 +237,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                     prescribedMedicine.setDays(Integer.parseInt(storeClickWidgetList.get(i).getEditTextDays()));
                     prescribedMedicine.setFrequency(storeClickWidgetList.get(i).getEditTextFrequency());
                     String[] frequencyNumber = storeClickWidgetList.get(i).getEditTextFrequency().split("\\+");
-                    int freqNum = Integer.parseInt(frequencyNumber[0])+Integer.parseInt(frequencyNumber[1])+Integer.parseInt(frequencyNumber[2]);
+                    int freqNum = Integer.parseInt(frequencyNumber[0]) + Integer.parseInt(frequencyNumber[1]) + Integer.parseInt(frequencyNumber[2]);
                     prescribedMedicine.setFrequencyNum(freqNum);
                     prescribedMedicineList.add(prescribedMedicine);
                 }

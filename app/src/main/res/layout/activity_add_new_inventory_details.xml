@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:backgroundTint="@color/dark2"
-                    android:hint="Search Medicine"
+                    android:hint="Type Medicine"
                     android:imeOptions="actionDone"
                     android:inputType="textPersonName"
                     android:textColor="@color/dark"
@@ -417,6 +417,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/textViewMedicineForm"
                             android:layout_width="0dp"
                             android:layout_weight="0.6"
                             android:layout_height="@dimen/_20sdp"

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -31,7 +30,7 @@ import retrofit2.Response;
 public class AddNewInventoryDetailsActivity extends BindingBaseActivity<ActivityAddNewInventoryDetailsBinding> implements OnClickHandlerInterface {
     String[] From = {"None", "Syrup", "Tablet", "Capsules", "Drops", "Topical", "Inhalers", "Injections", "Implants or patches"};
     String[] Strength = {"None", "500", "600", "700", "800", "800", "900"};
-    String[] Unit = {"None", "kg", "g", "mg", "mcg", "L"};
+    String[] Unit = {"None", "kg", "g", "mg", "mcg", "L", "ml", "cc", "mol", "mmol", "", "gm", "mm"};
     ArrayAdapter<String> from_adapter, strength_adapter, unit_adapter;
     MedicineViewModel medicineViewModel;
     private Observer observer;
@@ -63,13 +62,14 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
             String medicine_name = getIntent().getExtras().getString("medicine_name");
             getDataBinding().editTextSearch.setText(medicine_name);
 
-            if (getIntent().getExtras().getString("from") != null || getIntent().getExtras().getString("from") != "") {
+            if (getIntent().getExtras().getString("from") != null || !getIntent().getExtras().getString("from").equals("")) {
                 Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(getIntent().getExtras().getString("from"));
+                getDataBinding().textViewMedicineForm.setText(getIntent().getExtras().getString("from"));
             }
-            if (getIntent().getExtras().getString("strength") != null || getIntent().getExtras().getString("strength") != "") {
+            if (getIntent().getExtras().getString("strength") != null || !getIntent().getExtras().getString("strength").equals("")) {
                 Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(getIntent().getExtras().getString("strength"));
             }
-            if (getIntent().getExtras().getString("unit") != null || getIntent().getExtras().getString("unit") != "") {
+            if (getIntent().getExtras().getString("unit") != null || !getIntent().getExtras().getString("unit").equals("")) {
                 Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(getIntent().getExtras().getString("unit"));
             }
 
@@ -78,6 +78,7 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
             Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(From[0]);
             Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(Strength[0]);
             Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(Unit[0]);
+
         }
 
         if (getDataBinding().editTextSearch.getText().length() > 0) {
@@ -134,6 +135,9 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
             DisplayLog.showLog(TAG, "getError " + s);
             Toast.makeText(context, "Medicine Not Added", Toast.LENGTH_SHORT).show();
         });
+
+        getDataBinding().materialSpinnerForm.setOnItemClickListener((materialSpinner, view, i, l) ->
+                getDataBinding().textViewMedicineForm.setText(From[i]));
 
     }
 
@@ -219,7 +223,6 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
 
                 }
                 createMedicine(getDataBinding().editTextSearch.getText().toString(), from, strength, unit, Integer.parseInt(getDataBinding().textViewQuantityAndBoxesTotal.getText().toString()));
-
                 break;
         }
 

@@ -1,5 +1,6 @@
 package com.heuristify.mdu.pojo;
 
+
 public class Bluetooth {
     private String device_name;
     private String device_address;
