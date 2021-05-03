@@ -43,6 +43,8 @@
             android:layout_margin="@dimen/_3sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_below="@id/textView5"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
             android:background="@drawable/rounded_shape_white_color"
             android:text="Dismiss" />
 
@@ -53,6 +55,8 @@
             android:layout_height="@dimen/_30sdp"
             android:layout_margin="@dimen/_3sdp"
             android:layout_below="@id/textView5"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
             android:background="@drawable/rounded_shape"
             android:text="Retry"
             android:textColor="@color/white" />

@@ -136,6 +136,8 @@
             android:layout_marginBottom="@dimen/_40sdp"
             android:background="@drawable/rounded_shape_white_color"
             android:onClick="@{clickHandler::onClick}"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
             android:text="Back to Dashboard"
             android:textColor="@color/dark2"
             android:textSize="@dimen/_15sdp"

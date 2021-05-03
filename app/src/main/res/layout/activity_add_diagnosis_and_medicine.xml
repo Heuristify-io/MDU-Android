@@ -309,6 +309,8 @@
                 android:gravity="center"
                 android:layout_gravity="bottom"
                 android:onClick="@{clickHandler::onClick}"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:text="Next"
                 android:textColor="@color/white"
                 android:textSize="@dimen/button_text_size" />

@@ -16,11 +16,11 @@
     <application
         android:name=".base.MyApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/mdu_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:noHistory="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/mdu_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.MDU"
         android:usesCleartextTraffic="true"

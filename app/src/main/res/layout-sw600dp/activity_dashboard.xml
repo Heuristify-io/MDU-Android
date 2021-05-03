@@ -111,6 +111,7 @@
             android:layout_height="@dimen/_50sdp"
             android:backgroundTint="@color/dark2"
             android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             app:fabCustomSize="@dimen/_50sdp"
             app:layout_constraintBottom_toTopOf="@+id/view3"
             app:layout_constraintEnd_toEndOf="parent"
