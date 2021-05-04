@@ -2,17 +2,18 @@ package com.heuristify.mdu.view.activities;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.heuristify.mdu.R;
@@ -21,41 +22,25 @@ import com.heuristify.mdu.databinding.ActivityAddNewInventoryDetailsBinding;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.interfaces.OnClickHandlerInterface;
 import com.heuristify.mdu.mvvm.viewmodel.MedicineViewModel;
-import com.heuristify.mdu.pojo.StockMedicineList;
-
-import java.util.Objects;
-
-import retrofit2.Response;
 
 public class AddNewInventoryDetailsActivity extends BindingBaseActivity<ActivityAddNewInventoryDetailsBinding> implements OnClickHandlerInterface {
-    String[] From = {"None", "Syrup", "Tablet", "Capsules", "Drops", "Topical", "Inhalers", "Injections", "Implants or patches"};
-    String[] Strength = {"None", "500", "600", "700", "800", "800", "900"};
+    String[] From = {"None", "Syrup", "Tablet", "Capsules", "Drops", "Topical", "Inhalers", "Injections", "Implants", "patches"};
     String[] Unit = {"None", "kg", "g", "mg", "mcg", "L", "ml", "cc", "mol", "mmol", "gm", "mm"};
-    ArrayAdapter<String> from_adapter, strength_adapter, unit_adapter;
+    ArrayAdapter<String> f_adapter, f_unit;
     MedicineViewModel medicineViewModel;
-    private Observer observer;
-    private Context context;
     private final String TAG = "AddNewInventoryDetailsActivity";
+    private String text_from_spinner = "", text_unit_spinner = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getDataBinding().setClickHandler(this);
-        context = this;
         medicineViewModel = ViewModelProviders.of(this).get(MedicineViewModel.class);
 
-        from_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, From);
-        from_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        strength_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Strength);
-        strength_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        unit_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Unit);
-        unit_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        getDataBinding().materialSpinnerForm.setAdapter(from_adapter);
-        getDataBinding().materialSpinnerStrength.setAdapter(strength_adapter);
-        getDataBinding().materialSpinnerUnit.setAdapter(unit_adapter);
+        fromAdapterInitialization();
+        unitAdapterInitialization();
+        fromSpinnerClickListener();
+        unitSpinnerClickListener();
 
 
         if (getIntent().getExtras() != null) {
@@ -63,21 +48,40 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
             getDataBinding().editTextSearch.setText(medicine_name);
 
             if (getIntent().getExtras().getString("from") != null || !getIntent().getExtras().getString("from").equals("")) {
-                Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(getIntent().getExtras().getString("from"));
                 getDataBinding().textViewMedicineForm.setText(getIntent().getExtras().getString("from"));
+
+                int pos = 0;
+                String text = getIntent().getExtras().getString("from");
+                for (int i = 0; i < From.length; i++) {
+                    if (text.equals(From[i])) {
+                        pos = i;
+                        break;
+                    }
+                }
+                getDataBinding().spinnerFrom.setSelection(pos);
+
             }
             if (getIntent().getExtras().getString("strength") != null || !getIntent().getExtras().getString("strength").equals("")) {
-                Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(getIntent().getExtras().getString("strength"));
+
+                getDataBinding().editTextStrength.setText(getIntent().getExtras().getString("strength"));
             }
             if (getIntent().getExtras().getString("unit") != null || !getIntent().getExtras().getString("unit").equals("")) {
-                Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(getIntent().getExtras().getString("unit"));
+
+                int pos = 0;
+                String text = getIntent().getExtras().getString("unit");
+                for (int i = 0; i < Unit.length; i++) {
+                    if (text.equals(Unit[i])) {
+                        pos = i;
+                        break;
+                    }
+                }
+                getDataBinding().spinnerUnit.setSelection(pos);
             }
 
         } else {
 
-            Objects.requireNonNull(getDataBinding().materialSpinnerForm.getEditText()).setText(From[0]);
-            Objects.requireNonNull(getDataBinding().materialSpinnerStrength.getEditText()).setText(Strength[0]);
-            Objects.requireNonNull(getDataBinding().materialSpinnerUnit.getEditText()).setText(Unit[0]);
+            getDataBinding().spinnerFrom.setSelection(0);
+            getDataBinding().spinnerUnit.setSelection(0);
 
         }
 
@@ -113,31 +117,96 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
             }
         });
 
-        observer = (Observer<Response<StockMedicineList>>) responseBodyResponse -> {
+        medicineViewModel.createMedicine().observe(this, responseBodyResponse -> {
             dismissProgressDialog();
             if (responseBodyResponse.isSuccessful()) {
-                Toast.makeText(context, "Medicine Added Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Medicine Added Successfully", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AddNewInventoryDetailsActivity.this, DashboardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
             } else {
-                Toast.makeText(context, "Medicine Not Added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Medicine Not Added", Toast.LENGTH_SHORT).show();
             }
             DisplayLog.showLog(TAG, "success " + responseBodyResponse.code());
 
+        });
 
-        };
 
         medicineViewModel.getError_msg().observe(this, s -> {
             dismissProgressDialog();
             DisplayLog.showLog(TAG, "getError " + s);
-            Toast.makeText(context, "Medicine Not Added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Medicine Not Added", Toast.LENGTH_SHORT).show();
         });
 
-        getDataBinding().materialSpinnerForm.setOnItemClickListener((materialSpinner, view, i, l) ->
-                getDataBinding().textViewMedicineForm.setText(From[i]));
+
+    }
+
+    private void unitSpinnerClickListener() {
+
+        getDataBinding().spinnerUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View view,
+                                       int pos, long arg3) {
+                TextView tv = (TextView) view;
+                text_unit_spinner = tv.getText().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+    }
+
+    private void fromSpinnerClickListener() {
+
+        getDataBinding().spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View view,
+                                       int pos, long arg3) {
+                TextView tv = (TextView) view;
+                text_from_spinner = tv.getText().toString();
+                getDataBinding().textViewMedicineForm.setText(tv.getText().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+    }
+
+    private void unitAdapterInitialization() {
+
+        f_unit = new ArrayAdapter<String>(mContext, R.layout.spinner_item, Unit) {
+            @Override
+            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                tv.setTextColor(mContext.getResources().getColor(R.color.dark2));
+                return view;
+            }
+        };
+        f_unit.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        getDataBinding().spinnerUnit.setAdapter(f_unit);
+
+    }
+
+    private void fromAdapterInitialization() {
+
+        f_adapter = new ArrayAdapter<String>(mContext, R.layout.spinner_item, From) {
+            @Override
+            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                tv.setTextColor(mContext.getResources().getColor(R.color.dark2));
+                return view;
+            }
+        };
+        f_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        getDataBinding().spinnerFrom.setAdapter(f_adapter);
 
     }
 
@@ -207,21 +276,10 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
                 break;
             case R.id.buttonNextInventoryDetais:
                 showProgressDialog();
-                String from = "", strength = "", unit = "";
-
-
-                if (!getDataBinding().materialSpinnerForm.getEditText().getText().toString().equals("None")) {
-                    from = getDataBinding().materialSpinnerForm.getEditText().getText().toString();
-                }
-
-                if (!getDataBinding().materialSpinnerStrength.getEditText().getText().toString().equals("None")) {
-                    strength = getDataBinding().materialSpinnerStrength.getEditText().getText().toString();
-
-                }
-                if (!getDataBinding().materialSpinnerUnit.getEditText().getText().toString().equals("None")) {
-                    unit = getDataBinding().materialSpinnerUnit.getEditText().getText().toString();
-
-                }
+                String from, strength, unit;
+                strength = getDataBinding().editTextStrength.getText().toString();
+                from = text_from_spinner;
+                unit = text_unit_spinner;
                 createMedicine(getDataBinding().editTextSearch.getText().toString(), from, strength, unit, Integer.parseInt(getDataBinding().textViewQuantityAndBoxesTotal.getText().toString()));
                 break;
         }
@@ -238,7 +296,7 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
 
 
     private void createMedicine(String medicine_name, String from, String strength, String unit, int quantity) {
-        medicineViewModel.createMedicine(medicine_name, from, strength, unit, quantity).observe((AppCompatActivity) context, observer);
+        medicineViewModel.CreateMedicines(medicine_name, from, strength, unit, quantity);
 
     }
 }

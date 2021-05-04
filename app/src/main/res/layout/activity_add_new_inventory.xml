@@ -219,7 +219,7 @@
             android:fontFamily="@font/archivo_regular"
             android:gravity="left"
             android:onClick="@{clickHandler::onClick}"
-            android:text="Add another medicine"
+            android:text="Manually Add Medicine"
             android:textColor="@color/light1"
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal"

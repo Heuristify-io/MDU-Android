@@ -74,7 +74,7 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
         frequency_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.materialSpinner.setAdapter(frequency_adapter);
 
-        gender_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, frequencies) {
+        gender_adapter = new ArrayAdapter<String>(context, R.layout.spinner_item_for_diagnosis, frequencies) {
             @Override
             public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
@@ -119,8 +119,6 @@ public class AddDiagnosisAndMedicineAdapter extends RecyclerView.Adapter<AddDiag
             public void onItemSelected(AdapterView<?> arg0, View view,
                                        int pos, long arg3) {
                 TextView tv = (TextView) view;
-                tv.setPadding(0,0,0,20);
-                tv.setTextColor(context.getResources().getColor(R.color.dark2));
                 storeClickWidgetList.get(position).setEditTextFrequency(tv.getText().toString());
                 widgetLists.get(position).setFrequencySpinner(tv.getText().toString());
             }

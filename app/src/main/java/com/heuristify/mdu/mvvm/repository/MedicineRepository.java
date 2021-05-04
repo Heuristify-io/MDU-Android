@@ -1,15 +1,11 @@
 package com.heuristify.mdu.mvvm.repository;
 
 
-import android.os.Handler;
-import android.os.Looper;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.heuristify.mdu.base.MyApplication;
-import com.heuristify.mdu.database.entity.MedicineEntity;
 import com.heuristify.mdu.helper.DisplayLog;
 import com.heuristify.mdu.pojo.MedicineList;
 import com.heuristify.mdu.database.entity.StockMedicine;
@@ -30,17 +26,6 @@ public class MedicineRepository {
     MutableLiveData<String> get_medicine_error_msg = new MutableLiveData<>();
 
 
-    private void storeMedicineIntoDb(Response<MedicineList> response) {
-        MedicineEntity medicineEntity = new MedicineEntity();
-        medicineEntity.setMedicineList(response.body().getMedicineList());
-        new Thread(() -> {
-            MedicineEntity medicineEntity1 = new MedicineEntity();
-            medicineEntity1.setMedicineList(response.body().getMedicineList());
-            MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().taskDao().insertMedicineList(medicineEntity1);
-        }).start();
-
-    }
-
     public MutableLiveData<Response<MedicineList>> getSearchMedicine() {
         return searchMedicineResponse;
     }
@@ -54,8 +39,7 @@ public class MedicineRepository {
         return MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicinesUsingLiveData();
     }
 
-    public MutableLiveData<Response<StockMedicineList>> createMedicineInventory(String medicineName, String from, String strength, String units, int quantity) {
-        createMedicine(medicineName, from, strength, units, quantity);
+    public MutableLiveData<Response<StockMedicineList>> createMedicineInventory() {
         return createMedicineResponse;
     }
 
@@ -72,8 +56,7 @@ public class MedicineRepository {
                 int add_total = Integer.parseInt(t1) + quantity;
                 MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().update(add_quantity, add_total, stockMedicine.getStock_medicine_medicineId());
             }
-
-            MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
+            createMedicineResponse.postValue(response);
 
         }).start();
     }
@@ -89,7 +72,7 @@ public class MedicineRepository {
             stockMedicine.setStock_medicine_quantity(String.valueOf(quantity));
             stockMedicine.setStock_medicine_total(String.valueOf(quantity));
             storeInToDb(stockMedicine);
-            MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
+            createMedicineResponse.postValue(response);
 
         }).start();
     }
@@ -105,7 +88,6 @@ public class MedicineRepository {
 
 
     public MutableLiveData<Response<StockMedicineList>> getStockMedicineList() {
-//        new Handler(Looper.getMainLooper()).postDelayed(this::callGetMedicineList, 200);
         return getMedicineList;
     }
 
@@ -114,7 +96,7 @@ public class MedicineRepository {
         MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().insertStockMedicine(stockMedicine);
     }
 
-    private void deleteOldListAndStoreNewListFromDb(Response<StockMedicineList> response, List<StockMedicine> stockMedicineListList) {
+    private void deleteOldListAndStoreNewListFromDb(List<StockMedicine> stockMedicineListList) {
         new Thread(() -> {
             List<StockMedicine> stockMedicines = MyApplication.getInstance().getLocalDb(MyApplication.getInstance()).getAppDatabase().stockMedicineDoa().getStockMedicines();
             if (stockMedicines != null) {
@@ -123,9 +105,6 @@ public class MedicineRepository {
             for (int i = 0; i < stockMedicineListList.size(); i++) {
                 storeInToDb(stockMedicineListList.get(i));
             }
-            if ("getStockMedicineList".equals("createMedicine")) {
-                MyApplication.getInstance().getActivity().runOnUiThread(() -> createMedicineResponse.setValue(response));
-            }
         }).start();
     }
 
@@ -133,8 +112,14 @@ public class MedicineRepository {
         getSearchMedicineList(suggestion);
     }
 
-    public void getMedicineForPinView(){
+    public void getMedicineForPinView() {
         callGetMedicineList();
+    }
+
+    public void createMedicines(String medicineName, String from, String strength, String units, int quantity) {
+
+        createMedicine(medicineName, from, strength, units, quantity);
+
     }
 
     private void callGetMedicineList() {
@@ -149,12 +134,12 @@ public class MedicineRepository {
                 this.response = response;
                 if (response.isSuccessful()) {
                     if (response.code() == 200) {
+                        assert response.body() != null;
                         if (response.body().getStockMedicineListList() != null) {
-                            deleteOldListAndStoreNewListFromDb(response, response.body().getStockMedicineListList());
+                            deleteOldListAndStoreNewListFromDb(response.body().getStockMedicineListList());
                         }
                     }
                 }
-
                 getMedicineList.setValue(response);
             }
 
@@ -180,6 +165,7 @@ public class MedicineRepository {
                     } else if (response.code() == 201) {
                         //add new medicine
                         DisplayLog.showLog("medicine_code2", "" + response.code());
+                        assert response.body() != null;
                         addNewMedicine(response, response.body().getMedicine().getMedicine_id(), medicineName, quantity);
                     } else {
                         createMedicineResponse.setValue(response);

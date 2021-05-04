@@ -86,10 +86,6 @@ public class AddNewInventoryActivity extends BindingBaseActivity<ActivityAddNewI
 
         });
 
-        medicineViewModel.getError_msg().observe(this, s -> {
-
-        });
-
     }
 
 

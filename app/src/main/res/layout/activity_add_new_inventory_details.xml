@@ -42,8 +42,8 @@
                     android:layout_width="@dimen/_14sdp"
                     android:layout_height="@dimen/_14sdp"
                     android:layout_gravity="center"
-                    android:onClick="@{clickHandler::onClick}"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{clickHandler::onClick}"
                     android:paddingTop="@dimen/_2sdp"
                     android:paddingBottom="@dimen/_2sdp"
                     android:src="@drawable/chevron_left_24px" />
@@ -124,7 +124,7 @@
                     android:backgroundTint="@color/dark2"
                     android:hint="Type Medicine"
                     android:imeOptions="actionDone"
-                    android:inputType="textPersonName"
+                    android:inputType="text"
                     android:textColor="@color/dark"
                     android:textColorHint="@color/dark" />
 
@@ -134,41 +134,83 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:orientation="horizontal">
 
-                    <com.tiper.MaterialSpinner
-                        android:id="@+id/material_spinner_form"
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:hint="From"
-                        android:textColor="@color/dark2"
-                        android:textColorHint="@color/light1"
-                        app:backgroundTint="@color/dark2"
-                        app:spinnerMode="dialog" />
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_weight="1.3"
+                        android:fontFamily="@font/archivo_regular"
+                        android:gravity="start"
+                        android:text="From"
+                        android:textColor="@color/light1"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="normal" />
 
-
-                    <com.tiper.MaterialSpinner
-                        android:id="@+id/material_spinner_strength"
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.4"
-                        android:hint="Strength"
-                        android:textColor="@color/dark2"
-                        android:textColorHint="@color/light1"
-                        app:spinnerMode="dialog" />
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/archivo_regular"
+                        android:gravity="start"
+                        android:text="Strength"
+                        android:textColor="@color/light1"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="normal" />
 
-                    <com.tiper.MaterialSpinner
-                        android:id="@+id/material_spinner_unit"
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.4"
-                        android:hint="Unit"
-                        android:textColor="@color/dark2"
-                        android:textColorHint="@color/light1"
-                        app:spinnerMode="dialog" />
+                        android:layout_marginStart="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        android:layout_weight="1.3"
+                        android:fontFamily="@font/archivo_regular"
+                        android:gravity="start"
+                        android:text="Unit"
+                        android:textColor="@color/light1"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="normal" />
 
 
                 </LinearLayout>
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/spinner_from"
+                        style="@style/underLineSpinnerForInventoryDetails"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.3"
+                        android:backgroundTint="@color/dark2" />
+
+                    <EditText
+                        android:id="@+id/editTextStrength"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/dark2"
+                        android:hint="000"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:textColor="@color/dark2"
+                        android:textColorHint="@color/dark2"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_unit"
+                        style="@style/underLineSpinnerForInventoryDetails"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.3"
+                        android:backgroundTint="@color/dark2" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -202,11 +244,11 @@
                             android:layout_width="@dimen/_30sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:background="@drawable/rounded_textview_white_color"
+                            android:clickable="true"
                             android:fontFamily="@font/archivo_regular"
+                            android:foreground="?attr/selectableItemBackground"
                             android:gravity="center"
                             android:onClick="@{clickHandler::onClick}"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:clickable="true"
                             android:text="-"
                             android:textColor="@color/dark2"
                             android:textSize="@dimen/_12sdp"
@@ -233,11 +275,11 @@
                             android:layout_height="@dimen/_30sdp"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:background="@drawable/rounded_textview_white_color"
+                            android:clickable="true"
                             android:fontFamily="@font/archivo_regular"
+                            android:foreground="?attr/selectableItemBackground"
                             android:gravity="center"
                             android:onClick="@{clickHandler::onClick}"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:clickable="true"
                             android:text="+"
                             android:textColor="@color/dark2"
                             android:textSize="@dimen/_12sdp"
@@ -280,11 +322,11 @@
                             android:layout_width="@dimen/_30sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:background="@drawable/rounded_textview_white_color"
+                            android:clickable="true"
                             android:fontFamily="@font/archivo_regular"
+                            android:foreground="?attr/selectableItemBackground"
                             android:gravity="center"
                             android:onClick="@{clickHandler::onClick}"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:clickable="true"
                             android:text="-"
                             android:textColor="@color/dark2"
                             android:textSize="@dimen/_12sdp"
@@ -311,11 +353,11 @@
                             android:layout_height="@dimen/_30sdp"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:background="@drawable/rounded_textview_white_color"
+                            android:clickable="true"
                             android:fontFamily="@font/archivo_regular"
+                            android:foreground="?attr/selectableItemBackground"
                             android:gravity="center"
                             android:onClick="@{clickHandler::onClick}"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:clickable="true"
                             android:text="+"
                             android:textColor="@color/dark2"
                             android:textSize="@dimen/_12sdp"
@@ -336,7 +378,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="0.8"
                         android:background="?attr/selectableItemBackground"
                         android:fontFamily="@font/archivo_regular"
                         android:gravity="left"
@@ -356,8 +398,8 @@
                         <TextView
                             android:id="@+id/textViewBoxesNumber"
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
                             android:layout_height="@dimen/_30sdp"
+                            android:layout_weight="0.5"
                             android:fontFamily="@font/archivo_regular"
                             android:gravity="center"
                             android:onClick="@{clickHandler::onClick}"
@@ -369,8 +411,8 @@
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
                             android:layout_height="@dimen/_20sdp"
+                            android:layout_weight="0.5"
                             android:fontFamily="@font/archivo_regular"
                             android:gravity="center"
                             android:text="X"
@@ -382,8 +424,8 @@
                         <TextView
                             android:id="@+id/textViewQuantBoxNumber"
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
                             android:layout_height="@dimen/_30sdp"
+                            android:layout_weight="0.5"
                             android:fontFamily="@font/archivo_regular"
                             android:gravity="center"
                             android:text="0"
@@ -393,8 +435,8 @@
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="0.3"
                             android:layout_height="@dimen/_20sdp"
+                            android:layout_weight="0.3"
                             android:fontFamily="@font/archivo_regular"
                             android:gravity="center"
                             android:text="="
@@ -406,8 +448,8 @@
                         <TextView
                             android:id="@+id/textViewQuantityAndBoxesTotal"
                             android:layout_width="0dp"
-                            android:layout_weight="0.5"
                             android:layout_height="@dimen/_40sdp"
+                            android:layout_weight="0.5"
                             android:fontFamily="@font/archivo_regular"
                             android:gravity="center"
                             android:onClick="@{clickHandler::onClick}"
@@ -419,10 +461,10 @@
                         <TextView
                             android:id="@+id/textViewMedicineForm"
                             android:layout_width="0dp"
-                            android:layout_weight="0.6"
                             android:layout_height="@dimen/_20sdp"
-                            android:fontFamily="@font/archivo_regular"
                             android:layout_marginTop="@dimen/_2sdp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/archivo_regular"
                             android:gravity="center"
                             android:text="Tablets"
                             android:textColor="@color/light1"
@@ -454,11 +496,11 @@
                 android:layout_marginLeft="@dimen/_30sdp"
                 android:layout_marginRight="@dimen/_30sdp"
                 android:background="@drawable/rounded_shape_light_dark_mix_color"
+                android:clickable="true"
                 android:enabled="false"
+                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:onClick="@{clickHandler::onClick}"
-                android:foreground="?attr/selectableItemBackground"
-                android:clickable="true"
                 android:text="Next"
                 android:textColor="@color/white"
                 android:textSize="@dimen/button_text_size" />

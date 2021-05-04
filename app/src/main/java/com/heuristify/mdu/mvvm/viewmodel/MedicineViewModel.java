@@ -19,8 +19,6 @@ import retrofit2.Response;
 
 public class MedicineViewModel extends AndroidViewModel {
     MedicineRepository medicineRepository;
-    MutableLiveData<Response<StockMedicineList>> createMedicineResponse = new MutableLiveData<>();
-    MutableLiveData<String> error_msg = new MutableLiveData<>();
 
 
     public MedicineViewModel(@NonNull Application application) {
@@ -36,15 +34,13 @@ public class MedicineViewModel extends AndroidViewModel {
         return medicineRepository.getSearchMedicine();
     }
 
-    public MutableLiveData<Response<StockMedicineList>> createMedicine(String medicineName, String from, String strength, String units, int quantity) {
-        this.createMedicineResponse = medicineRepository.createMedicineInventory(medicineName, from, strength, units, quantity);
-        return createMedicineResponse;
+    public MutableLiveData<Response<StockMedicineList>> createMedicine() {
+        return medicineRepository.createMedicineInventory();
     }
 
 
     public MutableLiveData<String> getError_msg() {
-        this.error_msg = medicineRepository.getError_msg();
-        return error_msg;
+        return medicineRepository.getError_msg();
     }
 
     public MutableLiveData<String> get_medicine_error_msg() {
@@ -63,8 +59,12 @@ public class MedicineViewModel extends AndroidViewModel {
         medicineRepository.getSuggestionFromServer(suggestion);
     }
 
-    public void GetMedicineListForPinView(){
+    public void GetMedicineListForPinView() {
         medicineRepository.getMedicineForPinView();
+    }
+
+    public void CreateMedicines(String medicineName, String from, String strength, String units, int quantity) {
+        medicineRepository.createMedicines(medicineName, from, strength, units, quantity);
     }
 
 }
