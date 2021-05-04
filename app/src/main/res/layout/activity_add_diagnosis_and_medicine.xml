@@ -136,8 +136,7 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:backgroundTint="@color/dark2"
                     android:imeOptions="actionNext"
-                    android:nextFocusForward="@+id/editTextPatientDiagnosisDes"
-                    android:inputType="textMultiLine"
+                    android:inputType="text"
                     android:textColor="@color/dark"
                     android:textColorHint="@color/dark" />
 
@@ -165,7 +164,7 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:backgroundTint="@color/dark2"
                     android:imeOptions="actionDone"
-                    android:inputType="textMultiLine"
+                    android:inputType="text"
                     android:textColor="@color/dark"
                     android:textColorHint="@color/dark" />
 
@@ -203,7 +202,7 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="0.7"
+                        android:layout_weight="0.8"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_2sdp"
                         android:layout_marginTop="@dimen/_5sdp"

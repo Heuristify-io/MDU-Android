@@ -62,6 +62,11 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
             patient = (Patient) getIntent().getSerializableExtra("patient");
         }
 
+        getDataBinding().editTextPatientDiagnosis.setHorizontallyScrolling(false);
+        getDataBinding().editTextPatientDiagnosis.setMaxLines(Integer.MAX_VALUE);
+        getDataBinding().editTextPatientDiagnosisDes.setHorizontallyScrolling(false);
+        getDataBinding().editTextPatientDiagnosisDes.setMaxLines(Integer.MAX_VALUE);
+
 
         initializeRecycleView();
         patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
