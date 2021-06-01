@@ -23,7 +23,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:fontFamily="@font/archivo_regular"
-            android:text="Prescribed Medicine"
+            android:text="Issued Medicine"
             android:textColor="@color/light1"
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal"

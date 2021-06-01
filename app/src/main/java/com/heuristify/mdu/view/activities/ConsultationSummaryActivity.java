@@ -58,7 +58,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -310,7 +312,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                             "Patient Description \n" + getDataBinding().editTextTextPatientDescription.getText().toString() + "\n--------------------------------\n";
 
 
-                    BILL = BILL + "\nPrescribed Medicine\n";
+                    BILL = BILL + "\nIssued Medicine\n";
 
                     BILL = BILL + "--------------------------------\n" +
                             "Med Name            Freq" +
@@ -389,8 +391,12 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
 
 
         try {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+
             printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
-            BILL = "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, this.getApplicationContext().getResources().getDrawableForDensity(R.drawable.doctors_pana1, DisplayMetrics.DENSITY_MEDIUM)) + "</img>\n" +
+//            BILL = "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, this.getApplicationContext().getResources().getDrawableForDensity(R.drawable.doctors_pana1, DisplayMetrics.DENSITY_MEDIUM)) + "</img>\n" +
+            BILL = "[L]<b>Print Date: </b>" + formatter.format(date) + "\n" +
                     "[L]\n" +
                     "[C]<u><font size='big'>Patient Receipt</font></u>\n" +
                     "[C]================================\n" +
@@ -405,7 +411,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                     "\n"+
                     "[L]" + getDataBinding().editTextTextPatientDescription.getText().toString() + "\n" +
                     "[C]================================\n" +
-                    "[L]<b><font size='normal'>Prescribed Medicine</font></b>" + "\n" +
+                    "[L]<b><font size='normal'>Issued Medicine</font></b>" + "\n" +
                     "[C]================================\n" +
                     "[L]<b>Medicine Name[R]Days[R]Freq </b>" + "\n";
 

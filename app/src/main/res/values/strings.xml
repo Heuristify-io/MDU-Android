@@ -10,9 +10,9 @@
     <string name="string_back">Back</string>
     <string name="not_get_medicine_list">Unable To Get Medicine List</string>
     <string name="not_get_records">Unable To Import Doctors Data</string>
-    <string name="inventory_desc4">Please enter diagnosis and prescribed medicines.</string>
-    <string name="inventory_desc5">prescribed medicine. </string>
-    <string name="prescribed_medicine">Prescribed Medicine</string>
+    <string name="inventory_desc4">Please enter diagnosis and issued medicines.</string>
+    <string name="inventory_desc5">issued medicine. </string>
+    <string name="prescribed_medicine">Issued Medicine</string>
     <string name="frequency">Frequency</string>
     <string name="days">Days</string>
     <string name="consultation_desc">Please review the details for the consultation</string>

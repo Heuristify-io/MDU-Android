@@ -183,7 +183,7 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/archivo_regular"
                         android:gravity="start"
-                        android:text="Prescribed Medicine"
+                        android:text="Issued Medicine"
                         android:textColor="@color/light1"
                         android:textSize="@dimen/_10sdp"
                         android:textStyle="normal" />

@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/dark2"
-        android:hint="Prescribed Medicine"
+        android:hint="Issued Medicine"
         android:imeOptions="actionDone"
         android:inputType="textPersonName"
         android:textColor="@color/dark"

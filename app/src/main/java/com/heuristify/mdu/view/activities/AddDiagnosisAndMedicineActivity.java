@@ -151,7 +151,7 @@ public class AddDiagnosisAndMedicineActivity extends BindingBaseActivity<Activit
                 break;
             case R.id.buttonNextConsultation:
                 if (dataBinding.editTextPatientDiagnosis.getText().toString().isEmpty() || dataBinding.editTextPatientDiagnosisDes.getText().toString().isEmpty()) {
-                    Toast.makeText(mContext, "please enter diagnosis and prescribed medicines", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "please enter diagnosis and issued medicines", Toast.LENGTH_SHORT).show();
                 } else {
                     addIntoLocalDb();
                 }
