@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,6 +115,46 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
                 } else {
                     disableButton();
                 }
+            }
+        });
+
+        getDataBinding().textViewBoxNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(getDataBinding().textViewBoxNumber.getText().toString()) && !TextUtils.isEmpty(getDataBinding().textViewNumber.getText().toString())) {
+                    multiplyBoxesAndQuantity(Integer.parseInt(getDataBinding().textViewNumber.getText().toString()), Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()));
+                }
+
+            }
+        });
+
+        getDataBinding().textViewNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(getDataBinding().textViewNumber.getText().toString()) && !TextUtils.isEmpty(getDataBinding().textViewBoxNumber.getText().toString())) {
+                    multiplyBoxesAndQuantity(Integer.parseInt(getDataBinding().textViewNumber.getText().toString()), Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()));
+                }
+
             }
         });
 
@@ -235,58 +276,69 @@ public class AddNewInventoryDetailsActivity extends BindingBaseActivity<Activity
             case R.id.imageViewBack:
                 finish();
                 break;
-            case R.id.textViewSub:
-                if (Integer.parseInt(getDataBinding().textViewNumber.getText().toString()) > 1) {
-                    int number = Integer.parseInt(getDataBinding().textViewNumber.getText().toString());
-                    number = number - 1;
-                    getDataBinding().textViewNumber.setText(String.valueOf(number));
+//            case R.id.textViewSub:
+//                if (Integer.parseInt(getDataBinding().textViewNumber.getText().toString()) > 1) {
+//                    int number = Integer.parseInt(getDataBinding().textViewNumber.getText().toString());
+//                    number = number - 1;
+//                    getDataBinding().textViewNumber.setText(String.valueOf(number));
+//
+//                    multiplyBoxesAndQuantity(number, Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()));
+//
+//
+//                }
+//                break;
+//            case R.id.textViewAdd:
+//                int number = Integer.parseInt(getDataBinding().textViewNumber.getText().toString());
+//                number = number + 1;
+//                getDataBinding().textViewNumber.setText(String.valueOf(number));
+//
+//                multiplyBoxesAndQuantity(number, Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()));
+//
+//                break;
 
-                    multiplyBoxesAndQuantity(number, Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()));
-
-
-                }
-                break;
-            case R.id.textViewAdd:
-                int number = Integer.parseInt(getDataBinding().textViewNumber.getText().toString());
-                number = number + 1;
-                getDataBinding().textViewNumber.setText(String.valueOf(number));
-
-                multiplyBoxesAndQuantity(number, Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()));
-
-                break;
-
-            case R.id.textViewBoxSub:
-                if (Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()) > 1) {
-                    int number2 = Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString());
-                    number2 = number2 - 1;
-                    getDataBinding().textViewBoxNumber.setText(String.valueOf(number2));
-
-                    multiplyBoxesAndQuantity(Integer.parseInt(getDataBinding().textViewNumber.getText().toString()), number2);
-
-
-                }
-                break;
-            case R.id.textViewBoxAdd:
-                int number3 = Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString());
-                number3 = number3 + 1;
-                getDataBinding().textViewBoxNumber.setText(String.valueOf(number3));
-
-                multiplyBoxesAndQuantity(Integer.parseInt(getDataBinding().textViewNumber.getText().toString()), number3);
-
-                break;
+//            case R.id.textViewBoxSub:
+//                if (Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString()) > 1) {
+//                    int number2 = Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString());
+//                    number2 = number2 - 1;
+//                    getDataBinding().textViewBoxNumber.setText(String.valueOf(number2));
+//
+//                    multiplyBoxesAndQuantity(Integer.parseInt(getDataBinding().textViewNumber.getText().toString()), number2);
+//
+//
+//                }
+//                break;
+//            case R.id.textViewBoxAdd:
+//                int number3 = Integer.parseInt(getDataBinding().textViewBoxNumber.getText().toString());
+//                number3 = number3 + 1;
+//                getDataBinding().textViewBoxNumber.setText(String.valueOf(number3));
+//
+//                multiplyBoxesAndQuantity(Integer.parseInt(getDataBinding().textViewNumber.getText().toString()), number3);
+//
+//                break;
             case R.id.buttonNextInventoryDetais:
-                showProgressDialog();
-                String from, strength, unit;
-                strength = getDataBinding().editTextStrength.getText().toString();
-                from = text_from_spinner;
-                unit = text_unit_spinner;
-                createMedicine(getDataBinding().editTextSearch.getText().toString(), from, strength, unit, Integer.parseInt(getDataBinding().textViewQuantityAndBoxesTotal.getText().toString()));
-                break;
+
+                String box = getDataBinding().textViewNumber.getText().toString();
+                String quantity = getDataBinding().textViewBoxNumber.getText().toString();
+
+                if (TextUtils.isEmpty(box) || TextUtils.isEmpty(quantity) || Integer.parseInt(box) == 0 || Integer.parseInt(quantity) == 0) {
+                    Toast.makeText(mContext, "Value of boxes or quantity cannot be zero or empty.", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    showProgressDialog();
+                    String from, strength, unit;
+                    strength = getDataBinding().editTextStrength.getText().toString();
+                    from = text_from_spinner;
+                    unit = text_unit_spinner;
+                    createMedicine(getDataBinding().editTextSearch.getText().toString(), from, strength, unit, Integer.parseInt(getDataBinding().textViewQuantityAndBoxesTotal.getText().toString()));
+                }
+
+
         }
 
     }
 
     private void multiplyBoxesAndQuantity(int quantityNumber, int boxesNumber) {
+
 
         getDataBinding().textViewBoxesNumber.setText(String.valueOf(boxesNumber));
         getDataBinding().textViewQuantBoxNumber.setText(String.valueOf(quantityNumber));

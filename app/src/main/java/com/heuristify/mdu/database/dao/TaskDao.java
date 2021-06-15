@@ -38,7 +38,7 @@ public interface TaskDao {
     List<PatientPrescribedMedicine> getPatientPrescribedMedicine(int consultation_id);
 
 
-    @Query("SELECT c1.id,c1.patientDiagnosis,c1.createdAt,p1.fullName,p1.gender,p1.age FROM consultations c1 INNER JOIN patients p1 ON p1.id = c1.patientId")
+    @Query("SELECT c1.id,c1.patientDiagnosis,c1.createdAt,p1.fullName,p1.gender,p1.age FROM consultations c1 INNER JOIN patients p1 ON p1.id = c1.patientId ORDER BY p1.id desc")
     List<ConsultationHistory> getPatientAndConsultation();
 
     @Query("SELECT med.medicineName,p1.frequency,p1.days From prescribed_medicine p1 INNER JOIN doctor_med_stocks med ON med.id = p1.medicineId WHERE p1.consultationId =:consultation_id")

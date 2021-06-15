@@ -351,7 +351,7 @@
                     android:layout_marginRight="@dimen/_20sdp"
                     android:fontFamily="@font/archivo_regular"
                     android:gravity="start"
-                    android:text="Patient Description"
+                    android:text="Description + Prescribed medicine"
                     android:textColor="@color/light1"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="normal"

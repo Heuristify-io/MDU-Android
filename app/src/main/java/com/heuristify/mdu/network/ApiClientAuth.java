@@ -1,5 +1,7 @@
 package com.heuristify.mdu.network;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -40,6 +42,8 @@ public class ApiClientAuth {
 
                             .method(original.method(), original.body())
                             .build();
+
+                    Log.e("RideApiClient",""+request.toString());
 
                     return chain.proceed(request);
                 }

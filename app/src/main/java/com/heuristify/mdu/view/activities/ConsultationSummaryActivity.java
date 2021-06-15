@@ -407,7 +407,7 @@ public class ConsultationSummaryActivity extends BindingBaseActivity<ActivityCon
                     "[L]<b>Patient Diagnosis:</b>" +
                     "\n"+
                     "[L]" + getDataBinding().editTextTextPatientDiagnosis.getText().toString() + "\n" +
-                    "[L]<b>Patient Description:</b>" +
+                    "[L]<b>Patient Description + Prescribed medicine:</b>" +
                     "\n"+
                     "[L]" + getDataBinding().editTextTextPatientDescription.getText().toString() + "\n" +
                     "[C]================================\n" +
