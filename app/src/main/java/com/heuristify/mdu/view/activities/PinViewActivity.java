@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
@@ -234,7 +235,15 @@ public class PinViewActivity extends BindingBaseActivity<ActivityPinViewBinding>
                     e.printStackTrace();
                 }
             } else {
-                Toast.makeText(mContext, "PinCode Not Correct", Toast.LENGTH_SHORT).show();
+
+                try {
+                    JSONObject object = new JSONObject(responseBodyResponse.errorBody().string());
+                    Toast.makeText(mContext, object.getString("msg"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         });

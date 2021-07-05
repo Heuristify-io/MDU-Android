@@ -1,9 +1,14 @@
 package com.heuristify.mdu.view.fragments;
 
+import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,15 +24,19 @@ import android.widget.Toast;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.base.BindingBaseFragment;
+import com.heuristify.mdu.base.MyApplication;
 import com.heuristify.mdu.database.entity.Patient;
 import com.heuristify.mdu.databinding.FragmentDashboardBinding;
 import com.heuristify.mdu.helper.Constant;
 import com.heuristify.mdu.helper.DisplayLog;
+import com.heuristify.mdu.helper.Helper;
 import com.heuristify.mdu.helper.Utilities;
 import com.heuristify.mdu.mvvm.viewmodel.ConsultationViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.DataSyncViewModel;
 import com.heuristify.mdu.mvvm.viewmodel.HelperViewModel;
+import com.heuristify.mdu.sharedPreferences.SharedHelper;
 import com.heuristify.mdu.view.activities.ConsultationHistoryActivity;
+import com.heuristify.mdu.view.activities.PinViewActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +119,12 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
             if (responseBodyResponse.code() == 200) {
                 showProgressDialogWithText("Uploading Images");
                 getAllPatientImages();
-            } else {
+            }
+
+            else if(responseBodyResponse.code() == 401) {
+                showAlertDialog();
+            }
+            else {
                 showMedicineDialog();
             }
         });
@@ -170,10 +184,39 @@ public class DashboardFragment extends BindingBaseFragment<FragmentDashboardBind
             dismissProgressDialog();
             if (syncApiResponse.code() == 200) {
                 Toast.makeText(mContext, "Records uploaded", Toast.LENGTH_SHORT).show();
-            } else {
+            }
+            else if(syncApiResponse.code() == 401) {
+                showAlertDialog();
+            }
+            else {
                 Toast.makeText(mContext, "Unable to upload records", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("Your MDU has been changed, please sign in again to verify your account. Don't worry your data has been synced to the server.");
+        builder.setPositiveButton("Go To Login", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                goToLogin();
+            }
+        });
+        builder.show();
+    }
+
+
+    private void goToLogin() {
+        SharedHelper.putKey(MyApplication.getInstance(), Helper.NAME, "");
+        SharedHelper.putKey(MyApplication.getInstance(), Helper.PMDC, "");
+        SharedHelper.putKey(MyApplication.getInstance(), Helper.PHONE, "");
+        SharedHelper.putKey(MyApplication.getInstance(), Helper.EMAIL, "");
+        SharedHelper.putKey(MyApplication.getInstance(), Helper.JWT, "");
+        Intent intent = new Intent(getActivity() , PinViewActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+
     }
 
     private void showMedicineDialog() {

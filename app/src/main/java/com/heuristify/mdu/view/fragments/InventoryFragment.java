@@ -1,6 +1,8 @@
 package com.heuristify.mdu.view.fragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -16,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.heuristify.mdu.R;
 import com.heuristify.mdu.adapter.MedicineInventoryAdapter;
@@ -77,6 +80,7 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
 
         medicineViewModel.getMedicineList().observe(getViewLifecycleOwner(), stockMedicineList -> {
             if (stockMedicineList != null) {
+                medicineList.clear();
                 medicineList.addAll(stockMedicineList);
                 medicineInventoryAdapter.notifyDataSetChanged();
             }
@@ -119,11 +123,28 @@ public class InventoryFragment extends BindingBaseFragment<FragmentInventoryBind
             dismissProgressDialog();
             if (responseBodyResponse.code() == 200) {
                 startActivity(new Intent(getActivity(), AddNewInventoryActivity.class));
-            } else {
+            }
+            else if(responseBodyResponse.code() == 401) {
+                showAlertDialog();
+            }
+            else {
                 showMedicineDialog();
             }
         });
     }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("Unable to add medicine. Please click on upload record button on dashboard and try again.");
+        builder.setPositiveButton("Go To DashBoard", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                getActivity().recreate();
+            }
+        });
+        builder.show();
+    }
+
 
     private void showMedicineDialog() {
         mDialog = new Dialog(mContext);
